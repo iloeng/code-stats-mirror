@@ -10,7 +10,7 @@ This repository contains the Phoenix application that implements the service bac
 
 ### Requirements
 
-These are my targets, older versions _might_ work:
+These are current targets, older versions _might_ work:
 
 * Erlang 20.0+
 * Elixir 1.5+
@@ -20,6 +20,11 @@ These are my targets, older versions _might_ work:
 ### First time install
 
 ```
+# First create empty versions of required config files for it to compile
+echo use Mix.Config > config/{appsignal,dev.secret}.exs
+
+# Then:
+
 mix deps.get                # Get Hex dependencies, answer yes to installing Hex/rebar if
                             # needed
 mix compile                 # Compile application
