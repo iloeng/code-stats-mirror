@@ -6,7 +6,7 @@ defmodule CodeStatsWeb.ViewUtils do
   @doc """
   Format amount of XP for display.
   """
-  @spec format_xp(number) :: String.t
+  @spec format_xp(number) :: String.t()
   def format_xp(xp) do
     Number.Delimit.number_to_delimited(xp, precision: 0)
   end

@@ -18,16 +18,15 @@ defmodule CodeStatsWeb.APIAuthRequiredPlug do
 
   def call(conn, _opts) do
     ret =
-      with \
-        [auth_header]   <- get_req_header(conn, @api_auth_header),
-        %Conn{} = conn  <- AuthUtils.auth_user_api(conn, auth_header),
-        true            <- AuthUtils.is_api_authed?(conn)
-      do
+      with [auth_header] <- get_req_header(conn, @api_auth_header),
+           %Conn{} = conn <- AuthUtils.auth_user_api(conn, auth_header),
+           true <- AuthUtils.is_api_authed?(conn) do
         conn
       end
 
     case ret do
-      %Conn{} = conn -> conn
+      %Conn{} = conn ->
+        conn
 
       _ ->
         conn

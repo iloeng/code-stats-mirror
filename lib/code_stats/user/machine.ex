@@ -4,12 +4,12 @@ defmodule CodeStats.User.Machine do
   import Ecto.Changeset
 
   schema "machines" do
-    field :name, :string
-    field :api_salt, :string
-    field :active, :boolean
+    field(:name, :string)
+    field(:api_salt, :string)
+    field(:active, :boolean)
 
-    belongs_to :user, CodeStats.User
-    has_many :pulses, CodeStats.User.Pulse
+    belongs_to(:user, CodeStats.User)
+    has_many(:pulses, CodeStats.User.Pulse)
 
     timestamps()
   end

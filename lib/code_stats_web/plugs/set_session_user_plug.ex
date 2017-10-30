@@ -20,8 +20,7 @@ defmodule CodeStatsWeb.SetSessionUserPlug do
   def call(conn, _opts) do
     if AuthUtils.is_authed?(conn) do
       id = AuthUtils.get_current_user_id(conn)
-      query = from u in User,
-        where: u.id == ^id
+      query = from(u in User, where: u.id == ^id)
 
       put_private(conn, AuthUtils.private_info_key(), Repo.one(query))
     else

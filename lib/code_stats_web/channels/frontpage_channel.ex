@@ -32,23 +32,19 @@ defmodule CodeStatsWeb.FrontpageChannel do
   """
   def send_pulse(%User{private_profile: false} = user, coords, %Pulse{xps: xps})
       when not is_nil(xps) do
+    formatted_xps =
+      for xp <- xps do
+        %{
+          xp: xp.amount,
+          language: xp.language.name
+        }
+      end
 
-    formatted_xps = for xp <- xps do
-      %{
-        xp: xp.amount,
-        language: xp.language.name
-      }
-    end
-
-    CodeStatsWeb.Endpoint.broadcast(
-      "frontpage",
-      "new_pulse",
-      %{
-        xps: formatted_xps,
-        username: user.username,
-        coords: coords
-      }
-    )
+    CodeStatsWeb.Endpoint.broadcast("frontpage", "new_pulse", %{
+      xps: formatted_xps,
+      username: user.username,
+      coords: coords
+    })
   end
 
   def send_pulse(_, _, _), do: nil

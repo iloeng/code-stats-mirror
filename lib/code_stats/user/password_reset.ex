@@ -13,12 +13,12 @@ defmodule CodeStats.User.PasswordReset do
   @token_max_life 4
 
   schema "password_resets" do
-    field :token, Ecto.UUID
+    field(:token, Ecto.UUID)
 
     # Virtual field that is only used to fetch the correct user
-    field :username, :string, virtual: true
+    field(:username, :string, virtual: true)
 
-    belongs_to :user, User
+    belongs_to(:user, User)
 
     timestamps()
   end
@@ -26,7 +26,7 @@ defmodule CodeStats.User.PasswordReset do
   @doc """
   Get the maximum life of a password reset token, in hours.
   """
-  @spec token_max_life() :: Integer.t
+  @spec token_max_life() :: Integer.t()
   def token_max_life(), do: @token_max_life
 
   @doc """
@@ -43,24 +43,26 @@ defmodule CodeStats.User.PasswordReset do
   """
   @spec changeset(%__MODULE__{}, %{}) :: {%Ecto.Changeset{}, %User{} | nil}
   def changeset(data, params \\ %{}) do
-    cset = data
-    |> cast(params, [:username])
-    |> validate_required([:username])
-    |> put_change(:token, Ecto.UUID.generate())
-    |> unique_constraint(:token)
+    cset =
+      data
+      |> cast(params, [:username])
+      |> validate_required([:username])
+      |> put_change(:token, Ecto.UUID.generate())
+      |> unique_constraint(:token)
 
     case cset.valid? do
-      false -> {cset, nil}
+      false ->
+        {cset, nil}
 
       true ->
         username = get_change(cset, :username)
 
-        q = from u in User,
-          where: u.username == ^username
+        q = from(u in User, where: u.username == ^username)
 
         case Repo.one(q) do
           # Invalidate changeset, error message is not shown so it is not needed
-          nil -> {add_error(cset, :username, ""), nil}
+          nil ->
+            {add_error(cset, :username, ""), nil}
 
           %User{} = u ->
             {put_change(cset, :user_id, u.id), u}

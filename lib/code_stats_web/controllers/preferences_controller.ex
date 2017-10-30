@@ -4,10 +4,11 @@ defmodule CodeStatsWeb.PreferencesController do
   alias CodeStats.User
   alias CodeStatsWeb.AuthUtils
 
-  plug :set_title
+  plug(:set_title)
 
   def edit(conn, _params) do
     changeset = User.updating_changeset(AuthUtils.get_current_user(conn))
+
     conn
     |> common_edit_assigns()
     |> render("preferences.html", changeset: changeset)
@@ -15,6 +16,7 @@ defmodule CodeStatsWeb.PreferencesController do
 
   def do_edit(conn, %{"user" => user}) do
     changeset = User.updating_changeset(AuthUtils.get_current_user(conn), user)
+
     case AuthUtils.update_user(changeset) do
       %User{} ->
         conn
@@ -34,6 +36,7 @@ defmodule CodeStatsWeb.PreferencesController do
 
     if AuthUtils.check_user_password(user, old_password) do
       password_changeset = User.password_changeset(user, %{password: new_password})
+
       case AuthUtils.update_user(password_changeset) do
         %User{} ->
           conn
@@ -62,6 +65,7 @@ defmodule CodeStatsWeb.PreferencesController do
           |> AuthUtils.unauth_user()
           |> put_flash(:info, "Your user account has been deleted.")
           |> redirect(to: page_path(conn, :index))
+
         false ->
           conn
           |> put_flash(:delete_error, "There was an error deleting your account.")
@@ -69,13 +73,17 @@ defmodule CodeStatsWeb.PreferencesController do
       end
     else
       conn
-      |> put_flash(:delete_error, "Please confirm deletion by typing \"DELETE\" into the input field.")
+      |> put_flash(
+           :delete_error,
+           "Please confirm deletion by typing \"DELETE\" into the input field."
+         )
       |> redirect(to: preferences_path(conn, :edit))
     end
   end
 
   defp common_edit_assigns(conn) do
     user_data = AuthUtils.get_current_user(conn)
+
     conn
     |> assign(:user, user_data)
   end

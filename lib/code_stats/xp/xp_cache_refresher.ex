@@ -9,7 +9,8 @@ defmodule CodeStats.XP.XPCacheRefresher do
 
   alias CodeStats.{Repo, User}
 
-  @how_often 24 * 60 * 60 * 1000 # Run every 24 hours
+  # Run every 24 hours
+  @how_often 24 * 60 * 60 * 1000
 
   def start_link do
     GenServer.start_link(__MODULE__, %{})
@@ -32,10 +33,8 @@ defmodule CodeStats.XP.XPCacheRefresher do
   end
 
   defp do_refresh() do
-    (from u in User, select: u)
+    from(u in User, select: u)
     |> Repo.all()
-    |> Enum.each(
-      fn user -> User.update_cached_xps(user, true) end
-    )
+    |> Enum.each(fn user -> User.update_cached_xps(user, true) end)
   end
 end

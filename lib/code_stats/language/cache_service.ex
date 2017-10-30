@@ -25,16 +25,18 @@ defmodule CodeStats.Language.CacheService do
   end
 
   def init(state) do
-    :ets.new(@language_xp_cache_table, [:named_table, :set, :public, read_concurrency: true, write_concurrency: true])
+    :ets.new(@language_xp_cache_table, [
+      :named_table,
+      :set,
+      :public,
+      read_concurrency: true,
+      write_concurrency: true
+    ])
 
     refresh_total_language_xp_and_repeat()
 
     {:ok, state}
   end
-
-
-
-
 
   @doc """
   Add the given amount of XP for the given language in the total language XP cache.
@@ -48,7 +50,7 @@ defmodule CodeStats.Language.CacheService do
 
     case :ets.update_counter(@language_xp_cache_table, key, {2, value}, {key, value}) do
       new_count when is_integer(new_count) -> new_count
-      _ -> raise "Updating counter #{inspect key} failed!"
+      _ -> raise "Updating counter #{inspect(key)} failed!"
     end
   end
 
@@ -56,15 +58,11 @@ defmodule CodeStats.Language.CacheService do
   Get the total XP in the system for each language. Returns a list of tuples where the first
   element is the language name and the second element is the amount of XP.
   """
-  @spec get_total_language_xps() :: [{String.t, integer}]
+  @spec get_total_language_xps() :: [{String.t(), integer}]
   def get_total_language_xps() do
     :ets.match_object(@language_xp_cache_table, {{:"$1", :total}, :"$2"})
     |> Enum.map(fn {{lang_name, :total}, amount} -> {lang_name, amount} end)
   end
-
-
-
-
 
   def handle_info(:refresh_total_language_xp, state) do
     refresh_total_language_xp_and_repeat()
@@ -84,17 +82,22 @@ defmodule CodeStats.Language.CacheService do
     # Remove old languages as aliases can otherwise result in duplicate items
     :ets.delete_all_objects(@language_xp_cache_table)
 
-    most_popular_q = from x in XP,
-      join: l in Language, on: l.id == x.language_id,
-      group_by: l.id,
-      order_by: [desc: sum(x.amount)],
-      select: {l, sum(x.amount)}
+    most_popular_q =
+      from(
+        x in XP,
+        join: l in Language,
+        on: l.id == x.language_id,
+        group_by: l.id,
+        order_by: [desc: sum(x.amount)],
+        select: {l, sum(x.amount)}
+      )
 
-    most_popular = case Repo.all(most_popular_q) do
-      nil -> []
-      ret -> ret
-    end
-    |> Enum.map(fn {lang, amount} -> {{lang.name, :total}, amount} end)
+    most_popular =
+      case Repo.all(most_popular_q) do
+        nil -> []
+        ret -> ret
+      end
+      |> Enum.map(fn {lang, amount} -> {{lang.name, :total}, amount} end)
 
     :ets.insert(@language_xp_cache_table, most_popular)
   end

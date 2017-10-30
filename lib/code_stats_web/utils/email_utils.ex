@@ -16,7 +16,7 @@ defmodule CodeStatsWeb.EmailUtils do
 
   NOTE: User must have an email! Check before calling this function.
   """
-  @spec send_password_reset_email(%User{}, String.t) :: nil
+  @spec send_password_reset_email(%User{}, String.t()) :: nil
   def send_password_reset_email(user, token) do
     base_email()
     |> to(user.email)

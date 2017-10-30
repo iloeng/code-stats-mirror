@@ -14,7 +14,7 @@ defmodule CodeStatsWeb.AuthUtils do
   alias Plug.Conn
   alias Plug.Crypto.MessageVerifier
 
-  @auth_key     :codestats_user
+  @auth_key :codestats_user
   @api_auth_key :codestats_api_user
   @private_info_key :_codestats_session_user
 
@@ -61,17 +61,19 @@ defmodule CodeStatsWeb.AuthUtils do
 
   Returns nil if user was not found.
   """
-  @spec get_user(String.t, boolean) :: %User{} | nil
+  @spec get_user(String.t(), boolean) :: %User{} | nil
   def get_user(username, case_insensitive \\ false) do
-    query = case case_insensitive do
-      false ->
-        from u in User,
-          where: u.username == ^username
+    query =
+      case case_insensitive do
+        false ->
+          from(u in User, where: u.username == ^username)
 
-      true ->
-        from u in User,
-          where: fragment("lower(?)", ^username) == fragment("lower(?)", u.username)
-    end
+        true ->
+          from(
+            u in User,
+            where: fragment("lower(?)", ^username) == fragment("lower(?)", u.username)
+          )
+      end
 
     Repo.one(query)
   end
@@ -81,7 +83,7 @@ defmodule CodeStatsWeb.AuthUtils do
 
   Authentication status is saved in the session. Returns conn on success, :error on failure.
   """
-  @spec auth_user(%Conn{}, %User{}, String.t) :: %Conn{} | :error
+  @spec auth_user(%Conn{}, %User{}, String.t()) :: %Conn{} | :error
   def auth_user(%Conn{} = conn, %User{} = user, password) do
     if check_user_password(user, password) do
       force_auth_user_id(conn, user.id)
@@ -128,9 +130,9 @@ defmodule CodeStatsWeb.AuthUtils do
     changeset
     |> Repo.insert()
     |> case do
-      {:ok, user} -> user
-      {:error, changeset} -> changeset
-    end
+         {:ok, user} -> user
+         {:error, changeset} -> changeset
+       end
   end
 
   @doc """
@@ -143,9 +145,9 @@ defmodule CodeStatsWeb.AuthUtils do
     changeset
     |> Repo.update()
     |> case do
-      {:ok, user} -> user
-      {:error, changeset} -> changeset
-    end
+         {:ok, user} -> user
+         {:error, changeset} -> changeset
+       end
   end
 
   @doc """
@@ -177,15 +179,13 @@ defmodule CodeStatsWeb.AuthUtils do
 
   If the given token is not valid, nothing is done to the connection.
   """
-  @spec auth_user_api(%Conn{}, String.t) :: %Conn{}
+  @spec auth_user_api(%Conn{}, String.t()) :: %Conn{}
   def auth_user_api(%Conn{} = conn, api_user_token) do
-    with \
-      {username, machine_id}  <- split_token(api_user_token),
-      %User{} = user          <- get_user(username),
-      %Machine{} = machine    <- get_machine(machine_id, user),
-      {:ok, _}                <- MessageVerifier.verify(api_user_token,
-                                                        conn.secret_key_base <> machine.api_salt)
-    do
+    with {username, machine_id} <- split_token(api_user_token),
+         %User{} = user <- get_user(username),
+         %Machine{} = machine <- get_machine(machine_id, user),
+         {:ok, _} <-
+           MessageVerifier.verify(api_user_token, conn.secret_key_base <> machine.api_salt) do
       Conn.put_private(conn, @api_auth_key, {user, machine})
     else
       _ -> conn
@@ -207,16 +207,18 @@ defmodule CodeStatsWeb.AuthUtils do
 
   Connection needs to be given to get the secret key base.
   """
-  @spec get_api_key(%Conn{}, %User{}, %Machine{}) :: String.t
+  @spec get_api_key(%Conn{}, %User{}, %Machine{}) :: String.t()
   def get_api_key(%Conn{} = conn, %User{} = user, %Machine{} = machine) do
-    MessageVerifier.sign(form_payload(user.username, machine.id),
-                         conn.secret_key_base <> machine.api_salt)
+    MessageVerifier.sign(
+      form_payload(user.username, machine.id),
+      conn.secret_key_base <> machine.api_salt
+    )
   end
 
   @doc """
   Checks if the given password matches the given user's password.
   """
-  @spec check_user_password(%User{}, String.t) :: boolean
+  @spec check_user_password(%User{}, String.t()) :: boolean
   def check_user_password(%User{} = user, password) do
     Bcrypt.checkpw(password, user.password)
   end
@@ -226,11 +228,9 @@ defmodule CodeStatsWeb.AuthUtils do
   end
 
   defp unform_payload(payload) do
-    with \
-      [username, machine] <- String.split(payload, "##"),
-      {:ok, username}     <- Base.url_decode64(username),
-      {:ok, machine}      <- Base.url_decode64(machine)
-    do
+    with [username, machine] <- String.split(payload, "##"),
+         {:ok, username} <- Base.url_decode64(username),
+         {:ok, machine} <- Base.url_decode64(machine) do
       {username, machine}
     else
       _ -> :error
@@ -239,27 +239,28 @@ defmodule CodeStatsWeb.AuthUtils do
 
   defp split_token(token) do
     # Try new style token split first, then old style
-    content = case String.split(token, ".") do
-      [_, content, _] -> content
-      _ -> String.split(token, "##") |> Enum.at(0)
-    end
+    content =
+      case String.split(token, ".") do
+        [_, content, _] -> content
+        _ -> String.split(token, "##") |> Enum.at(0)
+      end
 
-    with \
-      {:ok, content}      <- Base.decode64(content, padding: false),
-      {username, machine} <- unform_payload(content)
-    do
+    with {:ok, content} <- Base.decode64(content, padding: false),
+         {username, machine} <- unform_payload(content) do
       {username, machine}
     else
       # Given token was malformed in some way
-      _ -> :error
+      _ ->
+        :error
     end
   end
 
   defp get_machine(machine_id, user) do
-    query = from m in Machine,
-      where: m.id == ^machine_id and
-             m.user_id == ^user.id and
-             m.active == true
+    query =
+      from(
+        m in Machine,
+        where: m.id == ^machine_id and m.user_id == ^user.id and m.active == true
+      )
 
     Repo.one(query)
   end

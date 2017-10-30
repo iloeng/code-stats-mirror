@@ -14,9 +14,12 @@ defmodule CodeStatsWeb.ControllerUtils do
   """
   @spec get_user_machines(%User{}) :: [%Machine{}]
   def get_user_machines(%User{} = user) do
-    query = from m in Machine,
-      where: m.user_id == ^user.id,
-      order_by: [desc: m.inserted_at]
+    query =
+      from(
+        m in Machine,
+        where: m.user_id == ^user.id,
+        order_by: [desc: m.inserted_at]
+      )
 
     Repo.all(query)
   end

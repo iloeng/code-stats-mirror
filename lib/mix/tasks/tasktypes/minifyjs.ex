@@ -3,6 +3,7 @@ defmodule CodeStats.BuildTasks.MinifyJS do
   import CodeStats.FrontendConfs
 
   def bin(), do: node_bin("uglifyjs")
+
   def args(in_file, out_file) do
     [
       "--source-map",

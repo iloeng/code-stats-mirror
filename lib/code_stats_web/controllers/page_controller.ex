@@ -8,8 +8,9 @@ defmodule CodeStatsWeb.PageController do
   def index(conn, _params) do
     # Load total language XPs from cache and use them to populate total XP and
     # list of most popular languages
-    total_lang_xps = CacheService.get_total_language_xps()
-    |> Enum.sort(fn {_, a}, {_, b} -> a > b end)
+    total_lang_xps =
+      CacheService.get_total_language_xps()
+      |> Enum.sort(fn {_, a}, {_, b} -> a > b end)
 
     total_xp = Enum.reduce(total_lang_xps, 0, fn {_, amount}, acc -> amount + acc end)
 

@@ -48,9 +48,7 @@ defmodule CodeStats.User.Terminator do
     now = DateTime.utc_now()
     earliest_valid = CDateTime.subtract!(now, PasswordReset.token_max_life() * 3600)
 
-    (from pr in PasswordReset,
-      where: pr.inserted_at < ^earliest_valid)
-
+    from(pr in PasswordReset, where: pr.inserted_at < ^earliest_valid)
     |> Repo.delete_all()
   end
 end

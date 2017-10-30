@@ -12,6 +12,6 @@ defmodule CodeStatsWeb.PermissionUtils do
   """
   @spec can_access_profile?(%User{} | nil, %User{}) :: boolean
   def can_access_profile?(user, target) do
-    (not target.private_profile) or (user != nil and user.id == target.id)
+    not target.private_profile or (user != nil and user.id == target.id)
   end
 end

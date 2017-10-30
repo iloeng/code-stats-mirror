@@ -3,6 +3,7 @@ defmodule CodeStats.BuildTasks.BundleJS do
   import CodeStats.FrontendConfs
 
   def bin(), do: node_bin("rollup")
+
   def args(in_file, out_file) do
     [
       "--config",
