@@ -10,22 +10,14 @@ This repository contains the Phoenix application that implements the service bac
 
 ### Requirements
 
-* [Vagrant](https://www.vagrantup.com/), which also needs [VirtualBox](https://www.virtualbox.org/)
+These are my targets, older versions _might_ work:
 
-or, if you do not want to use Vagrant (it should compile on macOS and Linux), you need to
-install (these are my targets, older versions _might_ work)
-
-* Erlang 19.3+
-* Elixir 1.4+
+* Erlang 20.0+
+* Elixir 1.5+
 * PostgreSQL 9.6+
-* Node 7+ and NPM
+* Node 8+ and NPM
 
 ### First time install
-
-If using Vagrant, first `vagrant up` to set up the machine, then `vagrant ssh` to log in and
-`cd /vagrant` to go to the project path.
-
-Then:
 
 ```
 mix deps.get                # Get Hex dependencies, answer yes to installing Hex/rebar if
