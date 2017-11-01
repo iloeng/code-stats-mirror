@@ -7,14 +7,19 @@ image: elixir:latest
 services:
   - postgres:latest
 
+variables:
+  POSTGRES_DB: code_stats_ci
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+
 before_script:
   # Set up required dummy config files
   - echo 'use Mix.Config' > config/appsignal.exs
 
-  - MIX_ENV=test mix local.rebar --force
-  - MIX_ENV=test mix local.hex --force
-  - MIX_ENV=test mix deps.get
+  - MIX_ENV=ci mix local.rebar --force
+  - MIX_ENV=ci mix local.hex --force
+  - MIX_ENV=ci mix deps.get
 
 mix:
   script:
-  - MIX_ENV=test mix test
+  - MIX_ENV=ci mix test
