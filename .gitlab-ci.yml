@@ -8,6 +8,7 @@ services:
   - postgres:latest
 
 variables:
+  MIX_ENV: ci
   POSTGRES_DB: code_stats_ci
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
@@ -16,10 +17,10 @@ before_script:
   # Set up required dummy config files
   - echo 'use Mix.Config' > config/appsignal.exs
 
-  - MIX_ENV=ci mix local.rebar --force
-  - MIX_ENV=ci mix local.hex --force
-  - MIX_ENV=ci mix deps.get
+  - mix local.rebar --force
+  - mix local.hex --force
+  - mix deps.get
 
 mix:
   script:
-  - MIX_ENV=ci mix test
+  - mix test
