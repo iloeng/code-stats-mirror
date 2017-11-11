@@ -11,26 +11,104 @@
     <ul>
       <li>
         <strong>Code::Stats main site:</strong>
-        <a href="https://github.com/Nicd/code-stats">https://github.com/Nicd/code-stats</a>
+        <a href="https://gitlab.com/code-stats/code-stats">code-stats/code-stats</a>
       </li>
 
       <li>
         <strong>Atom plugin:</strong>
-        <a href="https://github.com/Nicd/code-stats-atom">https://github.com/Nicd/code-stats-atom</a>
+        <a href="https://gitlab.com/code-stats/code-stats-atom">code-stats/code-stats-atom</a>
       </li>
 
       <li>
         <strong>JetBrains plugin:</strong>
-        <a href="https://github.com/Nicd/code-stats-intellij">https://github.com/Nicd/code-stats-intellij</a>
+        <a href="https://gitlab.com/code-stats/code-stats-intellij">code-stats/code-stats-intellij</a>
       </li>
 
       <li>
         <strong>Sublime Text 3 plugin:</strong>
-        <a href="https://github.com/Nicd/code-stats-sublime">https://github.com/Nicd/code-stats-sublime</a>
+        <a href="https://gitlab.com/code-stats/code-stats-sublime">code-stats/code-stats-sublime</a>
       </li>
     </ul>
   </p>
+</div>
 
+<div class="stripe stripe-accent contributors">
+  <h2>Contributors</h2>
+
+  <div class="contributors-list">
+    <div>
+      <img src="<%= static_path(@conn, "/frontend/assets/images/contributors/nicd.png") %>" alt="Mikko Ahlroth" title="Mikko Ahlroth" />
+
+      <h3>Mikko Ahlroth</h3>
+      <p class="subtitle">Lead developer</p>
+
+      <p>
+        <a href="https://blog.nytsoi.net/">Blog</a>
+        / <a href="https://github.com/Nicd">GitHub</a>
+        / <a href="https://gitlab.com/Nicd">GitLab</a>
+      </p>
+    </div>
+
+    <div>
+      <img src="<%= static_path(@conn, "/frontend/assets/images/Logo.svg") %>" alt="Code::Stats logo" />
+
+      <h3>Hannu Hartikainen</h3>
+      <p class="subtitle"><a href="">code-stats-zsh</a> developer</p>
+
+      <p>
+        <a href="https://github.com/dancek">GitHub</a>
+      </p>
+    </div>
+
+    <div>
+      <img src="<%= static_path(@conn, "/frontend/assets/images/contributors/nikolauska.png") %>" alt="Niko Lehtovirta" title="Niko Lehtovirta" />
+
+      <h3>Niko Lehtovirta</h3>
+
+      <p>
+        <a href="https://github.com/nikolauska">GitHub</a>
+        / <a href="https://gitlab.com/nikolauska">GitLab</a>
+      </p>
+    </div>
+
+    <div>
+      <img src="<%= static_path(@conn, "/frontend/assets/images/contributors/aman.jpeg") %>" alt="Aman Mittal" title="Aman Mittal" />
+
+      <h3>Aman Mittal</h3>
+      <p class="subtitle"><a href="https://gitlab.com/code-stats/codestats-cli">codestats-cli</a> developer</p>
+
+      <p>
+        <a href="https://github.com/amandeepmittal">GitHub</a>
+      </p>
+    </div>
+
+    <div>
+      <img src="<%= static_path(@conn, "/frontend/assets/images/contributors/riussi.jpg") %>" alt="Juha Ristolainen" title="Juha Ristolainen" />
+
+      <h3>Juha Ristolainen</h3>
+      <p class="subtitle"><a href="https://marketplace.visualstudio.com/items?itemName=juha-ristolainen.code-stats-vscode">code-stats-vscode</a> developer</p>
+
+      <p>
+        <a href="https://github.com/riussi">GitHub</a>
+        / <a href="https://twitter.com/riussi">Twitter</a>
+        / <a href="http://www.juharistolainen.com/">Site</a>
+      </p>
+    </div>
+
+    <div>
+      <img src="<%= static_path(@conn, "/frontend/assets/images/contributors/mastorm.png") %>" alt="Mathias Storm" title="Mathias Storm" />
+
+      <h3>Mathias Storm</h3>
+      <p class="subtitle"><a href="https://marketplace.visualstudio.com/items?itemName=MathiasSTorm.CodeStatsClient">CodeStats.Client</a> developer</p>
+
+      <p>
+        <a href="https://github.com/mastorm">GitHub</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="stripe">
   <h2>Changelog</h2>
 
   <h3>2.0.0 – ????-??-?? – Brand spanking new</h3>

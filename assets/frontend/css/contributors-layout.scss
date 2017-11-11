@@ -1,0 +1,47 @@
+.stripe.contributors {
+  padding-top: 30px;
+  padding-bottom: 30px;
+
+  >h2 {
+    grid-area: title;
+    margin-top: 0;
+  }
+
+  >.contributors-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 20px;
+
+    @media #{$sm} {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media #{$md} {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    >div {
+      text-align: center;
+
+      img {
+        width: 100%;
+        max-width: 128px;
+        height: auto;
+        border-radius: 40%;
+        background-color: $background-color;
+      }
+
+      h3 {
+        margin-top: 10px;
+      }
+
+      >.subtitle {
+        font-style: italic;
+      }
+
+      p {
+        margin: 5px 0;
+      }
+    }
+  }
+}
