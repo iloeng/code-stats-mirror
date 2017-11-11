@@ -1,0 +1,6 @@
+[
+  {
+    "files": "**/*.{ex,exs}",
+    "command": "mix format ${srcFile}"
+  }
+]
