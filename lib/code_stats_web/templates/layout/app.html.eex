@@ -38,7 +38,7 @@
     <header id="nav-stripe" class="stripe">
       <a id="header-logo" class="logo" href="<%= page_path(@conn, :index) %>">
         <img
-         src="<%= static_path(@conn, "/frontend/assets/images/Logo_circle_crushed.png") %>"
+         src="<%= static_path(@conn, "/frontend/assets/images/Logo.svg") %>"
          alt="<%= get_conf(:site_name) %> logo"
          title="<%= get_conf(:site_name) %>"
         />
