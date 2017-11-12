@@ -2,15 +2,17 @@ defmodule CodeStats.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :code_stats,
-     version: "2.0.0-wip",
-     elixir: "~> 1.5",
-     elixirc_paths: elixirc_paths(Mix.env),
-     compilers: [:phoenix, :gettext] ++ Mix.compilers,
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     aliases: aliases(),
-     deps: deps()]
+    [
+      app: :code_stats,
+      version: "2.0.0-wip",
+      elixir: "~> 1.5",
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      aliases: aliases(),
+      deps: deps()
+    ]
   end
 
   # Configuration for the OTP application.
@@ -24,9 +26,9 @@ defmodule CodeStats.Mixfile do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test),  do: ["lib", "test/support"]
-  defp elixirc_paths(:ci),    do: ["lib", "test/support"]
-  defp elixirc_paths(_),      do: ["lib"]
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:ci), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
   #
@@ -54,8 +56,16 @@ defmodule CodeStats.Mixfile do
       {:geolix, "~> 0.14.0"},
       {:geolite2data, "~> 0.0.3"},
       {:remote_ip, "~> 0.1.3"},
-      {:distillery, git: "https://github.com/bitwalker/distillery.git", ref: "67905e230ce0e861a739756c1f79ba9124c5fd3e", runtime: false}
-   ]
+      {
+        :distillery,
+        git: "https://github.com/bitwalker/distillery.git",
+        ref: "67905e230ce0e861a739756c1f79ba9124c5fd3e",
+        runtime: false
+      },
+      {:absinthe, "~> 1.3.2"},
+      {:absinthe_plug, "~> 1.3.1"},
+      {:absinthe_ecto, "~> 0.1.2"}
+    ]
   end
 
   # Aliases are shortcut or tasks specific to the current project.
@@ -68,7 +78,7 @@ defmodule CodeStats.Mixfile do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "test": ["ecto.create --quiet", "ecto.migrate", "test"]
-   ]
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+    ]
   end
 end
