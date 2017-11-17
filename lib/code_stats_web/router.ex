@@ -58,6 +58,7 @@ defmodule CodeStatsWeb.Router do
 
       get("/login", CodeStatsWeb.AuthController, :render_login)
       post("/login", CodeStatsWeb.AuthController, :login)
+      get "/login/oauth/:app", AuthController, :oauth
       get("/signup", CodeStatsWeb.AuthController, :render_signup)
       post("/signup", CodeStatsWeb.AuthController, :signup)
       get("/forgot-password", CodeStatsWeb.AuthController, :render_forgot)

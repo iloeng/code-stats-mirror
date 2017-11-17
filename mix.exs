@@ -67,6 +67,7 @@ defmodule CodeStats.Mixfile do
       {:geolix, "~> 0.15.1"},
       {:geolite2data, "~> 0.0.3"},
       {:remote_ip, "~> 0.1.3"},
+      {:oauth2, "~> 0.9.2"},
       {:distillery, "~> 1.5.2", runtime: false},
       {:absinthe, "~> 1.3.2"},
       {:absinthe_plug, "~> 1.3.1"},

@@ -9,6 +9,7 @@ defmodule CodeStatsWeb.AuthController do
   alias CodeStats.Repo
   alias CodeStats.User
   alias CodeStats.User.PasswordReset
+  alias CodeStats.Auth.Github
 
   def render_login(conn, _params) do
     conn
@@ -22,6 +23,12 @@ defmodule CodeStatsWeb.AuthController do
     conn
     |> assign(:title, "Signup")
     |> render("signup.html", changeset: changeset)
+  end
+
+  def oauth(conn, %{"app" => "github", "code" => code}) do
+    {:ok, user} = Github.user(code: code)
+    IO.inspect user
+    redirect(conn, to: auth_path(conn, :render_login))
   end
 
   def login(conn, %{"username" => username, "password" => password} = params) do
