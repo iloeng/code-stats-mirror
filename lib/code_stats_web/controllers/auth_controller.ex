@@ -26,13 +26,44 @@ defmodule CodeStatsWeb.AuthController do
   end
 
   def oauth(conn, %{"app" => "github", "code" => code}) do
-    {:ok, user} = Github.user(code: code)
-    IO.inspect user
-    redirect(conn, to: auth_path(conn, :render_login))
+    with {:ok, body} <- Github.user(code: code) |> IO.inspect,
+         {user = %User{}, _} <- {AuthUtils.get_user(body["login"], from: "github"), body}
+    do
+      conn
+      |> AuthUtils.force_auth_user_id(user.id)
+      |> redirect(to: profile_path(conn, :my_profile))
+    else
+      # Missing user, try to create it and login with that user
+      {nil, body} ->
+        params = %{
+          username: body["login"],
+          password: "github",
+          email: body["email"],
+          from: "github",
+        }
+        case Repo.insert(User.changeset(%User{}, params)) do
+          {:ok, user} ->
+            conn
+            |> AuthUtils.force_auth_user_id(user.id)
+            |> redirect(to: profile_path(conn, :my_profile))
+
+          {:error, _} ->
+            conn
+            |> assign(:title, "Login")
+            |> put_flash(:error, "Failed to login with GitHub")
+            |> render("login.html")
+        end
+
+      _ret ->
+        conn
+        |> assign(:title, "Login")
+        |> put_flash(:error, "Failed to login with GitHub")
+        |> render("login.html")
+    end
   end
 
   def login(conn, %{"username" => username, "password" => password} = params) do
-    with %User{} = user <- User.get_by_username(username, true),
+    with %User{} = user      <- AuthUtils.get_user(username, case_insensitive: true),
          %Plug.Conn{} = conn <- AuthUtils.auth_user(conn, user, password),
          %Plug.Conn{} = conn <- maybe_remember_me(conn, user, params) do
       redirect(conn, to: profile_path(conn, :my_profile))
