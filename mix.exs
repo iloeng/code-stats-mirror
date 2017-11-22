@@ -66,7 +66,8 @@ defmodule CodeStats.Mixfile do
       {:geolix, "~> 0.14.0"},
       {:geolite2data, "~> 0.0.3"},
       {:remote_ip, "~> 0.1.3"},
-      {:distillery, git: "https://github.com/bitwalker/distillery.git", ref: "67905e230ce0e861a739756c1f79ba9124c5fd3e", runtime: false}
+      {:distillery, git: "https://github.com/bitwalker/distillery.git", ref: "67905e230ce0e861a739756c1f79ba9124c5fd3e", runtime: false},
+      {:csv, "~> 2.0.0"}
    ]
   end
 

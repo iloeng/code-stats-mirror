@@ -2,6 +2,7 @@ defmodule CodeStats.User.Pulse do
   use Ecto.Schema
 
   import Ecto.Changeset
+  import Ecto.Query
 
   schema "pulses" do
     # When the Pulse was generated on the client. This is somewhat confusingly named
@@ -32,5 +33,11 @@ defmodule CodeStats.User.Pulse do
     data
     |> cast(params, [:sent_at, :sent_at_local, :tz_offset])
     |> validate_required([:sent_at, :sent_at_local, :tz_offset])
+  end
+
+  def xps_by_user_id(id) do
+    __MODULE__
+    |> where([p], p.user_id == ^id)
+    |> preload([:machine, {:xps, [:language]}])
   end
 end
