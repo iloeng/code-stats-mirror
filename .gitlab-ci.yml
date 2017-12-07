@@ -1,5 +1,12 @@
 image: bitwalker/alpine-elixir-phoenix:1.5.2
 
+# Cache deps and _build by default
+cache:
+  paths:
+    - _build
+    - deps
+
+# Run mix test
 test:
   services:
     - postgres:latest
@@ -14,6 +21,7 @@ test:
   script:
     - mix test
 
+# Generate ex_doc documenation to gitlab pages
 pages:
   before_script:
     - echo 'use Mix.Config' > config/appsignal.exs
