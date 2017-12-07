@@ -23,6 +23,7 @@ test:
 
 # Generate ex_doc documenation to gitlab pages
 pages:
+  only: master@code-stats/code-stats
   before_script:
     - echo 'use Mix.Config' > config/appsignal.exs
     - echo 'use Mix.Config' > config/dev.secret.exs
