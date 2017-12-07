@@ -19,6 +19,7 @@ test:
     - echo 'use Mix.Config' > config/appsignal.exs
     - mix deps.get
   script:
+    - mix compile --warnings-as-errors
     - mix test
 
 # Generate ex_doc documenation to gitlab pages

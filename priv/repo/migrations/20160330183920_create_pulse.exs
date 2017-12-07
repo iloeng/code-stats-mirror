@@ -3,10 +3,10 @@ defmodule CodeStats.Repo.Migrations.CreatePulse do
 
   def change do
     create table(:pulses) do
-      add :sent_at, :datetime
+      add :sent_at, :utc_datetime
       add :user_id, references(:users, on_delete: :nothing)
 
-      timestamps
+      timestamps()
     end
     create index(:pulses, [:user_id])
 

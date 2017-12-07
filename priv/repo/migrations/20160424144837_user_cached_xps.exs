@@ -7,13 +7,13 @@ defmodule CodeStats.Repo.Migrations.UserCachedXps do
       add :user_id, references(:users, on_delete: :nothing)
       add :language_id, references(:languages, on_delete: :nothing)
 
-      timestamps
+      timestamps()
     end
     create index(:cached_xps, [:user_id])
     create index(:cached_xps, [:language_id])
 
     alter table(:users) do
-      add :last_cached, :datetime
+      add :last_cached, :utc_datetime
     end
   end
 end

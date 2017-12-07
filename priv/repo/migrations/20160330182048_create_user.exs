@@ -7,8 +7,7 @@ defmodule CodeStats.Repo.Migrations.CreateUser do
       add :email, :string
       add :password, :string
 
-      timestamps
+      timestamps()
     end
-
   end
 end
