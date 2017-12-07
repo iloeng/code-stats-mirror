@@ -2,6 +2,18 @@ defmodule CodeStats.Auth.Github do
   @moduledoc """
   OAuth2 GitHub Provider
 
+  ## How to setup auth on GitHub
+
+  1. Go to https://github.com/settings/developers
+  2. Click "New OAuth App" button on top right
+  3. Add name and description you like, example "codestats development"
+  4. Add homepage url
+    - http://localhost:5000 for development
+    - https://codestats.net for production
+  5. Add authorization callback url
+    - http://localhost:5000/login/oauth/github for development
+    - https://codestats.net/login/oauth/github for production
+
   ## Config
 
   ```
@@ -9,6 +21,24 @@ defmodule CodeStats.Auth.Github do
     enabled: true,
     client_id: System.get_env("GITHUB_APP_ID"),
     client_secret: System.get_env("GITHUB_APP_SECRET")
+  ```
+
+  ## Usage
+
+  ##### Get authorization url
+  ```
+  <%= if {:ok, url} = CodeStats.Auth.Github.url() do %>
+    <a href="<%= url %>">GitHub login</a>
+  <% end %>
+  ```
+
+  ##### Get user info
+  ```
+  # Code is returned from github authentication
+  # See CodeStatsWeb.AuthController for example
+  if {:ok, user} = CodeStats.Auth.Github.user(code: "code from github") do
+    # Save user info or login user...
+  end
   ```
   """
   use OAuth2.Strategy

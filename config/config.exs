@@ -63,6 +63,14 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+# Configure GitHub authentication
+# Copy this to dev.secret.exs or prod.secret.exs and add proper variables
+# See CodeStats.Auth.Github for more documentation
+config :code_stats, CodeStats.Auth.Github,
+  enabled: false,
+  client_id: "",
+  client_secret: ""
+
 # Configure phoenix generators
 config :phoenix, :generators,
   migration: true,
