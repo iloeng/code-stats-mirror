@@ -68,8 +68,8 @@ config :logger, :console,
 # See CodeStats.Auth.Github for more documentation
 config :code_stats, CodeStats.Auth.Github,
   enabled: false,
-  client_id: "",
-  client_secret: ""
+  client_id: nil,
+  client_secret: nil
 
 # Configure phoenix generators
 config :phoenix, :generators,
