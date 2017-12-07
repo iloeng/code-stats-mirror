@@ -71,7 +71,7 @@ defmodule CodeStats.Auth.Github do
   end
 
   # Get token to client
-  defp token(params \\ [], opts \\ []) do
+  defp token(params, opts) when is_list(params) and is_list(opts) do
     headers = Keyword.get(opts, :headers, [])
     options = Keyword.get(opts, :options, [])
 
