@@ -1,5 +1,6 @@
+image: bitwalker/alpine-elixir-phoenix:1.5.2
+
 test:
-  image: elixir:latest
   services:
     - postgres:latest
   variables:
@@ -9,19 +10,14 @@ test:
     POSTGRES_PASSWORD: postgres
   before_script:
     - echo 'use Mix.Config' > config/appsignal.exs
-    - mix local.rebar --force
-    - mix local.hex --force
     - mix deps.get
   script:
     - mix test
 
 pages:
-  image: elixir:latest
   before_script:
     - echo 'use Mix.Config' > config/appsignal.exs
     - echo 'use Mix.Config' > config/dev.secret.exs
-    - mix local.rebar --force
-    - mix local.hex --force
     - mix deps.get
     - mix compile
   script:
