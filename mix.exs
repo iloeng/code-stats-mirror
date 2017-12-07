@@ -2,15 +2,27 @@ defmodule CodeStats.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :code_stats,
-     version: "2.0.0-wip",
-     elixir: "~> 1.5",
-     elixirc_paths: elixirc_paths(Mix.env),
-     compilers: [:phoenix, :gettext] ++ Mix.compilers,
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     aliases: aliases(),
-     deps: deps()]
+    [
+      app: :code_stats,
+      version: "2.0.0-wip",
+      elixir: "~> 1.5",
+      elixirc_paths: elixirc_paths(Mix.env),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers,
+      build_embedded: Mix.env == :prod,
+      start_permanent: Mix.env == :prod,
+      aliases: aliases(),
+      deps: deps(),
+
+      # Docs
+      name: "Code::Stats",
+      source_url: "https://gitlab.com/code-stats/code-stats",
+      homepage_url: "https://codestats.net",
+      docs: [
+        main: "readme", # The main page in the docs
+        logo: "Logo.png",
+        extras: ["README.md"]
+      ]
+    ]
   end
 
   # Configuration for the OTP application.
