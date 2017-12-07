@@ -19,6 +19,7 @@ pages:
   image: elixir:latest
   before_script:
     - echo 'use Mix.Config' > config/appsignal.exs
+    - echo 'use Mix.Config' > config/dev.secret.exs
     - mix deps.get
     - mix compile
     - mix local.rebar --force
