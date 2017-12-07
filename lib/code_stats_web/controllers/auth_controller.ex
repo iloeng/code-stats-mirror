@@ -26,7 +26,7 @@ defmodule CodeStatsWeb.AuthController do
   end
 
   def oauth(conn, %{"app" => "github", "code" => code}) do
-    with {:ok, body} <- Github.user(code: code) |> IO.inspect,
+    with {:ok, body} <- Github.user(code: code)
          {user = %User{}, _} <- {AuthUtils.get_user(body["login"], from: "github"), body}
     do
       conn
