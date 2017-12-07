@@ -20,10 +20,10 @@ pages:
   before_script:
     - echo 'use Mix.Config' > config/appsignal.exs
     - echo 'use Mix.Config' > config/dev.secret.exs
-    - mix deps.get
-    - mix compile
     - mix local.rebar --force
     - mix local.hex --force
+    - mix deps.get
+    - mix compile
   script:
     - mix docs
     - mv doc public
