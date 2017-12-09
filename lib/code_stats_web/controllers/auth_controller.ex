@@ -45,7 +45,7 @@ defmodule CodeStatsWeb.AuthController do
           {:ok, user} ->
             conn
             |> AuthUtils.force_auth_user_id(user.id)
-            |> put_flash(:success, "Great success! Your account was created and you can now log in with GitHub.")
+            |> put_flash(:success, "Great success! An account has been created for you and linked to your GitHub account.")
             |> redirect(to: profile_path(conn, :my_profile))
 
           {:error, _} ->
