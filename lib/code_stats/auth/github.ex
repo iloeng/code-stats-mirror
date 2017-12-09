@@ -27,7 +27,7 @@ defmodule CodeStats.Auth.Github do
 
   ##### Get authorization url
   ```
-  <%= if {:ok, url} = CodeStats.Auth.Github.url() do %>
+  <%= if {:ok, url} == CodeStats.Auth.Github.url() do %>
     <a href="<%= url %>">GitHub login</a>
   <% end %>
   ```
@@ -36,7 +36,7 @@ defmodule CodeStats.Auth.Github do
   ```
   # Code is returned from github authentication
   # See CodeStatsWeb.AuthController for example
-  if {:ok, user} = CodeStats.Auth.Github.user(code: "code from github") do
+  if {:ok, user} == CodeStats.Auth.Github.user(code: "code from github") do
     # Save user info or login user...
   end
   ```
