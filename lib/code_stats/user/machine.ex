@@ -25,6 +25,7 @@ defmodule CodeStats.User.Machine do
     |> cast(params, [:name])
     |> name_validations()
     |> put_change(:api_salt, generate_api_salt())
+    |> validate_length(:api_salt, min: 1, max: 255)
     |> put_change(:active, true)
   end
 
@@ -52,8 +53,7 @@ defmodule CodeStats.User.Machine do
   defp name_validations(changeset) do
     changeset
     |> validate_required([:name])
-    |> validate_length(:name, min: 1)
-    |> validate_length(:name, max: 64)
+    |> validate_length(:name, min: 1, max: 64)
     |> unique_constraint(:name, name: :machines_name_user_id_index)
   end
 
