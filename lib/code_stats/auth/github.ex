@@ -27,7 +27,7 @@ defmodule CodeStats.Auth.Github do
 
   ##### Get authorization url
   ```
-  <%= if {:ok, url} == CodeStats.Auth.Github.url() do %>
+  <%= if url = CodeStats.Auth.Github.url() do %>
     <a href="<%= url %>">GitHub login</a>
   <% end %>
   ```
@@ -36,8 +36,11 @@ defmodule CodeStats.Auth.Github do
   ```
   # Code is returned from github authentication
   # See CodeStatsWeb.AuthController for example
-  if {:ok, user} == CodeStats.Auth.Github.user(code: "code from github") do
-    # Save user info or login user...
+  case CodeStats.Auth.Github.user(code: "code from github") do
+    {:ok, user} ->
+      # Do something with user info
+    {:error, msg} ->
+      # Handle error
   end
   ```
   """
@@ -59,14 +62,14 @@ defmodule CodeStats.Auth.Github do
   @doc """
   Get url for authorizing user
   """
-  @spec url(keyword, keyword) :: {:ok, String.t} | {:error, String.t}
+  @spec url(keyword, keyword) :: String.t | nil
   def url(params \\ [], opts \\ []) do
     case get_client(opts) do
       {:ok, client} ->
-        {:ok, Client.authorize_url!(client, params)}
+        Client.authorize_url!(client, params)
 
-      {:error, msg} ->
-        {:error, msg}
+      {:error, _msg} ->
+        nil
     end
   end
 

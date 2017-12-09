@@ -11,8 +11,7 @@ defmodule CodeStats.Auth.GithubTest do
     ]
     Application.put_env(:code_stats, Github, settings)
 
-    assert {:error, msg} = Github.url()
-    assert is_binary(msg)
+    assert is_nil(Github.url())
   end
 
   test "don't return url github login url when id is nil" do
@@ -23,8 +22,7 @@ defmodule CodeStats.Auth.GithubTest do
     ]
     Application.put_env(:code_stats, Github, settings)
 
-    assert {:error, msg} = Github.url()
-    assert is_binary(msg)
+    assert is_nil(Github.url())
   end
 
   test "don't return url github login url when secret is nil" do
@@ -35,8 +33,7 @@ defmodule CodeStats.Auth.GithubTest do
     ]
     Application.put_env(:code_stats, Github, settings)
 
-    assert {:error, msg} = Github.url()
-    assert is_binary(msg)
+    assert is_nil(Github.url())
   end
 
   test "return github login url with valid values" do
@@ -47,7 +44,6 @@ defmodule CodeStats.Auth.GithubTest do
     ]
     Application.put_env(:code_stats, Github, settings)
 
-    assert {:ok, url} = Github.url()
-    assert is_binary(url)
+    assert is_binary(Github.url())
   end
 end
