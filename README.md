@@ -37,7 +37,8 @@ nano config/dev.secret.exs  # Set up dev config with at least the line "use Mix.
 
 ### Commands
 
-* `mix phx.server`: Run development server on port 15000 (host, inside Vagrant port is 5000)
+* `mix phx.server`: Run development server on port 5000 (default, you can configure this in
+  `dev.secret.exs`)
 * `mix frontend.build`: Build the JS/CSS frontend
 * `mix frontend.watch`: Build the frontend and watch for changes (also run when using `phx.server`)
 * `mix frontend.clean`: Clean frontend output and build artifacts
