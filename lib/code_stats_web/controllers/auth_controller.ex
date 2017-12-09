@@ -85,9 +85,10 @@ defmodule CodeStatsWeb.AuthController do
   end
 
   def signup(conn, %{"user" => user_params}) do
-    changeset = User.changeset(%User{}, user_params)
-
-    case AuthUtils.create_user(changeset) do
+    %User{}
+    |> User.changeset(Map.put(user_params, "from", "codestats"))
+    |> AuthUtils.create_user()
+    |> case do
       %Ecto.Changeset{} = changeset ->
         conn
         |> assign(:title, "Signup")
