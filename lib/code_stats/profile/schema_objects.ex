@@ -5,18 +5,23 @@ defmodule CodeStats.Profile.SchemaObjects do
 
   @desc "User profile public data"
   object :profile do
-    field(:username, :string)
+    @desc "Timestamp when user registered into service"
     field(:registered, :datetime)
 
+    @desc "Total amount of XP of user"
     field :total_xp, :integer do
       resolve(fn %{cache: cache}, _, _ ->
         {:ok, get_cached_total(cache)}
       end)
     end
 
+    @desc "Get all of users languages and their total XP"
     field :languages, list_of(:profile_language) do
-      resolve(fn %{cache: cache}, _, _ ->
-        {:ok, get_cached_languages(cache)}
+      arg(:since, type: :datetime)
+
+      resolve(fn _, %{since: since}, _ ->
+        IO.inspect(since)
+        {:ok, []}
       end)
     end
   end
@@ -33,7 +38,11 @@ defmodule CodeStats.Profile.SchemaObjects do
   end
 
   scalar :datetime, description: "RFC3339 time with timezone" do
-    serialize(&Calendar.DateTime.Format.rfc3339(&1))
+    serialize(&Calendar.DateTime.Format.rfc3339/1)
+
+    parse(fn %Absinthe.Blueprint.Input.String{value: dt} ->
+      Calendar.DateTime.Parse.rfc3339_utc(dt)
+    end)
   end
 
   scalar :naive_datetime, description: "ISO 8601 naive datetime" do
