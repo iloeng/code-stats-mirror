@@ -33,7 +33,8 @@ defmodule CodeStatsWeb.AuthController do
       |> AuthUtils.force_auth_user_id(user.id)
       |> redirect(to: profile_path(conn, :my_profile))
     else
-      # Missing user, try to create it and login with that user
+      # Missing user
+      # Show signup page with all fields so user can accept privacy policy
       {nil, body} ->
         params = %{
           username: body["login"],
@@ -41,19 +42,10 @@ defmodule CodeStatsWeb.AuthController do
           email: body["email"],
           from: "github",
         }
-        case Repo.insert(User.changeset(%User{}, params)) do
-          {:ok, user} ->
-            conn
-            |> AuthUtils.force_auth_user_id(user.id)
-            |> put_flash(:success, "Great success! An account has been created for you and linked to your GitHub account.")
-            |> redirect(to: profile_path(conn, :my_profile))
-
-          {:error, _} ->
-            conn
-            |> assign(:title, "Login")
-            |> put_flash(:error, "Failed to login with GitHub")
-            |> render("login.html")
-        end
+        conn
+        |> assign(:provider, "GitHub")
+        |> assign(:changeset, User.changeset(%User{}, params))
+        |> render("oauth_signup.html")
 
       _ret ->
         conn
@@ -101,6 +93,24 @@ defmodule CodeStatsWeb.AuthController do
           :success,
           "Great success! Your account was created and you can now log in with the details you provided."
         )
+        |> redirect(to: auth_path(conn, :render_login))
+    end
+  end
+
+  def oauth_signup(conn, %{"provider" => provider, "user" => user_params}) do
+    %User{}
+    |> User.changeset(user_params)
+    |> AuthUtils.create_user()
+    |> case do
+      %Ecto.Changeset{} = changeset ->
+        conn
+        |> assign(:title, "Signup")
+        |> put_status(400)
+        |> render("signup.html", changeset: changeset)
+
+      %User{} ->
+        conn
+        |> put_flash(:success, "Great success! Your account was created and you can now log in with #{provider}.")
         |> redirect(to: auth_path(conn, :render_login))
     end
   end
