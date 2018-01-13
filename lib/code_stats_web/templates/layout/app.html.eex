@@ -116,9 +116,16 @@
           <a href="http://www.phoenixframework.org/">Phoenix</a>, and
           <a href="https://redom.js.org/">RE:DOM</a>.
         </p>
-        <small>
-          <%= get_conf(:site_name) %> development sponsored by <a href="https://www.vincit.fi/en/">Vincit Oy</a>, the passionate software company.
-        </small>
+        <p class="no-margin">
+          <small>
+            <%= get_conf(:site_name) %> development sponsored by <a href="https://www.vincit.fi/en/">Vincit</a>, the passionate software company.
+          </small>
+        </p>
+        <p class="no-margin">
+          <small>
+            Realtime monitoring provided by <a href="https://appsignal.com/">AppSignal</a>.
+          </small>
+        </p>
       </section>
     </footer>
 
