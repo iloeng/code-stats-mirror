@@ -11,8 +11,7 @@ config :code_stats, CodeStatsWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [mix: ["frontend.watch",
-             cd: Path.expand("../", __DIR__)]]
+  watchers: [mix: ["frontend.watch", cd: Path.expand("../", __DIR__)]]
 
 # Watch static and templates for browser reloading.
 config :code_stats, CodeStatsWeb.Endpoint,
@@ -41,7 +40,6 @@ config :code_stats, CodeStats.Repo,
   database: "code_stats_dev",
   hostname: "localhost",
   pool_size: 10
-
 
 config :appsignal, :config, active: true
 
