@@ -2,6 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+
+    <!-- Preload resources for MAXIMUM SPEED -->
+    <link rel="preload" href="<%= static_path(@conn, "/frontend/css/frontend.css") %>" as="style">
+    <link rel="preload" href="<%= static_path(@conn, "/frontend/js/frontend.js") %>" as="script">
+    <link rel="preload" href="<%= static_path(@conn, "/frontend/assets/images/Logo.svg") %>" as="image">
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Code::Stats is a free stats tracking service for programmers">
@@ -116,7 +122,7 @@
       </section>
     </footer>
 
-    <script type="text/javascript" src="<%= static_path(@conn, "/frontend/js/frontend.js") %>"></script>
+    <script async type="text/javascript" src="<%= static_path(@conn, "/frontend/js/frontend.js") %>"></script>
     <%= raw get_conf(:analytics_code) %>
   </body>
 </html>
