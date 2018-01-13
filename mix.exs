@@ -75,7 +75,8 @@ defmodule CodeStats.Mixfile do
       },
       {:absinthe, "~> 1.3.2"},
       {:absinthe_plug, "~> 1.3.1"},
-      {:absinthe_ecto, "~> 0.1.2"}
+      {:absinthe_ecto, "~> 0.1.2"},
+      {:ex2ms, "~> 1.5"}
     ]
   end
 

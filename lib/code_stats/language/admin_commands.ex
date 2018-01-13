@@ -8,7 +8,6 @@ defmodule CodeStats.Language.AdminCommands do
 
   alias CodeStats.Repo
   alias CodeStats.Language
-  alias CodeStats.Language.CacheService
   alias CodeStats.User
   alias CodeStats.XP
 
@@ -19,7 +18,7 @@ defmodule CodeStats.Language.AdminCommands do
 
   Moves all XP to the new language and update users' caches.
   """
-  @spec alias_language(String.t, String.t) :: nil
+  @spec alias_language(String.t(), String.t()) :: nil
   def alias_language(lang_name, target_name) do
     {:ok, language} = Language.get_or_create(lang_name)
     {:ok, target} = Language.get_or_create(target_name)
@@ -71,13 +70,10 @@ defmodule CodeStats.Language.AdminCommands do
               ^id2str.(language.id),
               ^id2str.(target.id)
             )
-          ]
         ]
+      ]
     )
     |> Repo.update_all([])
-
-    # Update frontpage language caches
-    CacheService.refresh_total_language_xp()
   end
 
   @doc """
@@ -85,7 +81,7 @@ defmodule CodeStats.Language.AdminCommands do
 
   All aliased XP will be moved back to this language.
   """
-  @spec unalias_language(String.t) :: nil
+  @spec unalias_language(String.t()) :: nil
   def unalias_language(lang_name) do
     {:ok, language} = Language.get_or_create(lang_name)
 
@@ -104,13 +100,8 @@ defmodule CodeStats.Language.AdminCommands do
     |> Repo.update_all(set: [language_id: language.id])
 
     # Update caches for all users (since there's no easy way to separate language points)
-    (from u in User, select: u)
+    from(u in User, select: u)
     |> Repo.all()
-    |> Enum.each(
-      fn user -> User.update_cached_xps(user, true) end
-    )
-
-    # Update frontpage language caches
-    CacheService.refresh_total_language_xp()
+    |> Enum.each(fn user -> User.update_cached_xps(user, true) end)
   end
 end
