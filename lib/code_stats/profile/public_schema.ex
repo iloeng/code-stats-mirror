@@ -22,7 +22,7 @@ defmodule CodeStats.Profile.PublicSchema do
       from(
         u in CodeStats.User,
         where: fragment("lower(?)", ^username) == fragment("lower(?)", u.username),
-        select: %{username: u.username, cache: u.cache, registered: u.inserted_at}
+        select: %{id: u.id, username: u.username, cache: u.cache, registered: u.inserted_at}
       )
 
     case CodeStats.Repo.one(query) do
