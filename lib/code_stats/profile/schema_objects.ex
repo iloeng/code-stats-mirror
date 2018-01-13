@@ -1,9 +1,7 @@
 defmodule CodeStats.Profile.SchemaObjects do
   use Absinthe.Schema.Notation
   use Absinthe.Ecto, repo: CodeStats.Repo
-  import Ecto.Query, only: [from: 2]
 
-  alias CodeStats.Repo
   alias CodeStats.Profile.Queries
 
   @desc "User profile public data"
@@ -14,7 +12,7 @@ defmodule CodeStats.Profile.SchemaObjects do
     @desc "Total amount of XP of user"
     field :total_xp, :integer do
       resolve(fn %{cache: cache}, _, _ ->
-        {:ok, get_cached_total(cache)}
+        {:ok, Queries.cached_total(cache)}
       end)
     end
 
@@ -24,10 +22,10 @@ defmodule CodeStats.Profile.SchemaObjects do
 
       resolve(fn
         %{id: uid}, %{since: since}, _ ->
-          {:ok, Queries.language_xps(uid, since) |> Repo.all()}
+          {:ok, Queries.language_xps(uid, since)}
 
         %{cache: cache}, _, _ ->
-          {:ok, get_cached_languages(cache)}
+          {:ok, Queries.cached_languages(cache)}
       end)
     end
 
@@ -37,10 +35,10 @@ defmodule CodeStats.Profile.SchemaObjects do
 
       resolve(fn
         %{id: uid}, %{since: since}, _ ->
-          {:ok, Queries.machine_xps(uid, since) |> Repo.all()}
+          {:ok, Queries.machine_xps(uid, since)}
 
         %{cache: cache}, _, _ ->
-          {:ok, get_cached_machines(cache)}
+          {:ok, Queries.cached_machines(cache)}
       end)
     end
 
@@ -50,10 +48,10 @@ defmodule CodeStats.Profile.SchemaObjects do
 
       resolve(fn
         %{cache: cache}, %{since: since}, _ ->
-          {:ok, get_cached_dates(cache, since)}
+          {:ok, Queries.cached_dates(cache, DateTime.to_date(since))}
 
         %{cache: cache}, _, _ ->
-          {:ok, get_cached_dates(cache)}
+          {:ok, Queries.cached_dates(cache)}
       end)
     end
   end
@@ -87,56 +85,5 @@ defmodule CodeStats.Profile.SchemaObjects do
 
   scalar :naive_datetime, description: "ISO 8601 naive datetime" do
     serialize(&Calendar.NaiveDateTime.Format.iso8601(&1))
-  end
-
-  defp get_cached_languages(%{"languages" => languages}) when is_map(languages) do
-    intkeys =
-      languages
-      |> Map.to_list()
-      |> Enum.map(fn {k, v} -> {String.to_integer(k), v} end)
-      |> Enum.into(%{})
-
-    ids = Map.keys(intkeys)
-
-    structs =
-      from(l in CodeStats.Language, where: l.id in ^ids, select: {l.id, l.name})
-      |> Repo.all()
-      |> Enum.into(%{})
-
-    Enum.map(ids, fn id -> %{name: structs[id], xp: intkeys[id]} end)
-  end
-
-  defp get_cached_total(%{"languages" => languages}) when is_map(languages) do
-    languages |> Map.values() |> Enum.reduce(0, fn acc, xp -> acc + xp end)
-  end
-
-  defp get_cached_machines(%{"machines" => machines}) when is_map(machines) do
-    intkeys =
-      machines
-      |> Map.to_list()
-      |> Enum.map(fn {k, v} -> {String.to_integer(k), v} end)
-      |> Enum.into(%{})
-
-    ids = Map.keys(intkeys)
-
-    structs =
-      from(m in CodeStats.User.Machine, where: m.id in ^ids, select: {m.id, m.name})
-      |> Repo.all()
-      |> Enum.into(%{})
-
-    Enum.map(ids, fn id -> %{name: structs[id], xp: intkeys[id]} end)
-  end
-
-  defp get_cached_dates(%{"dates" => dates}) when is_map(dates) do
-    Map.to_list(dates)
-    |> Enum.map(fn {date, xp} -> %{date: date, xp: xp} end)
-  end
-
-  defp get_cached_dates(cache, %DateTime{} = since) when is_map(cache) do
-    since_date = DateTime.to_date(since)
-
-    get_cached_dates(cache)
-    |> Enum.map(fn data -> %{data | date: Date.from_iso8601!(data.date)} end)
-    |> Enum.filter(fn %{date: date} -> Date.compare(date, since_date) != :lt end)
   end
 end
