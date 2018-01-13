@@ -10,7 +10,7 @@
           <input type="text" class="api-key" readonly value="<%= CodeStatsWeb.AuthUtils.get_api_key(@conn, @user, machine) %>" />
         </div>
 
-        <button type="button" class="copy-button button-info">Copy</button>
+        <button type="button" class="copy-button">Copy</button>
 
         <%= form_tag(machine_path(@conn, :view_single, machine.id), method: :get, class: "edit-form") %>
           <button type="submit">Edit</button>
