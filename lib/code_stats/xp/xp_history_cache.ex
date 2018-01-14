@@ -14,10 +14,10 @@ defmodule CodeStats.XPHistoryCache do
   alias CodeStats.User.Pulse
 
   # How many hours to store (maximum is 24 hours as older stale data is deleted)
-  @history_hours 24
+  @history_hours 4
 
-  # Group data into blocks of this many minutes. Use 1 to disable
-  @group_minutes 5
+  # Group data into blocks of this many minutes. Use 1 to disable. This must divide 60 minutes evenly.
+  @group_minutes 1
 
   # ETS table name
   @table :xp_history_cache

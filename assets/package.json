@@ -4,8 +4,10 @@
   "repository": {},
   "dependencies": {
     "babel-polyfill": "~6.26.0",
+    "chart.js": "^2.7.1",
     "concise-ui": "~0.2.1",
     "concise.css": "~4.1.2",
+    "luxon": "^0.3.1",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
     "redom": "^3.8.10"
