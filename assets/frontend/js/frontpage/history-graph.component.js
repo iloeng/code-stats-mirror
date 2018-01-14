@@ -46,7 +46,7 @@ class HistoryGraphComponent {
     );
 
     this.dataset = this.chart.data.datasets[0];
-    this.newest_time = null;
+    this.newestTime = null;
 
     this.interval = setInterval(() => this._checkMove(), UPDATE_INTERVAL * 1000);
   }
@@ -70,17 +70,17 @@ class HistoryGraphComponent {
   // Check if data should be moved to the left and a new bar added
   _checkMove() {
     // If data isn't retrieved yet, don't do anything
-    if (this.newest_time == null) return;
+    if (this.newestTime == null) return;
 
     const now = DateTime.utc();
 
-    if (now.diff(this.newest_time, 'minutes').minutes >= GROUP_MINUTES) {
+    if (now.diff(this.newestTime, 'minutes').minutes >= GROUP_MINUTES) {
       this.dataset.data.shift();
       this.dataset.data.push();
 
       this.chart.update(0);
 
-      this.newest_time = now;
+      this.newestTime = now;
     }
   }
 
@@ -129,7 +129,7 @@ class HistoryGraphComponent {
       time = inc_time(time);
     }
 
-    this.newest_time = now;
+    this.newestTime = now;
     return ret;
   }
 }
