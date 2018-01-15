@@ -19,6 +19,7 @@ class HistoryGraphComponent {
         data: {
           labels: [],
           datasets: [{
+            label: 'Global XP',
             data: [],
             backgroundColor: '#9699b0'
           }]
@@ -28,7 +29,8 @@ class HistoryGraphComponent {
             display: false
           },
           tooltips: {
-            enabled: false
+            enabled: true,
+            displayColors: false
           },
           scales: {
             xAxes: [{
@@ -76,7 +78,7 @@ class HistoryGraphComponent {
 
     if (now.diff(this.newestTime, 'minutes').minutes >= GROUP_MINUTES) {
       this.dataset.data.shift();
-      this.dataset.data.push();
+      this.dataset.data.push(0);
 
       this.chart.update(0);
 
