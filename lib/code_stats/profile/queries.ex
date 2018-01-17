@@ -21,7 +21,7 @@ defmodule CodeStats.Profile.Queries do
       on: x.pulse_id == p.id,
       join: m in Machine,
       on: p.machine_id == m.id,
-      where: p.sent_at > ^since and p.user_id == ^user_id,
+      where: p.user_id == ^user_id and p.sent_at >= ^since,
       group_by: m.id,
       select: %{id: m.id, name: m.name, xp: sum(x.amount)}
     )
@@ -38,7 +38,7 @@ defmodule CodeStats.Profile.Queries do
       on: x.pulse_id == p.id,
       join: l in Language,
       on: x.language_id == l.id,
-      where: p.sent_at > ^since and p.user_id == ^user_id,
+      where: p.user_id == ^user_id and p.sent_at >= ^since,
       group_by: l.id,
       select: %{id: l.id, name: l.name, xp: sum(x.amount)}
     )
@@ -46,16 +46,40 @@ defmodule CodeStats.Profile.Queries do
   end
 
   @doc """
-  Get profile's total amount of XP from their cache.
+  Get profile's total amount of XP per language per day since given date.
   """
-  def cached_total(%{"languages" => languages}) when is_map(languages) do
-    languages |> Map.values() |> Enum.reduce(0, fn acc, xp -> acc + xp end)
+  def day_languages(user_id, %Date{} = since) do
+    {:ok, since_dt} = NaiveDateTime.new(since, ~T[00:00:00])
+
+    from(
+      x in XP,
+      join: p in Pulse,
+      on: x.pulse_id == p.id,
+      join: l in Language,
+      on: x.language_id == l.id,
+      where: p.user_id == ^user_id and p.sent_at_local >= ^since_dt,
+      group_by: [fragment("dt"), l.id],
+      select: %{
+        date: fragment("?::date as dt", p.sent_at_local),
+        language: l.name,
+        xp: sum(x.amount)
+      }
+    )
+    |> Repo.all()
+    |> Enum.map(fn %{date: dt} = val -> %{val | date: Date.from_erl!(dt)} end)
   end
 
   #################
   # Cache functions
   # These functions operate on the profile's cache, so they are very quick to return data.
   #################
+
+  @doc """
+  Get profile's total amount of XP from their cache.
+  """
+  def cached_total(%{"languages" => languages}) when is_map(languages) do
+    languages |> Map.values() |> Enum.reduce(0, fn acc, xp -> acc + xp end)
+  end
 
   @doc """
   Get profile's total languages and their XPs from cache.

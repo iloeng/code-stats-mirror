@@ -54,6 +54,15 @@ defmodule CodeStats.Profile.SchemaObjects do
           {:ok, Queries.cached_dates(cache)}
       end)
     end
+
+    @desc "User's dates since given date with their summed XP per language per day"
+    field :day_language_xps, list_of(:profile_daylanguage) do
+      arg(:since, type: :date)
+
+      resolve(fn %{id: uid}, %{since: since}, _ ->
+        {:ok, Queries.day_languages(uid, since) |> IO.inspect()}
+      end)
+    end
   end
 
   @desc "Language and its total XP for a profile"
@@ -75,6 +84,13 @@ defmodule CodeStats.Profile.SchemaObjects do
     field(:xp, :integer)
   end
 
+  @desc "Date when profile has an amount of XP of the language"
+  object :profile_daylanguage do
+    field(:date, :date)
+    field(:language, :string)
+    field(:xp, :integer)
+  end
+
   scalar :datetime, description: "RFC3339 time with timezone" do
     serialize(&Calendar.DateTime.Format.rfc3339/1)
 
@@ -85,5 +101,13 @@ defmodule CodeStats.Profile.SchemaObjects do
 
   scalar :naive_datetime, description: "ISO 8601 naive datetime" do
     serialize(&Calendar.NaiveDateTime.Format.iso8601(&1))
+  end
+
+  scalar :date, description: "ISO 8601 date" do
+    serialize(&Date.to_iso8601(&1))
+
+    parse(fn %Absinthe.Blueprint.Input.String{value: dt} ->
+      Date.from_iso8601(dt)
+    end)
   end
 end
