@@ -95,7 +95,15 @@ defmodule CodeStats.Profile.SchemaObjects do
     serialize(&Calendar.DateTime.Format.rfc3339/1)
 
     parse(fn %Absinthe.Blueprint.Input.String{value: dt} ->
-      Calendar.DateTime.Parse.rfc3339_utc(dt)
+      # rfc3339_utc might crash with missing time offset, see bug: https://github.com/lau/calendar/issues/50
+      try do
+        case Calendar.DateTime.Parse.rfc3339_utc(dt) do
+          {:ok, val} -> {:ok, val}
+          _ -> :error
+        end
+      rescue
+        _ -> :error
+      end
     end)
   end
 
@@ -107,7 +115,10 @@ defmodule CodeStats.Profile.SchemaObjects do
     serialize(&Date.to_iso8601(&1))
 
     parse(fn %Absinthe.Blueprint.Input.String{value: dt} ->
-      Date.from_iso8601(dt)
+      case Date.from_iso8601(dt) do
+        {:ok, val} -> {:ok, val}
+        _ -> :error
+      end
     end)
   end
 end

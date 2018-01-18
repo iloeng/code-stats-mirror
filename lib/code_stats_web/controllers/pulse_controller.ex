@@ -52,9 +52,16 @@ defmodule CodeStatsWeb.PulseController do
   end
 
   defp parse_timestamp(timestamp) do
-    case CDateTime.Parse.rfc3339_utc(timestamp) do
-      {:ok, datetime} -> {:ok, datetime}
-      {:bad_format, _} -> {:error, :generic, "Invalid coded_at format."}
+    err_ret = {:error, :generic, "Invalid coded_at format."}
+
+    # rfc3339_utc might crash with missing time offset, see bug: https://github.com/lau/calendar/issues/50
+    try do
+      case CDateTime.Parse.rfc3339_utc(timestamp) do
+        {:ok, datetime} -> {:ok, datetime}
+        {:bad_format, _} -> err_ret
+      end
+    rescue
+      _ -> err_ret
     end
   end
 
