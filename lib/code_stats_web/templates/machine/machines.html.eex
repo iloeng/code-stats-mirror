@@ -7,7 +7,7 @@
         <h2><%= machine.name %></h2>
         <div class="api-key-text">
           <span>API key:</span>
-          <input type="text" class="api-key" readonly value="<%= CodeStatsWeb.AuthUtils.get_api_key(@conn, @user, machine) %>" />
+          <input type="text" class="api-key" readonly value="<%= CodeStatsWeb.AuthUtils.get_machine_key(@conn, @user, machine) %>" />
         </div>
 
         <button type="button" class="copy-button">Copy</button>

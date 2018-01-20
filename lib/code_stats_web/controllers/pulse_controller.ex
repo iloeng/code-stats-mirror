@@ -20,7 +20,7 @@ defmodule CodeStatsWeb.PulseController do
   plug(GeoIPPlug)
 
   def add(conn, %{"coded_at" => timestamp, "xps" => xps}) when is_list(xps) do
-    {user, machine} = AuthUtils.get_api_details(conn)
+    {user, machine} = AuthUtils.get_machine_auth_details(conn)
 
     with {:ok, %DateTime{} = datetime} <- parse_timestamp(timestamp),
          {:ok, datetime} <- check_datetime_diff(datetime),

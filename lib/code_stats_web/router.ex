@@ -23,8 +23,8 @@ defmodule CodeStatsWeb.Router do
     plug(:accepts, ["json"])
   end
 
-  pipeline :api_auth do
-    plug(CodeStatsWeb.APIAuthRequiredPlug)
+  pipeline :api_machine_auth do
+    plug(CodeStatsWeb.MachineAuthRequiredPlug)
   end
 
   scope "/", CodeStatsWeb do
@@ -90,7 +90,7 @@ defmodule CodeStatsWeb.Router do
     forward("/users-graphiql", Absinthe.Plug.GraphiQL, schema: CodeStats.Profile.PublicSchema)
 
     scope "/my" do
-      pipe_through(:api_auth)
+      pipe_through(:api_machine_auth)
 
       post("/pulses", CodeStatsWeb.PulseController, :add)
     end
