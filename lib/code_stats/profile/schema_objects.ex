@@ -1,6 +1,5 @@
 defmodule CodeStats.Profile.SchemaObjects do
   use Absinthe.Schema.Notation
-  use Absinthe.Ecto, repo: CodeStats.Repo
 
   alias CodeStats.Profile.Queries
 

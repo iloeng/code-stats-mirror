@@ -61,21 +61,15 @@ defmodule CodeStats.Mixfile do
       {:ex_doc, "~> 0.17", only: :dev},
       {:calendar, "~> 0.17.4"},
       {:bamboo, "1.0.0-rc.1"},
-      {:corsica, "~> 1.0.0"},
-      {:appsignal, "~> 1.3"},
+      {:corsica, "~> 1.1.0"},
+      {:appsignal, "~> 1.4"},
       {:mbu, "~> 2.0.0"},
-      {:geolix, "~> 0.14.0"},
+      {:geolix, "~> 0.15.1"},
       {:geolite2data, "~> 0.0.3"},
       {:remote_ip, "~> 0.1.3"},
-      {
-        :distillery,
-        git: "https://github.com/bitwalker/distillery.git",
-        ref: "67905e230ce0e861a739756c1f79ba9124c5fd3e",
-        runtime: false
-      },
+      {:distillery, "~> 1.5.2", runtime: false},
       {:absinthe, "~> 1.3.2"},
       {:absinthe_plug, "~> 1.3.1"},
-      {:absinthe_ecto, "~> 0.1.2"},
       {:ex2ms, "~> 1.5"}
     ]
   end
