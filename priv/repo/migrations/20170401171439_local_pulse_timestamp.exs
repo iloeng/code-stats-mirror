@@ -3,8 +3,8 @@ defmodule CodeStats.Repo.Migrations.LocalPulseTimestamp do
 
   def change do
     alter table(:pulses) do
-      add :sent_at_local, :naive_datetime, null: true
-      add :tz_offset, :smallint, null: true
+      add(:sent_at_local, :naive_datetime, null: true)
+      add(:tz_offset, :smallint, null: true)
     end
   end
 end

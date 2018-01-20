@@ -20,6 +20,7 @@ defmodule CodeStatsWeb.MachineController do
 
   def add(conn, %{"machine" => params}) do
     {conn, user} = common_assigns(conn)
+
     Machine.changeset(%Machine{}, params)
     |> Changeset.put_change(:user_id, user.id)
     |> create_machine()
@@ -40,37 +41,37 @@ defmodule CodeStatsWeb.MachineController do
     user = AuthUtils.get_current_user(conn)
 
     with %Machine{} = machine <- get_machine_or_404(conn, user, id),
-      changeset                = Machine.changeset(machine) do
-        conn
-        |> assign(:machine, machine)
-        |> assign(:title, "Machine: #{machine.name}")
-        |> render("single_machine.html", changeset: changeset)
-      end
+         changeset = Machine.changeset(machine) do
+      conn
+      |> assign(:machine, machine)
+      |> assign(:title, "Machine: #{machine.name}")
+      |> render("single_machine.html", changeset: changeset)
+    end
   end
 
   def edit(conn, %{"id" => id, "machine" => params}) do
     user = AuthUtils.get_current_user(conn)
 
     with %Machine{} = machine <- get_machine_or_404(conn, user, id),
-      changeset                = Machine.update_changeset(machine, params),
-      %Machine{} = machine    <- edit_machine_or_flash(conn, changeset) do
-        conn
-        |> assign(:machine, machine)
-        |> put_flash(:success, "Machine edited successfully.")
-        |> redirect(to: machine_path(conn, :view_single, machine.id))
-      end
+         changeset = Machine.update_changeset(machine, params),
+         %Machine{} = machine <- edit_machine_or_flash(conn, changeset) do
+      conn
+      |> assign(:machine, machine)
+      |> put_flash(:success, "Machine edited successfully.")
+      |> redirect(to: machine_path(conn, :view_single, machine.id))
+    end
   end
 
   def regen_machine_key(conn, %{"id" => id}) do
     user = AuthUtils.get_current_user(conn)
 
     with %Machine{} = machine <- get_machine_or_404(conn, user, id),
-      changeset                = Machine.api_changeset(machine),
-      %Machine{} = machine    <- edit_api_key_or_flash(conn, changeset) do
-        conn
-        |> put_flash(:success, "API key regenerated for machine #{machine.name}.")
-        |> redirect(to: machine_path(conn, :list))
-      end
+         changeset = Machine.api_changeset(machine),
+         %Machine{} = machine <- edit_api_key_or_flash(conn, changeset) do
+      conn
+      |> put_flash(:success, "API key regenerated for machine #{machine.name}.")
+      |> redirect(to: machine_path(conn, :list))
+    end
   end
 
   def delete(conn, %{"id" => id}) do
@@ -107,9 +108,8 @@ defmodule CodeStatsWeb.MachineController do
     verb = if active, do: "activated", else: "deactivated"
 
     with %Machine{} = machine <- get_machine_or_404(conn, user, id),
-      changeset                = Machine.activation_changeset(machine, %{active: active}),
-      %Machine{} = machine    <- edit_machine_or_flash(conn, changeset)
-    do
+         changeset = Machine.activation_changeset(machine, %{active: active}),
+         %Machine{} = machine <- edit_machine_or_flash(conn, changeset) do
       conn
       |> put_flash(:success, "Machine #{machine.name} #{verb}.")
       |> redirect(to: machine_path(conn, :list))
@@ -118,21 +118,24 @@ defmodule CodeStatsWeb.MachineController do
 
   defp common_assigns(conn) do
     user = AuthUtils.get_current_user(conn)
-    conn = conn
-    |> assign(:user, user)
-    |> machines_title()
-    |> assign(:machines, ControllerUtils.get_user_machines(user))
+
+    conn =
+      conn
+      |> assign(:user, user)
+      |> machines_title()
+      |> assign(:machines, ControllerUtils.get_user_machines(user))
+
     {conn, user}
   end
 
   # Also checks that user is owner of machine
   defp get_machine_or_404(conn, user, id) do
-    (from m in Machine,
-      where: m.id == ^id and m.user_id == ^user.id)
-
+    from(m in Machine, where: m.id == ^id and m.user_id == ^user.id)
     |> Repo.one()
     |> case do
-      %Machine{} = machine -> machine
+      %Machine{} = machine ->
+        machine
+
       nil ->
         conn
         |> put_status(404)
@@ -153,7 +156,9 @@ defmodule CodeStatsWeb.MachineController do
     changeset
     |> Repo.update()
     |> case do
-      {:ok, machine} -> machine
+      {:ok, machine} ->
+        machine
+
       {:error, _} ->
         conn
         |> put_flash(:error, "Error regenerating API key.")
@@ -165,7 +170,9 @@ defmodule CodeStatsWeb.MachineController do
     changeset
     |> Repo.update()
     |> case do
-      {:ok, machine} -> machine
+      {:ok, machine} ->
+        machine
+
       {:error, changeset} ->
         conn
         |> put_status(500)

@@ -3,7 +3,7 @@ defmodule CodeStats.Repo.Migrations.UserPrivateProfile do
 
   def change do
     alter table(:users) do
-      add :private_profile, :boolean, null: false, default: false
+      add(:private_profile, :boolean, null: false, default: false)
     end
   end
 end

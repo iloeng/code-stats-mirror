@@ -12,10 +12,8 @@ defmodule CodeStatsWeb.ProfileController do
   end
 
   def profile(conn, %{"username" => username}) do
-    with \
-      {:ok, user} <- get_user(username),
-      true        <- PermissionUtils.can_access_profile?(AuthUtils.get_current_user(conn), user)
-    do
+    with {:ok, user} <- get_user(username),
+         true <- PermissionUtils.can_access_profile?(AuthUtils.get_current_user(conn), user) do
       render_or_redirect(conn, user, username, &render_profile/2, :profile)
     else
       _ ->
@@ -26,10 +24,9 @@ defmodule CodeStatsWeb.ProfileController do
   end
 
   def profile_api(conn, %{"username" => username}) do
-    with \
-      {:ok, user} <- get_user(username),
-      false       <- user.private_profile # Private profiles are not allowed in read API
-    do
+    with {:ok, user} <- get_user(username),
+         # Private profiles are not allowed in read API
+         false <- user.private_profile do
       render_or_redirect(conn, user, username, &render_profile_api/2, :profile_api)
     else
       _ ->
@@ -52,7 +49,7 @@ defmodule CodeStatsWeb.ProfileController do
 
     # Get new XP data from last 12 hours
     now = DateTime.utc_now()
-    latest_xp_since = Calendar.DateTime.subtract!(now, 3600 * ProfileUtils.recent_xp_hours)
+    latest_xp_since = Calendar.DateTime.subtract!(now, 3600 * ProfileUtils.recent_xp_hours())
     new_language_xps = ProfileUtils.get_language_xps_since(user, latest_xp_since)
     new_machine_xps = ProfileUtils.get_machine_xps_since(user, latest_xp_since)
     new_xp = Enum.reduce(Map.values(new_language_xps), 0, fn amount, acc -> acc + amount end)
@@ -89,10 +86,11 @@ defmodule CodeStatsWeb.ProfileController do
           {nil, 0}
       end
 
-    xp_per_day = case last_day do
-      nil -> 0
-      _ -> trunc(Float.round(total_xp / Enum.count(dates_list)))
-    end
+    xp_per_day =
+      case last_day do
+        nil -> 0
+        _ -> trunc(Float.round(total_xp / Enum.count(dates_list)))
+      end
 
     conn
     |> assign(:title, user.username)
@@ -139,17 +137,18 @@ defmodule CodeStatsWeb.ProfileController do
     conn
     |> put_status(200)
     |> json(%{
-      "user"      => user.username,
-      "total_xp"  => total_xp,
-      "new_xp"    => new_xp,
+      "user" => user.username,
+      "total_xp" => total_xp,
+      "new_xp" => new_xp,
       "languages" => serialize_xps.(language_xps, new_language_xps),
-      "machines"  => serialize_xps.(machine_xps, new_machine_xps),
-      "dates"     => serialize_date_xps.(date_xps)
+      "machines" => serialize_xps.(machine_xps, new_machine_xps),
+      "dates" => serialize_date_xps.(date_xps)
     })
   end
 
   # Render if username matches, redirect otherwise
-  defp render_or_redirect(conn, %User{username: username} = user, input_username, renderer, _) when username == input_username do
+  defp render_or_redirect(conn, %User{username: username} = user, input_username, renderer, _)
+       when username == input_username do
     renderer.(conn, user)
   end
 
@@ -164,10 +163,8 @@ defmodule CodeStatsWeb.ProfileController do
   end
 
   defp get_user(username) do
-    with \
-      username        <- fix_url_username(username),
-      %User{} = user  <- AuthUtils.get_user(username, true)
-    do
+    with username <- fix_url_username(username),
+         %User{} = user <- AuthUtils.get_user(username, true) do
       {:ok, user}
     else
       _ -> :error

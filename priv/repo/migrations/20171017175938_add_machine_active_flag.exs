@@ -3,7 +3,7 @@ defmodule CodeStats.Repo.Migrations.AddMachineActiveFlag do
 
   def change do
     alter table(:machines) do
-      add :active, :boolean, default: true, null: false
+      add(:active, :boolean, default: true, null: false)
     end
   end
 end

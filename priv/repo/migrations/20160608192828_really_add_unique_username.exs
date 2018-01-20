@@ -3,6 +3,6 @@ defmodule CodeStats.Repo.Migrations.ReallyAddUniqueUsername do
 
   def change do
     # Shameful display :(
-    create unique_index(:users, [:username])
+    create(unique_index(:users, [:username]))
   end
 end

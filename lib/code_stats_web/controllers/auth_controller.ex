@@ -25,11 +25,9 @@ defmodule CodeStatsWeb.AuthController do
   end
 
   def login(conn, %{"username" => username, "password" => password} = params) do
-    with \
-      %User{} = user      <- AuthUtils.get_user(username, true),
-      %Plug.Conn{} = conn <- AuthUtils.auth_user(conn, user, password),
-      %Plug.Conn{} = conn <- maybe_remember_me(conn, user, params)
-    do
+    with %User{} = user <- AuthUtils.get_user(username, true),
+         %Plug.Conn{} = conn <- AuthUtils.auth_user(conn, user, password),
+         %Plug.Conn{} = conn <- maybe_remember_me(conn, user, params) do
       redirect(conn, to: profile_path(conn, :my_profile))
     else
       ret ->
@@ -49,6 +47,7 @@ defmodule CodeStatsWeb.AuthController do
 
   def signup(conn, %{"user" => user_params}) do
     changeset = User.changeset(%User{}, user_params)
+
     case AuthUtils.create_user(changeset) do
       %Ecto.Changeset{} = changeset ->
         conn
@@ -58,7 +57,10 @@ defmodule CodeStatsWeb.AuthController do
 
       %User{} ->
         conn
-        |> put_flash(:success, "Great success! Your account was created and you can now log in with the details you provided.")
+        |> put_flash(
+          :success,
+          "Great success! Your account was created and you can now log in with the details you provided."
+        )
         |> redirect(to: auth_path(conn, :render_login))
     end
   end
@@ -83,16 +85,18 @@ defmodule CodeStatsWeb.AuthController do
 
     # If the changeset is valid, attempt to create password reset token
     # and send email
-    with \
-      true <- changeset.valid?,
-      %PasswordReset{token: token} <- Repo.insert!(changeset) do
-        EmailUtils.send_password_reset_email(user, token)
+    with true <- changeset.valid?,
+         %PasswordReset{token: token} <- Repo.insert!(changeset) do
+      EmailUtils.send_password_reset_email(user, token)
     else
       _ -> nil
     end
 
     conn
-    |> put_flash(:info, "A password reset email will be sent shortly to the email address linked to the account, if the account had one. If you do not receive an email, please check that you typed the account name correctly.")
+    |> put_flash(
+      :info,
+      "A password reset email will be sent shortly to the email address linked to the account, if the account had one. If you do not receive an email, please check that you typed the account name correctly."
+    )
     |> redirect(to: auth_path(conn, :render_forgot))
   end
 
@@ -114,20 +118,24 @@ defmodule CodeStatsWeb.AuthController do
   end
 
   def reset(conn, %{"user" => params, "token" => token}) do
-    with \
-      %PasswordReset{} = token  <- check_reset_token(token),
-      changeset                  = User.password_changeset(token.user, params),
-      %User{}                   <- Repo.update!(changeset)
-    do
+    with %PasswordReset{} = token <- check_reset_token(token),
+         changeset = User.password_changeset(token.user, params),
+         %User{} <- Repo.update!(changeset) do
       Repo.delete(token)
 
       conn
-      |> put_flash(:success, "Password reset successfully. You can now log in with the new password.")
+      |> put_flash(
+        :success,
+        "Password reset successfully. You can now log in with the new password."
+      )
       |> redirect(to: auth_path(conn, :render_login))
     else
       _ ->
         conn
-        |> put_flash(:error, "Unable to reset password. The password reset token may have expired. Please try requesting a new token.")
+        |> put_flash(
+          :error,
+          "Unable to reset password. The password reset token may have expired. Please try requesting a new token."
+        )
         |> redirect(to: auth_path(conn, :render_login))
     end
   end
@@ -138,9 +146,12 @@ defmodule CodeStatsWeb.AuthController do
     now = DateTime.utc_now()
     earliest_valid = CDateTime.subtract!(now, PasswordReset.token_max_life() * 3600)
 
-    query = from p in PasswordReset,
-      where: p.token == ^token and p.inserted_at >= ^earliest_valid,
-      preload: [:user]
+    query =
+      from(
+        p in PasswordReset,
+        where: p.token == ^token and p.inserted_at >= ^earliest_valid,
+        preload: [:user]
+      )
 
     case Repo.one(query) do
       %PasswordReset{} = token -> token

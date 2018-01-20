@@ -75,26 +75,25 @@ defmodule CodeStats.XPHistoryCache do
         join: p in Pulse,
         on: x.pulse_id == p.id,
         where: p.sent_at > ^since,
-        select:
+        select: {
           {
             {
-              {
-                fragment("extract('year' from ?)::int as year", p.sent_at),
-                fragment("extract('month' from ?)::int as month", p.sent_at),
-                fragment("extract('day' from ?)::int as day", p.sent_at)
-              },
-              {
-                fragment("extract('hour' from ?)::int as hour", p.sent_at),
-                fragment(
-                  "extract('minute' from ?)::int / ? * ? as minute",
-                  p.sent_at,
-                  @group_minutes,
-                  @group_minutes
-                )
-              }
+              fragment("extract('year' from ?)::int as year", p.sent_at),
+              fragment("extract('month' from ?)::int as month", p.sent_at),
+              fragment("extract('day' from ?)::int as day", p.sent_at)
             },
-            sum(x.amount)
+            {
+              fragment("extract('hour' from ?)::int as hour", p.sent_at),
+              fragment(
+                "extract('minute' from ?)::int / ? * ? as minute",
+                p.sent_at,
+                @group_minutes,
+                @group_minutes
+              )
+            }
           },
+          sum(x.amount)
+        },
         group_by: [
           fragment("year"),
           fragment("month"),

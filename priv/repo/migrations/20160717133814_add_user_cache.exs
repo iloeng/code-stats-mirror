@@ -3,7 +3,7 @@ defmodule CodeStats.Repo.Migrations.AddUserCache do
 
   def change do
     alter table(:users) do
-      add :cache, :jsonb
+      add(:cache, :jsonb)
     end
   end
 end

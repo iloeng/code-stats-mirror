@@ -3,7 +3,7 @@ defmodule CodeStats.Repo.Migrations.MakeXpNotNull do
 
   def change do
     alter table(:users) do
-      modify :total_xp, :bigint, null: false
+      modify(:total_xp, :bigint, null: false)
     end
   end
 end

@@ -3,14 +3,15 @@ defmodule CodeStats.Repo.Migrations.CreateMachine do
 
   def change do
     create table(:machines) do
-      add :name, :string
-      add :created_at, :utc_datetime
+      add(:name, :string)
+      add(:created_at, :utc_datetime)
 
-      add :user_id, references(:users, on_delete: :delete_all)
+      add(:user_id, references(:users, on_delete: :delete_all))
 
       timestamps()
     end
-    create index(:machines, [:user_id])
+
+    create(index(:machines, [:user_id]))
     unique_index(:machines, [:name, :user_id])
   end
 end

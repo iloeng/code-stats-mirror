@@ -3,7 +3,7 @@ defmodule CodeStats.Repo.Migrations.AddMachineApiSalt do
 
   def change do
     alter table(:machines) do
-      add :api_salt, :string
+      add(:api_salt, :string)
     end
   end
 end

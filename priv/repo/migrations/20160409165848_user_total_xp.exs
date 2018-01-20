@@ -3,7 +3,7 @@ defmodule CodeStats.Repo.Migrations.UserTotalXp do
 
   def change do
     alter table(:users) do
-      add :total_xp, :bigint, default: 0
+      add(:total_xp, :bigint, default: 0)
     end
   end
 end

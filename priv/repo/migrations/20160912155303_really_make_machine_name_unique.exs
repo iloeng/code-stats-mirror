@@ -3,6 +3,6 @@ defmodule CodeStats.Repo.Migrations.ReallyMakeMachineNameUnique do
 
   def change do
     # ಠ_ಠ
-    create unique_index(:machines, [:name, :user_id])
+    create(unique_index(:machines, [:name, :user_id]))
   end
 end
