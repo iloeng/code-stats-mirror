@@ -57,14 +57,12 @@
 
 <div class="stripe flash-stripe flash-error" role="alert"><%= get_flash(@conn, :delete_error) %></div>
 
-<div class="stripe">
+<div class="stripe stripe-warning">
   <h2>Delete account</h2>
 
   <p>
     If you wish to delete your account, please input "DELETE" into the field below and press
     the delete button. If you do this, all your data will be removed and cannot be recovered.
-
-
   </p>
 
   <%= form_tag(preferences_path(@conn, :delete)) %>
@@ -73,4 +71,14 @@
 
     <div class="submit"><button type="submit" class="btn btn-danger">Delete account forever</button></div>
   </form>
+</div>
+
+<div class="stripe stripe-padded">
+  <h2>Export data</h2>
+
+  <p>
+    Press the button below to download your XP data in CSV format.
+  </p>
+
+  <button id="export-data-button" type="button" class="btn btn-primary">Download data</button>
 </div>

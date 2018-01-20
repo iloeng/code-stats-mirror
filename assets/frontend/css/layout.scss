@@ -98,6 +98,16 @@ main {
     @include use-accent;
   }
 
+  &.stripe-warning {
+    background-color: $warning-color;
+    border-top: 1px dashed $warning-text-color;
+    border-bottom: 1px dashed $warning-text-color;
+  }
+
+  &.stripe-padded {
+    padding-bottom: 40px;
+  }
+
   // When layout is wider than stripe, keep content at max width and centered with padding. This enables the
   // continuation of background color to edges of screen. We also need to account for the scroll bar as that is
   // included in the width of the page.

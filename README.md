@@ -20,7 +20,12 @@ These are current targets, older versions _might_ work:
 ### First time install
 
 ```
+# Database setup for development environment
+
+Set up PostgreSQL matching the settings in `config/dev.exs`.
+
 # First create empty versions of required config files for it to compile
+
 echo use Mix.Config > config/{appsignal,dev.secret}.exs
 
 # Then:
@@ -37,6 +42,7 @@ nano config/dev.secret.exs  # Set up dev config with at least the line "use Mix.
 
 ### Commands
 
+* `mix test`: Run all tests suite
 * `mix phx.server`: Run development server on port 5000 (default, you can configure this in
   `dev.secret.exs`)
 * `mix frontend.build`: Build the JS/CSS frontend

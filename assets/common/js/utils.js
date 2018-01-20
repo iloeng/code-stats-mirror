@@ -2,6 +2,8 @@
  * Miscellaneous utilities
  */
 
+import 'core-js/es6/promise';
+import 'core-js/fn/promise/finally';
 import {Socket} from "phoenix";
 
 /**
@@ -30,4 +32,19 @@ function clear_children(elem) {
   }
 }
 
-export { get_live_update_socket, clear_children };
+/**
+ * Returns a promise that is resolved when page is loaded enough to run JavaScripts.
+ */
+function wait_for_load() {
+  return new Promise(resolve => {
+    // If already loaded, fire immediately
+    if (/complete|interactive|loaded/.test(document.readyState)) {
+      resolve();
+    }
+    else {
+      document.addEventListener('DOMContentLoaded', resolve);
+    }
+  });
+}
+
+export { get_live_update_socket, clear_children, wait_for_load };

@@ -1,13 +1,20 @@
 defmodule CodeStatsWeb.Router do
   use CodeStatsWeb, :router
 
-  pipeline :browser do
-    plug(:accepts, ["html"])
+  pipeline :browser_common do
     plug(:fetch_session)
     plug(:fetch_flash)
     plug(:put_secure_browser_headers)
     plug(CodeStatsWeb.RememberMePlug)
     plug(CodeStatsWeb.SetSessionUserPlug)
+  end
+
+  pipeline :browser_html do
+    plug(:accepts, ["html"])
+  end
+
+  pipeline :browser_csv do
+    plug(:accepts, ["csv"])
   end
 
   pipeline :browser_auth do
@@ -31,7 +38,8 @@ defmodule CodeStatsWeb.Router do
   end
 
   scope "/" do
-    pipe_through(:browser)
+    pipe_through(:browser_html)
+    pipe_through(:browser_common)
 
     get("/", CodeStatsWeb.PageController, :index)
 
@@ -87,7 +95,15 @@ defmodule CodeStatsWeb.Router do
     end
   end
 
-  scope "/api" do
+  scope "/", CodeStatsWeb do
+    pipe_through(:browser_csv)
+    pipe_through(:browser_common)
+    pipe_through(:browser_auth)
+
+    get("/my/pulses", PulseController, :list)
+  end
+
+  scope "/api", CodeStatsWeb do
     pipe_through(:api)
 
     get("/users/:username", CodeStatsWeb.ProfileController, :profile_api)

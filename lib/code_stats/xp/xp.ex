@@ -2,6 +2,7 @@ defmodule CodeStats.XP do
   use Ecto.Schema
 
   import Ecto.Changeset
+  import Ecto.Query, only: [from: 2]
 
   schema "xps" do
     field(:amount, :integer)
@@ -25,5 +26,19 @@ defmodule CodeStats.XP do
     data
     |> cast(params, [:amount])
     |> validate_required([:amount])
+  end
+
+  @doc """
+  Get all of a user's XP's by user ID.
+  """
+  @spec xps_by_user_id(integer) :: [%__MODULE__{}]
+  def xps_by_user_id(user_id) do
+    from(
+      x in __MODULE__,
+      join: p in CodeStats.User.Pulse,
+      on: p.id == x.pulse_id,
+      where: p.user_id == ^user_id,
+      preload: [:language, pulse: {p, :machine}]
+    )
   end
 end

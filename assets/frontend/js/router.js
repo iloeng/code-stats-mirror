@@ -1,6 +1,7 @@
 import profile_page from './profile_page';
 import machine_page from './machine_page';
 import index_page from './index_page';
+import preferences_page from './preferences_page';
 
 /**
  * List of routes. Key should be regex to match against path, value
@@ -9,8 +10,9 @@ import index_page from './index_page';
  * First matching route is executed.
  */
 const ROUTES = [
-  [/^\/users\/[^/]+\/?/, profile_page],
-  [/^\/my\/machines\/?/, machine_page],
+  [/^\/users\/[^/]+\/?$/, profile_page],
+  [/^\/my\/machines\/?$/, machine_page],
+  [/^\/my\/preferences\/?$/, preferences_page],
   [/^\/?$/, index_page]
 ];
 

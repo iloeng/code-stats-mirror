@@ -12,12 +12,34 @@ defmodule CodeStatsWeb.PulseController do
   alias CodeStatsWeb.ProfileChannel
   alias CodeStatsWeb.FrontpageChannel
   alias CodeStatsWeb.GeoIPPlug
+  alias CodeStatsWeb.Utils.CsvFormatter
+
   alias CodeStats.Repo
   alias CodeStats.Language
   alias CodeStats.User.Pulse
   alias CodeStats.XP
 
   plug(GeoIPPlug)
+
+  def list(conn, _params) do
+    csv =
+      AuthUtils.get_current_user_id(conn)
+      |> XP.xps_by_user_id()
+      |> Repo.all()
+      |> CsvFormatter.format([
+        "sent_at",
+        "sent_at_local",
+        "tz_offset",
+        "language",
+        "machine",
+        "amount"
+      ])
+
+    conn
+    |> put_resp_content_type("text/csv")
+    |> put_resp_header("content-disposition", "attachment; filename=\"pulses.csv\"")
+    |> send_resp(200, csv)
+  end
 
   def add(conn, %{"coded_at" => timestamp, "xps" => xps}) when is_list(xps) do
     {user, machine} = AuthUtils.get_machine_auth_details(conn)

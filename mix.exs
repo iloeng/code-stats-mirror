@@ -70,7 +70,8 @@ defmodule CodeStats.Mixfile do
       {:distillery, "~> 1.5.2", runtime: false},
       {:absinthe, "~> 1.3.2"},
       {:absinthe_plug, "~> 1.3.1"},
-      {:ex2ms, "~> 1.5"}
+      {:ex2ms, "~> 1.5"},
+      {:csv, "~> 2.1.1"}
     ]
   end
 
