@@ -19,9 +19,7 @@ config :code_stats, CodeStatsWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :error
 
-
 config :appsignal, :config, active: true
-
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
