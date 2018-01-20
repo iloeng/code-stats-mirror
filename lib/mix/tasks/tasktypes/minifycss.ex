@@ -3,6 +3,7 @@ defmodule CodeStats.BuildTasks.MinifyCSS do
   import CodeStats.FrontendConfs
 
   def bin(), do: node_bin("cssnano")
+
   def args(in_file, out_file) do
     [
       in_file,

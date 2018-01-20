@@ -41,3 +41,7 @@
     </p>
   </section>
 </section>
+
+<section class="last-section-no-padding">
+  <div id="frontpage-history-graph"></div>
+</section>

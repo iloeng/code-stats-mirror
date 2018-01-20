@@ -18,7 +18,7 @@ defmodule CodeStats.Language do
     belongs_to(:alias_of, __MODULE__)
     has_many(:aliases, __MODULE__, foreign_key: :alias_of_id)
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc """
@@ -60,15 +60,15 @@ defmodule CodeStats.Language do
         |> put_assoc(:alias_of, nil)
         |> Repo.insert()
         |> case do
-             {:ok, language} ->
-               {:ok, language}
+          {:ok, language} ->
+            {:ok, language}
 
-             {:error, _} ->
-               case Repo.one(get_query) do
-                 %__MODULE__{} = language -> {:ok, language}
-                 nil -> {:error, :unknown}
-               end
-           end
+          {:error, _} ->
+            case Repo.one(get_query) do
+              %__MODULE__{} = language -> {:ok, language}
+              nil -> {:error, :unknown}
+            end
+        end
     end
   end
 end

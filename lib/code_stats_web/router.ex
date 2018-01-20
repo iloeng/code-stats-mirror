@@ -5,7 +5,6 @@ defmodule CodeStatsWeb.Router do
     plug(:accepts, ["html"])
     plug(:fetch_session)
     plug(:fetch_flash)
-    plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
     plug(CodeStatsWeb.RememberMePlug)
     plug(CodeStatsWeb.SetSessionUserPlug)
@@ -19,47 +18,54 @@ defmodule CodeStatsWeb.Router do
     plug(CodeStatsWeb.AuthNotAllowedPlug)
   end
 
+  pipeline :browser_changes_state do
+    plug(:protect_from_forgery)
+  end
+
   pipeline :api do
     plug(:accepts, ["json"])
   end
 
-  pipeline :api_auth do
-    plug(CodeStatsWeb.APIAuthRequiredPlug)
+  pipeline :api_machine_auth do
+    plug(CodeStatsWeb.MachineAuthRequiredPlug)
   end
 
-  scope "/", CodeStatsWeb do
-    # Use the default browser stack
+  scope "/" do
     pipe_through(:browser)
 
-    get("/", PageController, :index)
+    get("/", CodeStatsWeb.PageController, :index)
 
-    get("/api-docs", PageController, :api_docs)
-    get("/tos", PageController, :terms)
-    get("/plugins", PageController, :plugins)
-    get("/changes", PageController, :changes)
+    get("/api-docs", CodeStatsWeb.PageController, :api_docs)
+    get("/tos", CodeStatsWeb.PageController, :terms)
+    get("/plugins", CodeStatsWeb.PageController, :plugins)
+    get("/changes", CodeStatsWeb.PageController, :changes)
 
-    get("/aliases", AliasController, :list)
+    get("/aliases", CodeStatsWeb.AliasController, :list)
 
-    get("/battle", BattleController, :battle)
+    get("/battle", CodeStatsWeb.BattleController, :battle)
 
     scope "/" do
+      pipe_through(:browser_changes_state)
       pipe_through(:browser_unauth)
 
-      get("/login", AuthController, :render_login)
-      post("/login", AuthController, :login)
-      get("/signup", AuthController, :render_signup)
-      post("/signup", AuthController, :signup)
-      get("/forgot-password", AuthController, :render_forgot)
-      post("/forgot-password", AuthController, :forgot)
-      get("/reset-password/:token", AuthController, :render_reset)
-      put("/reset-password/:token", AuthController, :reset)
+      get("/login", CodeStatsWeb.AuthController, :render_login)
+      post("/login", CodeStatsWeb.AuthController, :login)
+      get("/signup", CodeStatsWeb.AuthController, :render_signup)
+      post("/signup", CodeStatsWeb.AuthController, :signup)
+      get("/forgot-password", CodeStatsWeb.AuthController, :render_forgot)
+      post("/forgot-password", CodeStatsWeb.AuthController, :forgot)
+      get("/reset-password/:token", CodeStatsWeb.AuthController, :render_reset)
+      put("/reset-password/:token", CodeStatsWeb.AuthController, :reset)
     end
 
-    get("/logout", AuthController, :logout)
+    get("/logout", CodeStatsWeb.AuthController, :logout)
 
-    get("/users/:username", ProfileController, :profile)
+    get("/users/:username", CodeStatsWeb.ProfileController, :profile)
+    forward("/profile-graph", Absinthe.Plug, schema: CodeStats.Profile.PublicSchema)
+    forward("/profile-graphiql", Absinthe.Plug.GraphiQL, schema: CodeStats.Profile.PublicSchema)
 
-    scope "/my" do
+    scope "/my", CodeStatsWeb do
+      pipe_through(:browser_changes_state)
       pipe_through(:browser_auth)
 
       get("/profile", ProfileController, :my_profile)
@@ -86,11 +92,8 @@ defmodule CodeStatsWeb.Router do
 
     get("/users/:username", CodeStatsWeb.ProfileController, :profile_api)
 
-    forward("/users-graph", Absinthe.Plug, schema: CodeStats.Profile.PublicSchema)
-    forward("/users-graphiql", Absinthe.Plug.GraphiQL, schema: CodeStats.Profile.PublicSchema)
-
     scope "/my" do
-      pipe_through(:api_auth)
+      pipe_through(:api_machine_auth)
 
       post("/pulses", CodeStatsWeb.PulseController, :add)
     end

@@ -71,10 +71,7 @@ h4 {
 
 h1 {
   @include smallinize-heading($h1-size);
-
-  &:not(.top-margin) {
-    margin-top: 0;
-  }
+  margin-top: 0.5em;
 }
 
 h2 {
@@ -98,7 +95,7 @@ h6 {
 }
 
 small,
-.font_small {
+.font-small {
   font-size: 0.75em;
 }
 

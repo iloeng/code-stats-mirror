@@ -7,19 +7,15 @@ defmodule CodeStatsWeb.FrontpageChannel do
   """
 
   alias CodeStats.User
-  alias CodeStats.Language.CacheService
   alias CodeStats.User.Pulse
 
   def join("frontpage", _params, socket) do
-    # Load total language XPs from cache and use them to populate total XP and
-    # list of most popular languages
-    total_lang_xps = CacheService.get_total_language_xps()
-
-    total_xp = Enum.reduce(total_lang_xps, 0, fn {_, amount}, acc -> amount + acc end)
+    history_data =
+      CodeStats.XPHistoryCache.get_data()
+      |> Enum.map(fn {{{y, mo, d}, {h, min}}, xp} -> [[[y, mo, d], [h, min]], xp] end)
 
     data = %{
-      total_xp: total_xp,
-      languages: Enum.map(total_lang_xps, fn {k, v} -> %{name: k, xp: v} end)
+      xp_history: history_data
     }
 
     {:ok, data, socket}
@@ -32,23 +28,19 @@ defmodule CodeStatsWeb.FrontpageChannel do
   """
   def send_pulse(%User{private_profile: false} = user, coords, %Pulse{xps: xps})
       when not is_nil(xps) do
+    formatted_xps =
+      for xp <- xps do
+        %{
+          xp: xp.amount,
+          language: xp.language.name
+        }
+      end
 
-    formatted_xps = for xp <- xps do
-      %{
-        xp: xp.amount,
-        language: xp.language.name
-      }
-    end
-
-    CodeStatsWeb.Endpoint.broadcast(
-      "frontpage",
-      "new_pulse",
-      %{
-        xps: formatted_xps,
-        username: user.username,
-        coords: coords
-      }
-    )
+    CodeStatsWeb.Endpoint.broadcast("frontpage", "new_pulse", %{
+      xps: formatted_xps,
+      username: user.username,
+      coords: coords
+    })
   end
 
   def send_pulse(_, _, _), do: nil

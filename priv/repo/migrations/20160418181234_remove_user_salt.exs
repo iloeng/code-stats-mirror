@@ -3,7 +3,7 @@ defmodule CodeStats.Repo.Migrations.RemoveUserSalt do
 
   def change do
     alter table(:users) do
-      remove :api_salt
+      remove(:api_salt)
     end
   end
 end

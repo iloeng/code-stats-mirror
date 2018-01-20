@@ -13,16 +13,16 @@ defmodule CodeStats.User do
   alias CodeStats.XP
 
   schema "users" do
-    field :username, :string
-    field :email, :string
-    field :password, :string
-    field :last_cached, :utc_datetime
-    field :private_profile, :boolean
-    field :cache, :map
+    field(:username, :string)
+    field(:email, :string)
+    field(:password, :string)
+    field(:last_cached, :utc_datetime)
+    field(:private_profile, :boolean)
+    field(:cache, :map)
 
-    has_many :pulses, Pulse
+    has_many(:pulses, Pulse)
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc """
@@ -66,6 +66,30 @@ defmodule CodeStats.User do
   end
 
   @doc """
+  Get user with the given username.
+
+  If second argument is true, case insensitive search is used instead.
+
+  Returns nil if user was not found.
+  """
+  @spec get_by_username(String.t(), boolean) :: %__MODULE__{} | nil
+  def get_by_username(username, case_insensitive \\ false) do
+    query =
+      case case_insensitive do
+        false ->
+          from(u in __MODULE__, where: u.username == ^username)
+
+        true ->
+          from(
+            u in __MODULE__,
+            where: fragment("lower(?)", ^username) == fragment("lower(?)", u.username)
+          )
+      end
+
+    Repo.one(query)
+  end
+
+  @doc """
   Calculate and store cached XP values for user.
 
   If `update_all` is set, all XP is gathered and the whole cache is replaced, not
@@ -74,49 +98,57 @@ defmodule CodeStats.User do
   def update_cached_xps(user, update_all \\ false) do
     update_start_time = DateTime.utc_now()
 
-    last_cached = if not update_all and user.last_cached != nil do
-      user.last_cached
-    else
-      {:ok, datetime} = Calendar.DateTime.Parse.rfc3339_utc(@null_datetime)
-      datetime
-    end
+    last_cached =
+      if not update_all and user.last_cached != nil do
+        user.last_cached
+      else
+        {:ok, datetime} = Calendar.DateTime.Parse.rfc3339_utc(@null_datetime)
+        datetime
+      end
 
     # If update_all is given or user cache is empty, don't use any previous cache data
     cached_data = %{
       languages: %{},
       machines: %{},
       dates: %{},
-      caching_duration: 0,      # Time taken for the last partial cache update
-      total_caching_duration: 0 # Time taken for the last full cache update
+      # Time taken for the last partial cache update
+      caching_duration: 0,
+      # Time taken for the last full cache update
+      total_caching_duration: 0
     }
 
-    cached_data = case {update_all, user.cache} do
-      {true, _} -> cached_data
-      {_, nil} -> cached_data
-      _ -> unformat_cache_from_db(user.cache)
-    end
+    cached_data =
+      case {update_all, user.cache} do
+        {true, _} -> cached_data
+        {_, nil} -> cached_data
+        _ -> unformat_cache_from_db(user.cache)
+      end
 
     # Load all of user's new XP plus required associations
-    xps_q = from x in XP,
-      join: p in Pulse, on: p.id == x.pulse_id,
-      where: p.user_id == ^user.id and p.inserted_at >= ^last_cached,
-      select: {p, x}
+    xps_q =
+      from(
+        x in XP,
+        join: p in Pulse,
+        on: p.id == x.pulse_id,
+        where: p.user_id == ^user.id and p.inserted_at >= ^last_cached,
+        select: {p, x}
+      )
 
-    xps = case Repo.all(xps_q) do
-      nil -> []
-      ret -> ret
-    end
+    xps =
+      case Repo.all(xps_q) do
+        nil -> []
+        ret -> ret
+      end
 
     language_data = generate_language_cache(cached_data.languages, xps)
     machine_data = generate_machine_cache(cached_data.machines, xps)
     date_data = generate_date_cache(cached_data.dates, xps)
 
-    cache_contents =
-      %{
-        languages: language_data,
-        machines: machine_data,
-        dates: date_data
-      }
+    cache_contents = %{
+      languages: language_data,
+      machines: machine_data,
+      dates: date_data
+    }
 
     # Correct key for storing caching duration
     duration_key = if update_all, do: :total_caching_duration, else: :caching_duration
@@ -170,16 +202,19 @@ defmodule CodeStats.User do
 
   # Format data in cache for storing into db as JSON
   defp format_cache_for_db(cache) do
-    languages = Map.get(cache, :languages)
-    |> int_keys_to_str()
+    languages =
+      Map.get(cache, :languages)
+      |> int_keys_to_str()
 
-    machines = Map.get(cache, :machines)
-    |> int_keys_to_str()
+    machines =
+      Map.get(cache, :machines)
+      |> int_keys_to_str()
 
-    dates = Map.get(cache, :dates)
-    |> Map.to_list()
-    |> Enum.map(fn {key, value} -> {Date.to_iso8601(key), value} end)
-    |> Map.new()
+    dates =
+      Map.get(cache, :dates)
+      |> Map.to_list()
+      |> Enum.map(fn {key, value} -> {Date.to_iso8601(key), value} end)
+      |> Map.new()
 
     %{
       languages: languages,
@@ -190,16 +225,19 @@ defmodule CodeStats.User do
 
   # Unformat data from DB to native datatypes
   defp unformat_cache_from_db(cache) do
-    languages = Map.get(cache, "languages")
-    |> str_keys_to_int()
+    languages =
+      Map.get(cache, "languages")
+      |> str_keys_to_int()
 
-    machines = Map.get(cache, "machines")
-    |> str_keys_to_int()
+    machines =
+      Map.get(cache, "machines")
+      |> str_keys_to_int()
 
-    dates = Map.get(cache, "dates")
-    |> Map.to_list()
-    |> Enum.map(fn {key, value} -> {Date.from_iso8601!(key), value} end)
-    |> Map.new()
+    dates =
+      Map.get(cache, "dates")
+      |> Map.to_list()
+      |> Enum.map(fn {key, value} -> {Date.from_iso8601!(key), value} end)
+      |> Map.new()
 
     %{
       languages: languages,
@@ -238,6 +276,6 @@ defmodule CodeStats.User do
 
   defp get_caching_duration(start_time) do
     Calendar.DateTime.diff(DateTime.utc_now(), start_time)
-    |> (fn {:ok, s, us, _} -> s + (us / 1_000_000) end).()
+    |> (fn {:ok, s, us, _} -> s + us / 1_000_000 end).()
   end
 end

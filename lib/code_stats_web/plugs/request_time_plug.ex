@@ -9,7 +9,9 @@ defmodule CodeStatsWeb.RequestTimePlug do
   @data_key :codestats_request_start_time
 
   @time_units [
-    "µs", "ms", "s"
+    "µs",
+    "ms",
+    "s"
   ]
 
   def init(opts) do
@@ -33,7 +35,7 @@ defmodule CodeStatsWeb.RequestTimePlug do
 
   defp get_current_time() do
     {millions, seconds, microseconds} = :os.timestamp()
-    (millions * 1_000_000) + seconds + (microseconds / 1_000_000)
+    millions * 1_000_000 + seconds + microseconds / 1_000_000
   end
 
   defp get_unit(value, [unit]), do: {value, unit}

@@ -3,6 +3,6 @@ defmodule CodeStats.Repo.Migrations.AddSentAtIndex do
 
   def change do
     # This makes "last 12h" searches somewhat faster
-    create_if_not_exists index(:pulses, ["sent_at DESC"])
+    create_if_not_exists(index(:pulses, ["sent_at DESC"]))
   end
 end

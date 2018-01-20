@@ -12,7 +12,8 @@ defmodule CodeStatsWeb.RememberMePlug do
   """
 
   @cookie_name "_codestats_remember_me"
-  @cookie_age 60 * 60 * 24 * 365 # ~1 year, in seconds
+  # ~1 year, in seconds
+  @cookie_age 60 * 60 * 24 * 365
   @cookie_opts [max_age: @cookie_age]
 
   import Plug.Conn
@@ -24,15 +25,14 @@ defmodule CodeStatsWeb.RememberMePlug do
   end
 
   def call(conn, _opts) do
-    with \
-      false                     <- AuthUtils.is_authed?(conn),
-      %{@cookie_name => cookie} <- conn.cookies,
-      {:ok, id}                 <- unform_payload(conn, cookie)
-    do
+    with false <- AuthUtils.is_authed?(conn),
+         %{@cookie_name => cookie} <- conn.cookies,
+         {:ok, id} <- unform_payload(conn, cookie) do
       AuthUtils.force_auth_user_id(conn, id)
     else
       # If an error occurred, ignore it
-      _ -> conn
+      _ ->
+        conn
     end
   end
 

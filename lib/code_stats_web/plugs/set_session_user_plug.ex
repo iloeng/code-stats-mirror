@@ -4,6 +4,8 @@ defmodule CodeStatsWeb.SetSessionUserPlug do
 
   is_authed? should be used to check if user data is available before using the data set by
   this plug.
+
+  This plug also adds the user status for use in Absinthe.
   """
 
   import Plug.Conn
@@ -20,10 +22,12 @@ defmodule CodeStatsWeb.SetSessionUserPlug do
   def call(conn, _opts) do
     if AuthUtils.is_authed?(conn) do
       id = AuthUtils.get_current_user_id(conn)
-      query = from u in User,
-        where: u.id == ^id
+      query = from(u in User, where: u.id == ^id)
+      user = Repo.one(query)
 
-      put_private(conn, AuthUtils.private_info_key(), Repo.one(query))
+      conn
+      |> put_private(AuthUtils.private_info_key(), user)
+      |> put_private(:absinthe, %{context: %{user: user}})
     else
       put_private(conn, AuthUtils.private_info_key(), nil)
     end

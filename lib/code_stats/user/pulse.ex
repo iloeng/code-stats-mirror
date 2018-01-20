@@ -6,20 +6,20 @@ defmodule CodeStats.User.Pulse do
   schema "pulses" do
     # When the Pulse was generated on the client. This is somewhat confusingly named
     # "sent_at" for legacy reasons, better name would be "coded_at".
-    field :sent_at, :utc_datetime
+    field(:sent_at, :utc_datetime)
 
     # Same value as before, but stored in the client's local timezone offset. This should
     # be used for certain aggregations to make the results more useful for the user.
-    field :sent_at_local, :naive_datetime
+    field(:sent_at_local, :naive_datetime)
 
     # Original offset from UTC for the sent_at_local timestamp. In minutes.
-    field :tz_offset, :integer
-    belongs_to :user, CodeStats.User
-    belongs_to :machine, CodeStats.User.Machine
+    field(:tz_offset, :integer)
+    belongs_to(:user, CodeStats.User)
+    belongs_to(:machine, CodeStats.User.Machine)
 
-    has_many :xps, CodeStats.XP
+    has_many(:xps, CodeStats.XP)
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc """

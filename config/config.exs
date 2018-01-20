@@ -10,8 +10,7 @@ config :code_stats, CodeStatsWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "gWdaZrx0+CB8iuwoC1LMNUD2Lp37PCqvv73Dgid6k+jESaQFWguzrf2hDAoIYE4U",
   render_errors: [accepts: ~w(html json)],
-  pubsub: [name: CodeStats.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: CodeStats.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Email config, override in your env.secret.exs
 config :code_stats, CodeStats.Mailer,
@@ -20,12 +19,10 @@ config :code_stats, CodeStats.Mailer,
   domain: "domain.example"
 
 config :code_stats,
-
   ecto_repos: [CodeStats.Repo],
 
-
-# User configurable settings below
-##################################
+  # User configurable settings below
+  ##################################
 
   # Set to true if site is in beta mode. This shows a big banner to users
   # that announces the fact.
@@ -34,7 +31,6 @@ config :code_stats,
   # If the site is proxied, the URL helpers may end up with the wrong URL.
   # This value is used as absolute URL instead. No trailing slash!
   absolute_url: "https://domain.example",
-
   site_name: "Code::Stats",
 
   # Address to send email from in the form of {"Name", "address@domain.example"}
@@ -49,16 +45,16 @@ config :code_stats,
 
   # Extra HTML that is injected to every page, right before </body>. Useful for analytics scripts.
   analytics_code: """
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'my-googleanalytics-id', 'auto');
-  ga('send', 'pageview');
-</script>
-""",
+    ga('create', 'my-googleanalytics-id', 'auto');
+    ga('send', 'pageview');
+  </script>
+  """,
 
   # CORS
 
@@ -73,15 +69,14 @@ config :logger, :console,
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"
 
 # Configure phoenix generators
 config :phoenix, :generators,
   migration: true,
   binary_id: false
 
-config :comeonin,
-  bcrypt_log_rounds: 12
+config :comeonin, bcrypt_log_rounds: 12
 
 config :number,
   delimiter: [
@@ -93,14 +88,14 @@ config :number,
 config :geolix,
   databases: [
     %{
-      id:      :city,
+      id: :city,
       adapter: Geolix.Adapter.MMDB2,
-      source:  "#{__DIR__}/geoip-cities.gz"
+      source: "#{__DIR__}/geoip-cities.gz"
     },
     %{
-      id:      :country,
+      id: :country,
       adapter: Geolix.Adapter.MMDB2,
-      source:  "#{__DIR__}/geoip-countries.gz"
+      source: "#{__DIR__}/geoip-countries.gz"
     }
   ]
 
@@ -108,20 +103,25 @@ config :geolite2data,
   geolix_updater: true,
   logger: true
 
-
 # Appsignal configuration
 
-config :code_stats, CodeStatsWeb.Endpoint,
-  instrumenters: [Appsignal.Phoenix.Instrumenter]
+config :code_stats, CodeStatsWeb.Endpoint, instrumenters: [Appsignal.Phoenix.Instrumenter]
 
 config :phoenix, :template_engines,
   eex: Appsignal.Phoenix.Template.EExEngine,
   exs: Appsignal.Phoenix.Template.ExsEngine
 
-config :code_stats, CodeStats.Repo,
-  loggers: [Appsignal.Ecto, Ecto.LogEntry]
+config :code_stats, CodeStats.Repo, loggers: [Appsignal.Ecto, Ecto.LogEntry]
 
 config :appsignal, :config,
-  filter_parameters: ["password", "username", "user_email", "email", "new_password", "old_password", "machine_name"]
+  filter_parameters: [
+    "password",
+    "username",
+    "user_email",
+    "email",
+    "new_password",
+    "old_password",
+    "machine_name"
+  ]
 
 import_config "appsignal.exs"

@@ -3,12 +3,14 @@ defmodule CodeStats.BuildTasks.CompileCSS do
   import CodeStats.FrontendConfs
 
   def bin(), do: node_bin("node-sass")
-  def args(in_file, out_path), do: [
-    "--source-map-embed",
-    "--output",
-    out_path,
-    in_file
-  ]
+
+  def args(in_file, out_path),
+    do: [
+      "--source-map-embed",
+      "--output",
+      out_path,
+      in_file
+    ]
 
   def task(out_path, in_file) do
     # Ensure output path exists

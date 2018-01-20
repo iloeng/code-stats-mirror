@@ -57,7 +57,16 @@ body {
 
 main {
   grid-area: main;
-  padding-bottom: 20px;
+
+  >section {
+    &:last-of-type {
+      padding-bottom: 20px;
+
+      &.last-section-no-padding {
+        padding-bottom: 0;
+      }
+    }
+  }
 }
 
 #footer-stripe {

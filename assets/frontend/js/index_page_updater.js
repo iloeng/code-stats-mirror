@@ -1,5 +1,6 @@
 import {mount} from 'redom';
-import WorldMapGraphComponent from './worldmap/world-map.component';
+import WorldMapGraphComponent from './frontpage/world-map.component';
+import HistoryGraphComponent from './frontpage/history-graph.component';
 
 /**
  * Handles connecting to the index page socket and sending updates to the graphs.
@@ -12,6 +13,10 @@ class IndexPageUpdater {
     this.worldMapEl = document.getElementById('world-map-graph');
     this.worldMap = new WorldMapGraphComponent();
     mount(this.worldMapEl, this.worldMap);
+
+    this.historyGraphEl = document.getElementById('frontpage-history-graph');
+    this.historyGraph = new HistoryGraphComponent();
+    mount(this.historyGraphEl, this.historyGraph);
 
     this.initSocket();
   }
@@ -33,10 +38,13 @@ class IndexPageUpdater {
   }
 
   initialize(init_data) {
+    this.historyGraph.init(init_data);
   }
 
   newPulse({xps, coords}) {
     for (const {language, xp} of xps) {
+      this.historyGraph.addPulse(xp);
+
       if (coords != null) {
         this.worldMap.addPulse(coords, xp);
       }

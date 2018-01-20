@@ -22,77 +22,62 @@ defmodule Mix.Tasks.Frontend.Watch do
 
   task _ do
     [
-      watch(
-        "BundleCommonJS",
-        src_path(common_prefix(), ["js"]),
-        fn _ ->
-          run_tasks([
-            FrontendBundleJS,
-            BattleBundleJS
-          ])
-        end
-      ),
-
+      watch("BundleCommonJS", src_path(common_prefix(), ["js"]), fn _ ->
+        run_tasks([
+          FrontendBundleJS,
+          BattleBundleJS
+        ])
+      end),
       watch(
         "TranspileFrontendJS",
         FrontendTranspileJS.in_path(),
         FrontendTranspileJS
       ),
-
       watch(
         "BundleFrontendJS",
         FrontendBundleJS.in_path(),
         FrontendBundleJS
       ),
-
       watch(
         "CopyFrontendJS",
         FrontendCopyJS.in_path(),
         FrontendCopyJS
       ),
-
       watch(
         "CompileFrontendCSS",
         FrontendCompileCSS.in_path(),
         FrontendCompileCSS
       ),
-
       watch(
         "CopyFrontendCSS",
         FrontendCopyCSS.in_path(),
         FrontendCopyCSS
       ),
-
       watch(
         "CopyFrontendAssets",
         FrontendAssets.in_path(),
         FrontendAssets
       ),
-
       watch(
         "TranspileBattleJS",
         BattleTranspileJS.in_path(),
         BattleTranspileJS
       ),
-
       watch(
         "BundleBattleJS",
         BattleBundleJS.in_path(),
         BattleBundleJS
       ),
-
       watch(
         "CopyBattleJS",
         BattleCopyJS.in_path(),
         BattleCopyJS
       ),
-
       watch(
         "CompileBattleCSS",
         BattleCompileCSS.in_path(),
         BattleCompileCSS
       ),
-
       watch(
         "CopyBattleCSS",
         BattleCopyCSS.in_path(),

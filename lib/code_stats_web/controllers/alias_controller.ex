@@ -14,9 +14,11 @@ defmodule CodeStatsWeb.AliasController do
   end
 
   defp get_aliases() do
-    (from l in Language,
+    from(
+      l in Language,
       where: is_nil(l.alias_of_id),
-      preload: :aliases)
+      preload: :aliases
+    )
     |> Repo.all()
   end
 end
