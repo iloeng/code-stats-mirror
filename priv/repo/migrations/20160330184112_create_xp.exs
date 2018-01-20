@@ -7,7 +7,7 @@ defmodule CodeStats.Repo.Migrations.CreateXP do
       add :pulse_id, references(:pulses, on_delete: :nothing)
       add :language_id, references(:languages, on_delete: :nothing)
 
-      timestamps
+      timestamps()
     end
     create index(:xps, [:pulse_id])
     create index(:xps, [:language_id])

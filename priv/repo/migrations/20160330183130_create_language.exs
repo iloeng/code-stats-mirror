@@ -5,8 +5,7 @@ defmodule CodeStats.Repo.Migrations.CreateLanguage do
     create table(:languages) do
       add :name, :string
 
-      timestamps
+      timestamps()
     end
-
   end
 end

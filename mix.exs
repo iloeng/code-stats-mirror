@@ -11,7 +11,18 @@ defmodule CodeStats.Mixfile do
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+
+      # Docs
+      name: "Code::Stats",
+      source_url: "https://gitlab.com/code-stats/code-stats",
+      homepage_url: "https://codestats.net",
+      docs: [
+        # The main page in the docs
+        main: "readme",
+        logo: "Logo.png",
+        extras: ["README.md"]
+      ]
     ]
   end
 
