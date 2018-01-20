@@ -55,30 +55,6 @@ defmodule CodeStatsWeb.AuthUtils do
   end
 
   @doc """
-  Get user with the given username.
-
-  If second argument is true, case insensitive search is used instead.
-
-  Returns nil if user was not found.
-  """
-  @spec get_user(String.t(), boolean) :: %User{} | nil
-  def get_user(username, case_insensitive \\ false) do
-    query =
-      case case_insensitive do
-        false ->
-          from(u in User, where: u.username == ^username)
-
-        true ->
-          from(
-            u in User,
-            where: fragment("lower(?)", ^username) == fragment("lower(?)", u.username)
-          )
-      end
-
-    Repo.one(query)
-  end
-
-  @doc """
   Authenticate the given user in the given connection.
 
   Authentication status is saved in the session. Returns conn on success, :error on failure.
@@ -182,7 +158,7 @@ defmodule CodeStatsWeb.AuthUtils do
   @spec auth_machine(%Conn{}, String.t()) :: %Conn{}
   def auth_machine(%Conn{} = conn, machine_token) do
     with {username, machine_id} <- split_token(machine_token),
-         %User{} = user <- get_user(username),
+         %User{} = user <- User.get_by_username(username),
          %Machine{} = machine <- get_machine(machine_id, user),
          {:ok, _} <-
            MessageVerifier.verify(machine_token, conn.secret_key_base <> machine.api_salt) do

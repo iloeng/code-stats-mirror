@@ -25,7 +25,7 @@ defmodule CodeStatsWeb.AuthController do
   end
 
   def login(conn, %{"username" => username, "password" => password} = params) do
-    with %User{} = user <- AuthUtils.get_user(username, true),
+    with %User{} = user <- User.get_by_username(username, true),
          %Plug.Conn{} = conn <- AuthUtils.auth_user(conn, user, password),
          %Plug.Conn{} = conn <- maybe_remember_me(conn, user, params) do
       redirect(conn, to: profile_path(conn, :my_profile))

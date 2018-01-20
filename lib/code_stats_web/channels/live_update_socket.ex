@@ -2,7 +2,6 @@ defmodule CodeStatsWeb.LiveUpdateSocket do
   use Phoenix.Socket
 
   alias CodeStats.User
-  alias CodeStatsWeb.AuthUtils
 
   # Maximum age of token that is accepted. We want people to be able to leave the site open and be able to reconnect
   # for a reasonable time but not use their token forever
@@ -57,7 +56,7 @@ defmodule CodeStatsWeb.LiveUpdateSocket do
   # Check that given token is valid, return user or nil if invalid
   defp check_token(socket, token) do
     with {:ok, data} <- Phoenix.Token.verify(socket, "user", token, max_age: @token_max_age),
-         %User{} = user <- AuthUtils.get_user(data) do
+         %User{} = user <- User.get_by_username(data) do
       user
     else
       _ -> nil

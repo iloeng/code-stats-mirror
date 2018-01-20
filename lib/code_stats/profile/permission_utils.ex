@@ -1,6 +1,6 @@
-defmodule CodeStatsWeb.PermissionUtils do
+defmodule CodeStats.Profile.PermissionUtils do
   @moduledoc """
-  Utility functions related to permissions in the system.
+  Utility functions related to profile permissions.
   """
 
   alias CodeStats.User

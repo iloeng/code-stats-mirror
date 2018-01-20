@@ -3,7 +3,7 @@ defmodule CodeStatsWeb.ProfileController do
 
   alias CodeStats.User
   alias CodeStatsWeb.AuthUtils
-  alias CodeStatsWeb.PermissionUtils
+  alias CodeStats.Profile.PermissionUtils
   alias CodeStatsWeb.ProfileUtils
 
   def my_profile(conn, _params) do
@@ -164,7 +164,7 @@ defmodule CodeStatsWeb.ProfileController do
 
   defp get_user(username) do
     with username <- fix_url_username(username),
-         %User{} = user <- AuthUtils.get_user(username, true) do
+         %User{} = user <- User.get_by_username(username, true) do
       {:ok, user}
     else
       _ -> :error

@@ -3,7 +3,6 @@ defmodule CodeStatsWeb.ProfileChannel do
 
   alias CodeStats.User
   alias CodeStats.User.Pulse
-  alias CodeStatsWeb.AuthUtils
   alias CodeStatsWeb.ProfileUtils
 
   @moduledoc """
@@ -16,7 +15,7 @@ defmodule CodeStatsWeb.ProfileChannel do
     # The profile is public, OR
     # the current user is the same as the profile user.
 
-    with %User{} = user <- AuthUtils.get_user(username),
+    with %User{} = user <- User.get_by_username(username),
          true <- !user.private_profile or socket.assigns[:user_id] === user.id,
          updated_cache <- User.update_cached_xps(user),
          preloaded_cache <- ProfileUtils.preload_cache_data(updated_cache, user),

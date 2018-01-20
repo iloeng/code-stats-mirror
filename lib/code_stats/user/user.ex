@@ -66,6 +66,30 @@ defmodule CodeStats.User do
   end
 
   @doc """
+  Get user with the given username.
+
+  If second argument is true, case insensitive search is used instead.
+
+  Returns nil if user was not found.
+  """
+  @spec get_by_username(String.t(), boolean) :: %__MODULE__{} | nil
+  def get_by_username(username, case_insensitive \\ false) do
+    query =
+      case case_insensitive do
+        false ->
+          from(u in __MODULE__, where: u.username == ^username)
+
+        true ->
+          from(
+            u in __MODULE__,
+            where: fragment("lower(?)", ^username) == fragment("lower(?)", u.username)
+          )
+      end
+
+    Repo.one(query)
+  end
+
+  @doc """
   Calculate and store cached XP values for user.
 
   If `update_all` is set, all XP is gathered and the whole cache is replaced, not
