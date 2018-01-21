@@ -106,12 +106,12 @@ defmodule CodeStatsWeb.Router do
   scope "/api", CodeStatsWeb do
     pipe_through(:api)
 
-    get("/users/:username", CodeStatsWeb.ProfileController, :profile_api)
+    get("/users/:username", ProfileController, :profile_api)
 
     scope "/my" do
       pipe_through(:api_machine_auth)
 
-      post("/pulses", CodeStatsWeb.PulseController, :add)
+      post("/pulses", PulseController, :add)
     end
   end
 end
