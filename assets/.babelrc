@@ -1,5 +1,5 @@
 {
-  "__comment": "Note that the paths below are relative to the CWD when executing babel, that is the project root.",
+  // Note that the paths below are relative to the CWD when executing babel, that is the project root
   "presets": [
     "./assets/node_modules/babel-preset-es2015",
     "./assets/node_modules/babel-preset-es2016",
