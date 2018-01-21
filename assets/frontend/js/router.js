@@ -4,8 +4,9 @@ import index_page from './index_page';
 import preferences_page from './preferences_page';
 
 /**
- * List of routes. Key should be regex to match against path, value
- * should be function to execute.
+ * List of routes.
+ *
+ * Key should be regex to match against path, value should be function to execute.
  *
  * First matching route is executed.
  */
