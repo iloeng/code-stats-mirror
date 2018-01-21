@@ -15,7 +15,7 @@
 
     @media #{$sm} {
       grid-template: 'name   name   name   name  '
-                     'key    key    key    copy   '
+                     'key    key    key    copy  '
                      'regen  edit   deact  delete'
                     / 1fr    1fr    1fr    1fr;
     }

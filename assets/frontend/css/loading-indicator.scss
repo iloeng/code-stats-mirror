@@ -1,0 +1,35 @@
+div.loading-indicator {
+  $indicator-width: 640px;
+  $indicator-height: 480px;
+
+  display: grid;
+  grid-template: 'indicator indicator' $indicator-height
+                 'loading   copy     '
+                / 1fr       1fr;
+  align-items: center;
+  grid-gap: 20px;
+
+  .canvas-wrapper {
+    grid-area: indicator;
+    max-height: $indicator-height;
+    overflow-y: hidden;
+
+    canvas#loading-profile {
+      display: block;
+      width: 100%;
+      max-width: $indicator-width;
+
+      margin: 0 auto;
+    }
+  }
+
+  .loading-text {
+    grid-area: loading;
+    text-align: right;
+  }
+
+  .loading-author {
+    grid-area: copy;
+    text-align: left;
+  }
+}
