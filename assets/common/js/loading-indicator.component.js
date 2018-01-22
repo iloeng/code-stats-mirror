@@ -60,6 +60,39 @@ const INDICATORS = [
       x.rotate(C(t)/1e4);
     }
   },
+  {
+    author: 'BirdsTweetCodersDweet',
+    url: 'https://www.dwitter.net/d/5112',
+    f: t => { let w, h, z; w=1920/2;h=1080/2;if((t*t)/S(t*t) > 1){z=(t*t)/S(t*t);}x.strokeStyle=R(15,25,15, 0.75);x.beginPath();x.arc(w,h,z,0,Math.PI/S(t));x.stroke(); }
+  },
+  {
+    author: 'BirdsTweetCodersDweet',
+    url: 'https://www.dwitter.net/d/5118',
+    f: t => {
+      let w, h, z;
+      w=1920/2;
+      h=1080/2;
+      z=t*t;
+      x.strokeStyle= `hsl(${t*90},50%,50%)`;
+      x.beginPath();
+      x.arc(w, h, z, 0, Math.PI*2);
+      x.stroke();
+    }
+  },
+  {
+    author: 'BirdsTweetCodersDweet',
+    url: 'https://www.dwitter.net/d/5121',
+    f: t => { let w, h, z; w=1920/2;h=1080/2;z=t*t;x.beginPath();x.arc(w, h, z,0,Math.PI*2);x.rotate(20, 0, 0);x.strokeStyle=`hsl(${t*90},50%,50%)`;x.stroke(); }
+  },
+  {
+    author: 'BirdsTweetCodersDweet',
+    url: 'https://www.dwitter.net/d/6293',
+    f: t => {
+      x.fillStyle=`hsl(${t*90},50%,50%)`;
+      x.fillRect(940+S(t%3)*300,550+C(t)*290,20,20);
+      x.fillRect(940+S(-t%3)*300,550+C(t)*290,20,20);
+    }
+  },
 ];
 
 class LoadingIndicatorComponent {
