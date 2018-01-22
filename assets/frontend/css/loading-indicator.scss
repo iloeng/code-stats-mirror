@@ -3,9 +3,9 @@ div.loading-indicator {
   $indicator-height: 480px;
 
   display: grid;
-  grid-template: 'indicator indicator' $indicator-height
-                 'loading   copy     '
-                / 1fr       1fr;
+  grid-template: 'loading   copy      '
+                 'indicator indicator ' #{$indicator-height}
+           #{'/'} 1fr       1fr;
   align-items: center;
   grid-gap: 20px;
 

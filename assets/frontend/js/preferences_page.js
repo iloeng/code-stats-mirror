@@ -1,8 +1,10 @@
 import 'core-js/es6/promise';
 import 'whatwg-fetch';
 import {saveAs} from 'file-saver';
+import {mount, setChildren} from 'redom';
 
 import {wait_for_load} from '../../common/js/utils';
+import LoadingIndicatorComponent from '../../common/js/loading-indicator.component';
 
 const EXPORT_PATH = '/my/pulses';
 
@@ -12,12 +14,14 @@ const EXPORT_PATH = '/my/pulses';
 
 function preferences_page() {
   wait_for_load().then(() => {
+    const container = document.getElementById('export-data-container');
     const button = document.getElementById('export-data-button');
+    const indicator_el = document.getElementById('export-data-processing');
 
     if (button != null) {
       button.onclick = () => {
-        button.textContent = 'Processing…';
-        button.disabled = true;
+        container.hidden = true;
+        mount(indicator_el, new LoadingIndicatorComponent());
 
         fetch(EXPORT_PATH, {
           method: 'GET',
@@ -32,8 +36,8 @@ function preferences_page() {
         })
         .catch(err => alert("Error exporting data:\n\n" + err.message))
         .finally(() => {
-          button.textContent = 'Download data';
-          button.disabled = false;
+          container.hidden = false;
+          setChildren(indicator_el, []);
         });
       };
     }

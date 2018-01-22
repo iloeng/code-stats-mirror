@@ -76,9 +76,13 @@
 <div class="stripe stripe-padded">
   <h2>Export data</h2>
 
-  <p>
-    Press the button below to download your XP data in CSV format.
-  </p>
+  <div id="export-data-container">
+    <p>
+      Press the button below to download your XP data in CSV format.
+    </p>
 
-  <button id="export-data-button" type="button" class="btn btn-primary">Download data</button>
+    <button id="export-data-button" type="button" class="btn btn-primary">Download data</button>
+  </div>
+
+  <div id="export-data-processing"></div>
 </div>
