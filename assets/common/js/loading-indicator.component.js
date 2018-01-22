@@ -75,6 +75,8 @@ class LoadingIndicatorComponent {
       ])
     ]);
 
+    this.running = true;
+
     this.initIndicator();
   }
 
@@ -84,7 +86,10 @@ class LoadingIndicatorComponent {
     let frame = 0;
     const u = t => this.indicator.f(t);
 
-    function loop() {
+    const loop = () => {
+      // Stop if component was removed from page
+      if (!this.running) return;
+
       time = frame / 60;
 
       if (time * 60 | 0 == frame - 1) {
@@ -101,9 +106,13 @@ class LoadingIndicatorComponent {
       }
 
       requestAnimationFrame(loop);
-    }
+    };
 
     requestAnimationFrame(loop);
+  }
+
+  onunmount() {
+    this.running = false;
   }
 }
 
