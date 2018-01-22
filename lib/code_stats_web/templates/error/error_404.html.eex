@@ -1,6 +1,10 @@
-<div class="jumbotron">
-  <h1>Not found</h1>
-  <p class="lead">
-    The page you were looking for does not exist.
+<div class="stripe stripe-accent stripe-just-heading">
+  <h2>Not found</h2>
+</div>
+
+<div class="stripe stripe-content-padded">
+  <p>
+    The page you were looking for does not exist. If you were looking for a user profile, it may have also been set to
+    private.
   </p>
 </div>

@@ -34,11 +34,10 @@ defmodule CodeStatsWeb do
       use Phoenix.View, root: "lib/code_stats_web/templates"
 
       # Import convenience functions from controllers
-      import Phoenix.Controller, only: [get_csrf_token: 0, get_flash: 2, view_module: 1]
+      import Phoenix.Controller, only: [get_csrf_token: 0, view_module: 1]
       import CodeStats.Utils, only: [get_conf: 1]
 
-      import CodeStatsWeb.AuthUtils,
-        only: [is_authed?: 1, get_current_user: 1, get_current_user_id: 1]
+      import CodeStatsWeb.AuthUtils, only: [get_current_user: 1, get_current_user_id: 1]
 
       import CodeStats.XP.XPCalculator,
         only: [get_level: 1, get_next_level_xp: 1, get_level_progress: 1]

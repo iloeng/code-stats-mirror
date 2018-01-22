@@ -139,7 +139,7 @@ defmodule CodeStatsWeb.MachineController do
       nil ->
         conn
         |> put_status(404)
-        |> render(CodeStats.ErrorView, "404.html")
+        |> render(CodeStatsWeb.ErrorView, "error_404.html")
     end
   end
 

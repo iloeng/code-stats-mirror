@@ -104,8 +104,29 @@ main {
     border-bottom: 1px dashed $warning-text-color;
   }
 
+  // Stripe with nice padding for content
+  &.stripe-content-padded {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
   &.stripe-padded {
     padding-bottom: 40px;
+  }
+
+  // Stripe with just heading element
+  &.stripe-just-heading {
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin: 0;
+    }
   }
 
   // When layout is wider than stripe, keep content at max width and centered with padding. This enables the

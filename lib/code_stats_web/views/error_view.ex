@@ -1,5 +1,6 @@
 defmodule CodeStatsWeb.ErrorView do
   use CodeStatsWeb, :view
+  require Logger
 
   def render("404.html", assigns) do
     assigns = non_crash_error_assigns(assigns)
@@ -20,7 +21,7 @@ defmodule CodeStatsWeb.ErrorView do
 
   def render("403.html", assigns) do
     assigns = non_crash_error_assigns(assigns)
-    render("error_403.html", assigns)
+    render(__MODULE__, "error_403.html", assigns)
   end
 
   def render("403.json", _assigns) do
@@ -29,14 +30,15 @@ defmodule CodeStatsWeb.ErrorView do
 
   # In case no render clause matches or no
   # template is found, let's render it as 500
-  def template_not_found(_template, assigns) do
+  def template_not_found(template, assigns) do
+    Logger.error("Template #{template} not found.")
     render("500.html", assigns)
   end
 
   # Assigns for error pages that are not crashes
   defp non_crash_error_assigns(assigns) do
     Map.merge(assigns, %{
-      layout: {__MODULE__, "error_layout.html"}
+      layout: {CodeStatsWeb.LayoutView, "app.html"}
     })
   end
 end

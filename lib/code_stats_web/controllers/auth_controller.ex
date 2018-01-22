@@ -113,7 +113,7 @@ defmodule CodeStatsWeb.AuthController do
       nil ->
         conn
         |> put_status(404)
-        |> render(CodeStats.ErrorView, "error_404.html")
+        |> render(CodeStatsWeb.ErrorView, "error_404.html")
     end
   end
 
