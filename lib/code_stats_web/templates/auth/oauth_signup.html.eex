@@ -1,24 +1,21 @@
 <div class="stripe">
   <h1>Sign up with <%= @provider %></h1>
   <%= form_for(@changeset, auth_path(@conn, :oauth_signup, @provider), fn f -> %>
+    <%= hidden_input(f, :token, value: @token) %>
+
     <label for="user_username">Username</label>
     <div class="input">
-      <%= hidden_input(f, :username) %>
       <span><%= @changeset.changes.username %></span>
     </div>
 
     <label for="user_email">Email address</label>
     <div class="input">
-      <%= hidden_input(f, :email) %>
       <span><%= @changeset.changes.email %></span>
 
       <p class="help-block">
         Email is only used for important notifications about the service, not for promotions or spam.
       </p>
     </div>
-
-    <%= hidden_input(f, :from) %>
-    <%= hidden_input(f, :password) %>
 
     <p class="description">
       When registering, you accept that you have read, understood and accepted the <a href="<%= page_path(@conn, :terms) %>">Terms of Service and Privacy policy</a>.

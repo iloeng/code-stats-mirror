@@ -1,6 +1,8 @@
 defmodule CodeStatsWeb.AuthController do
   use CodeStatsWeb, :controller
 
+  alias Phoenix.Token
+  alias Ecto.Changeset
   alias Calendar.DateTime, as: CDateTime
 
   alias CodeStatsWeb.AuthUtils
@@ -27,7 +29,7 @@ defmodule CodeStatsWeb.AuthController do
 
   def oauth(conn, %{"app" => "github", "code" => code}) do
     with {:ok, body} <- Github.user(code: code),
-         {user = %User{}, _} <- {AuthUtils.get_user(body["login"], from: "github"), body}
+         {user = %User{}, _} <- {AuthUtils.get_user(body["login"], from: "GitHub"), body}
     do
       conn
       |> AuthUtils.force_auth_user_id(user.id)
@@ -42,9 +44,11 @@ defmodule CodeStatsWeb.AuthController do
           email: body["email"],
           from: "github",
         }
+        token = Token.sign(conn, "codestats_oauth", {"GitHub", params.username, params.email})
         conn
         |> assign(:provider, "GitHub")
         |> assign(:changeset, User.changeset(%User{}, params))
+        |> assign(:token, token)
         |> render("oauth_signup.html")
 
       _ret ->
@@ -97,20 +101,29 @@ defmodule CodeStatsWeb.AuthController do
     end
   end
 
-  def oauth_signup(conn, %{"provider" => provider, "user" => user_params}) do
-    %User{}
-    |> User.changeset(user_params)
-    |> AuthUtils.create_user()
-    |> case do
-      %Ecto.Changeset{} = changeset ->
+  def oauth_signup(conn, %{"user" => %{"token" => token}}) do
+    with {:ok, {from, username, email}} <- Token.verify(conn, "codestats_oauth", token, max_age: 86400),
+         params <- %{username: username, from: from, email: email, password: from},
+         %User{} <- %User{} |> User.changeset(params) |> AuthUtils.create_user()
+    do
+      conn
+      |> put_flash(:success, "Great success! Your account was created and you can now log in with #{from}.")
+      |> redirect(to: auth_path(conn, :render_login))
+    else
+      {:error, :invalid} ->
         conn
-        |> assign(:title, "Signup")
-        |> put_status(400)
-        |> render("signup.html", changeset: changeset)
+        |> put_flash(:error, "Invalid token given on oauth signup")
+        |> redirect(to: auth_path(conn, :render_login))
 
-      %User{} ->
+      {:error, :expired} ->
         conn
-        |> put_flash(:success, "Great success! Your account was created and you can now log in with #{provider}.")
+        |> put_flash(:error, "Token was expired on oauth signup")
+        |> redirect(to: auth_path(conn, :render_login))
+
+      %Changeset{} = ch ->
+        IO.inspect ch.errors
+        conn
+        |> put_flash(:error, "Failed to create new user")
         |> redirect(to: auth_path(conn, :render_login))
     end
   end
