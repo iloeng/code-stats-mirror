@@ -15,7 +15,13 @@ class TotalInfoComponent {
 
     this.username = document.getElementById('profile-username').dataset.name;
     this.registeredAt = DateTime.fromISO(document.getElementById('registered-at').getAttribute('datetime'));
-    this.lastDayCoded = DateTime.fromISO(document.getElementById('last-programmed-at').getAttribute('datetime'));
+
+    const last_day_coded_el = document.getElementById('last-programmed-at');
+    this.lastDayCoded = null;
+
+    if (last_day_coded_el != null) {
+      this.lastDayCoded = DateTime.fromISO(last_day_coded_el.getAttribute('datetime'));
+    }
 
     this.usernameEl = el('h1#profile-username', this.username);
     this.profileDetailList = el('ul#profile-detail-list', [
