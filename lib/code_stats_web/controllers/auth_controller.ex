@@ -148,17 +148,18 @@ defmodule CodeStatsWeb.AuthController do
 
     # If the changeset is valid, attempt to create password reset token
     # and send email
-    with true <- changeset.valid?,
-         %PasswordReset{token: token} <- Repo.insert!(changeset) do
-      EmailUtils.send_password_reset_email(user, token)
-    else
-      _ -> nil
+    case Repo.insert(changeset) do
+      {:ok, %PasswordReset{token: token}} ->
+        EmailUtils.send_password_reset_email(user, token)
+
+      {:error, _} ->
+        nil
     end
 
     conn
     |> put_flash(
       :info,
-      "A password reset email will be sent shortly to the email address linked to the account, if the account had one. If you do not receive an email, please check that you typed the account name correctly."
+      "A password reset email will be sent shortly to the email address linked to the account, if the account had one. If you do not receive an email, please check that you typed the account name correctly. Password reset won't also work if your account has been created with GitHub."
     )
     |> redirect(to: auth_path(conn, :render_forgot))
   end
