@@ -36,43 +36,10 @@ defmodule CodeStatsWeb.ProfileController do
     end
   end
 
-  def get_profile_data(user) do
-    # Update and get user's cache data
-    %{
-      languages: language_xps,
-      machines: machine_xps,
-      dates: date_xps
-    } = User.update_cached_xps(user) |> ProfileUtils.preload_cache_data(user)
-
-    # Calculate total XP
-    total_xp = Enum.reduce(language_xps, 0, fn {_, amount}, acc -> acc + amount end)
-
-    # Get new XP data from last 12 hours
-    now = DateTime.utc_now()
-    latest_xp_since = Calendar.DateTime.subtract!(now, 3600 * ProfileUtils.recent_xp_hours())
-    new_language_xps = ProfileUtils.get_language_xps_since(user, latest_xp_since)
-    new_machine_xps = ProfileUtils.get_machine_xps_since(user, latest_xp_since)
-    new_xp = Enum.reduce(Map.values(new_language_xps), 0, fn amount, acc -> acc + amount end)
-
-    {
-      total_xp,
-      new_xp,
-      language_xps,
-      new_language_xps,
-      machine_xps,
-      new_machine_xps,
-      date_xps
-    }
-  end
-
   def render_profile(conn, user) do
     {
       total_xp,
       new_xp,
-      language_xps,
-      new_language_xps,
-      machine_xps,
-      new_machine_xps,
       date_xps
     } = get_profile_data(user)
 
@@ -86,22 +53,11 @@ defmodule CodeStatsWeb.ProfileController do
           {nil, 0}
       end
 
-    xp_per_day =
-      case last_day do
-        nil -> 0
-        _ -> trunc(Float.round(total_xp / Enum.count(dates_list)))
-      end
-
     conn
     |> assign(:title, user.username)
     |> assign(:user, user)
     |> assign(:total_xp, total_xp)
     |> assign(:last_day_coded, last_day)
-    |> assign(:xp_per_day, xp_per_day)
-    |> assign(:new_xps, new_language_xps)
-    |> assign(:language_xps, language_xps)
-    |> assign(:machine_xps, machine_xps)
-    |> assign(:new_machine_xps, new_machine_xps)
     |> assign(:total_new_xp, new_xp)
     |> render("profile.html")
   end
@@ -115,7 +71,7 @@ defmodule CodeStatsWeb.ProfileController do
       machine_xps,
       new_machine_xps,
       date_xps
-    } = get_profile_data(user)
+    } = get_api_profile_data(user)
 
     # Transform data into JSON serializable formats and combine XPs with
     # recent XPs
@@ -146,6 +102,44 @@ defmodule CodeStatsWeb.ProfileController do
     })
   end
 
+  defp get_profile_data(%User{} = user) do
+    %{dates: date_xps} = User.update_cached_xps(user)
+
+    total_xp = Enum.reduce(date_xps, 0, fn {_, amount}, acc -> acc + amount end)
+    latest_xp_since = get_since_datetime()
+    new_xp = ProfileUtils.get_xps_since(user, latest_xp_since)
+
+    {total_xp, new_xp, date_xps}
+  end
+
+  defp get_api_profile_data(%User{} = user) do
+    # Update and get user's cache data
+    %{
+      languages: language_xps,
+      machines: machine_xps,
+      dates: date_xps
+    } = User.update_cached_xps(user) |> ProfileUtils.preload_cache_data(user)
+
+    # Calculate total XP
+    total_xp = Enum.reduce(language_xps, 0, fn {_, amount}, acc -> acc + amount end)
+
+    # Get new XP data from last 12 hours
+    latest_xp_since = get_since_datetime()
+    new_language_xps = ProfileUtils.get_language_xps_since(user, latest_xp_since)
+    new_machine_xps = ProfileUtils.get_machine_xps_since(user, latest_xp_since)
+    new_xp = Enum.reduce(Map.values(new_language_xps), 0, fn amount, acc -> acc + amount end)
+
+    {
+      total_xp,
+      new_xp,
+      language_xps,
+      new_language_xps,
+      machine_xps,
+      new_machine_xps,
+      date_xps
+    }
+  end
+
   # Render if username matches, redirect otherwise
   defp render_or_redirect(conn, %User{username: username} = user, input_username, renderer, _)
        when username == input_username do
@@ -169,5 +163,11 @@ defmodule CodeStatsWeb.ProfileController do
     else
       _ -> :error
     end
+  end
+
+  # Get the datetime to use for "last 12h" filtering
+  defp get_since_datetime() do
+    now = DateTime.utc_now()
+    Calendar.DateTime.subtract!(now, 3600 * ProfileUtils.recent_xp_hours())
   end
 end

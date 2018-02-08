@@ -37,7 +37,7 @@
 
   <div class="contributors-list">
     <div>
-      <img src="<%= static_path(@conn, "/frontend/assets/images/contributors/nicd.png") %>" alt="Mikko Ahlroth" title="Mikko Ahlroth" />
+      <img src="<%= static_path(@conn, "/assets/frontend/images/contributors/nicd.png") %>" alt="Mikko Ahlroth" title="Mikko Ahlroth" />
 
       <h3>Mikko Ahlroth</h3>
       <p class="subtitle">Lead developer</p>
@@ -50,7 +50,7 @@
     </div>
 
     <div>
-      <img src="<%= static_path(@conn, "/frontend/assets/images/Logo.svg") %>" alt="Code::Stats logo" />
+      <img src="<%= static_path(@conn, "/assets/frontend/images/Logo.svg") %>" alt="Code::Stats logo" />
 
       <h3>Hannu Hartikainen</h3>
       <p class="subtitle"><a href="">code-stats-zsh</a> developer</p>
@@ -61,7 +61,7 @@
     </div>
 
     <div>
-      <img src="<%= static_path(@conn, "/frontend/assets/images/contributors/nikolauska.png") %>" alt="Niko Lehtovirta" title="Niko Lehtovirta" />
+      <img src="<%= static_path(@conn, "/assets/frontend/images/contributors/nikolauska.png") %>" alt="Niko Lehtovirta" title="Niko Lehtovirta" />
 
       <h3>Niko Lehtovirta</h3>
 
@@ -72,7 +72,7 @@
     </div>
 
     <div>
-      <img src="<%= static_path(@conn, "/frontend/assets/images/contributors/aman.jpeg") %>" alt="Aman Mittal" title="Aman Mittal" />
+      <img src="<%= static_path(@conn, "/assets/frontend/images/contributors/aman.jpeg") %>" alt="Aman Mittal" title="Aman Mittal" />
 
       <h3>Aman Mittal</h3>
       <p class="subtitle"><a href="https://gitlab.com/code-stats/codestats-cli">codestats-cli</a> developer</p>
@@ -83,7 +83,7 @@
     </div>
 
     <div>
-      <img src="<%= static_path(@conn, "/frontend/assets/images/contributors/riussi.jpg") %>" alt="Juha Ristolainen" title="Juha Ristolainen" />
+      <img src="<%= static_path(@conn, "/assets/frontend/images/contributors/riussi.jpg") %>" alt="Juha Ristolainen" title="Juha Ristolainen" />
 
       <h3>Juha Ristolainen</h3>
       <p class="subtitle"><a href="https://marketplace.visualstudio.com/items?itemName=juha-ristolainen.code-stats-vscode">code-stats-vscode</a> developer</p>
@@ -96,7 +96,7 @@
     </div>
 
     <div>
-      <img src="<%= static_path(@conn, "/frontend/assets/images/contributors/mastorm.png") %>" alt="Mathias Storm" title="Mathias Storm" />
+      <img src="<%= static_path(@conn, "/assets/frontend/images/contributors/mastorm.png") %>" alt="Mathias Storm" title="Mathias Storm" />
 
       <h3>Mathias Storm</h3>
       <p class="subtitle"><a href="https://marketplace.visualstudio.com/items?itemName=MathiasSTorm.CodeStatsClient">CodeStats.Client</a> developer</p>

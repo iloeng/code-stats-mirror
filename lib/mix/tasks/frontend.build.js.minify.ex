@@ -7,14 +7,14 @@ defmodule Mix.Tasks.Frontend.Build.Js.Minify do
   @preferred_cli_env :prod
 
   @deps [
-    "frontend.build.js.transpile"
+    "frontend.build.js.bundle"
   ]
 
-  def in_path(), do: Mix.Tasks.Frontend.Build.Js.Transpile.out_path()
-  def in_file(), do: Path.join([in_path(), "#{frontend_prefix()}.js"])
+  def in_path(), do: Mix.Tasks.Frontend.Build.Js.Bundle.out_path()
+  def in_file(), do: Path.join([in_path(), "frontend.js"])
 
-  def out_path(), do: dist_path(frontend_prefix(), ["js"])
-  def out_file(), do: Path.join([out_path(), "#{frontend_prefix()}.js"])
+  def out_path(), do: Path.join([base_dist_path(), "js"])
+  def out_file(), do: Path.join([out_path(), "frontend.js"])
 
   task _ do
     MinifyJS.task(out_path(), in_file(), out_file())

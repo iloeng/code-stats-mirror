@@ -1,9 +1,15 @@
 {
-  // Note that the paths below are relative to the CWD when executing babel, that is the project root
   "presets": [
-    "./assets/node_modules/babel-preset-es2015",
-    "./assets/node_modules/babel-preset-es2016",
-    "./assets/node_modules/babel-preset-es2017"
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": ["last 2 Chrome versions", "last 2 Edge versions", "last 2 Safari versions", "last 2 Firefox versions", "last 2 and_chr versions", "last 2 and_ff versions", "last 2 ios_saf versions"]
+        },
+        "useBuiltIns": true,
+        "modules": false
+      }
+    ]
   ],
-  "ignore": "node_modules"
+  "plugins": ["external-helpers"]
 }

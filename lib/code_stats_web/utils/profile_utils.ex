@@ -39,7 +39,26 @@ defmodule CodeStatsWeb.ProfileUtils do
   end
 
   @doc """
-  Get all XP accumulated since `then`.
+  Get all XP since `then`.
+  """
+  @spec get_xps_since(%User{}, %DateTime{}) :: integer
+  def get_xps_since(%User{} = user, %DateTime{} = then) do
+    from(
+      x in XP,
+      join: p in Pulse,
+      on: p.id == x.pulse_id,
+      where: p.user_id == ^user.id and p.sent_at >= ^then,
+      select: sum(x.amount)
+    )
+    |> Repo.one()
+    |> case do
+      nil -> 0
+      amount -> amount
+    end
+  end
+
+  @doc """
+  Get all XP per language accumulated since `then`.
   """
   @spec get_language_xps_since(%User{}, %DateTime{}) :: %{}
   def get_language_xps_since(user, then) do
@@ -67,7 +86,7 @@ defmodule CodeStatsWeb.ProfileUtils do
   end
 
   @doc """
-  Get all XP per machine and XP per machine since `then`.
+  Get all XP per machine since `then`.
   """
   @spec get_machine_xps_since(%User{}, %DateTime{}) :: %{}
   def get_machine_xps_since(user, then) do

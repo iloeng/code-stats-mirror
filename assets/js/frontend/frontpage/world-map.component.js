@@ -34,7 +34,7 @@ class WorldMapGraphComponent {
         el('h2', 'The free stats tracking service for programmers.'),
       ]),
       el('img.graph', {
-        src: '/frontend/assets/images/worldmap-colored_crushed.png',
+        src: '/assets/frontend/images/worldmap-colored_crushed.png',
         alt: 'World map with light pulses showing where users are coding'
       }),
       this.pulseList

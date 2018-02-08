@@ -7,8 +7,8 @@ defmodule Mix.Tasks.Frontend.Build.Assets do
 
   @deps []
 
-  def in_path(), do: src_path(frontend_prefix(), ["assets"])
-  def out_path(), do: dist_path(frontend_prefix(), ["assets"])
+  def in_path(), do: Path.join([base_src_path(), "assets"])
+  def out_path(), do: Path.join([base_dist_path(), "assets"])
 
   task _ do
     Copy.task(in_path(), out_path())

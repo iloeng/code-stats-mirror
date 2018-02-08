@@ -37,11 +37,7 @@ defmodule CodeStats.FrontendConfs do
   """
   def base_dist_path(), do: Path.join([proj_path(), "priv", "static"])
 
-  def common_prefix(), do: "common"
-  def frontend_prefix(), do: "frontend"
-  def battle_prefix(), do: "battle"
-
-  def src_path(prefix, parts \\ []), do: Path.join([base_src_path(), prefix | parts])
-  def tmp_path(prefix, parts \\ []), do: Path.join([base_tmp_path(), prefix | parts])
-  def dist_path(prefix, parts \\ []), do: Path.join([base_dist_path(), prefix | parts])
+  def js_path(), do: Path.join([base_src_path(), "js"])
+  def css_path(), do: Path.join([base_src_path(), "css"])
+  def assets_path(), do: Path.join([base_src_path(), "assets"])
 end

@@ -23,7 +23,11 @@
     </li>
   </ul>
 
-  <div id="total-progress">
+  <div
+   id="total-progress"
+   data-total-xp="<%= @total_xp %>"
+   data-new-xp="<%= @total_new_xp %>"
+  >
     <%=
       render(
         CodeStatsWeb.ComponentsView,

@@ -17,7 +17,7 @@ defmodule CodeStats do
       supervisor(CodeStatsWeb.Endpoint, []),
 
       # Start XPCacheRefresher
-      worker(CodeStats.XP.XPCacheRefresher, []),
+      # worker(CodeStats.XP.XPCacheRefresher, []),
 
       # Start The Terminator
       worker(CodeStats.User.Terminator, [])

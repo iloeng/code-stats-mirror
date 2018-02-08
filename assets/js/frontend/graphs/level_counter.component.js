@@ -1,5 +1,5 @@
 import {el} from 'redom';
-import {get_level} from '../../../common/js/xp_utils';
+import {get_level} from '../../common/xp_utils';
 
 class LevelCounterComponent {
   constructor(element_type, prefix, total_xp, new_xp) {

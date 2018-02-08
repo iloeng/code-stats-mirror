@@ -14,7 +14,7 @@ defmodule CodeStatsWeb.Endpoint do
     at: "/",
     from: :code_stats,
     gzip: true,
-    only: ~w(frontend battle favicon.ico robots.txt)
+    only: ~w(assets js css favicon.ico robots.txt)
   )
 
   # Code reloading can be explicitly enabled under the

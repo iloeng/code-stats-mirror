@@ -4,9 +4,9 @@
     <meta charset="utf-8">
 
     <!-- Preload resources for MAXIMUM SPEED -->
-    <link rel="preload" href="<%= static_path(@conn, "/frontend/css/frontend.css") %>" as="style">
-    <link rel="preload" href="<%= static_path(@conn, "/frontend/js/frontend.js") %>" as="script">
-    <link rel="preload" href="<%= static_path(@conn, "/frontend/assets/images/Logo.svg") %>" as="image">
+    <link rel="preload" href="<%= static_path(@conn, "/css/frontend.css") %>" as="style">
+    <link rel="preload" href="<%= static_path(@conn, "/js/frontend.js") %>" as="script">
+    <link rel="preload" href="<%= static_path(@conn, "/assets/frontend/images/Logo.svg") %>" as="image">
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,29 +14,31 @@
     <meta name="author" content="Mikko Ahlroth">
 
     <title><%= get_title(@conn) %></title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/frontend/css/frontend.css") %>">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/frontend.css") %>">
 
-    <link rel="apple-touch-icon" sizes="57x57" href="/frontend/assets/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/frontend/assets/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/frontend/assets/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/frontend/assets/apple-touch-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/frontend/assets/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/frontend/assets/apple-touch-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/frontend/assets/apple-touch-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/frontend/assets/apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/frontend/assets/apple-touch-icon-180x180.png">
-    <link rel="icon" type="image/png" href="/frontend/assets/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="/frontend/assets/android-chrome-192x192.png" sizes="192x192">
-    <link rel="icon" type="image/png" href="/frontend/assets/favicon-96x96.png" sizes="96x96">
-    <link rel="icon" type="image/png" href="/frontend/assets/favicon-16x16.png" sizes="16x16">
-    <link rel="manifest" href="/frontend/assets/manifest.json">
-    <link rel="mask-icon" href="/frontend/assets/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/frontend/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/frontend/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/frontend/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/frontend/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/frontend/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/frontend/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/frontend/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/frontend/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/frontend/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/assets/frontend/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/assets/frontend/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/assets/frontend/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/assets/frontend/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/assets/frontend/manifest.json">
+    <link rel="mask-icon" href="/assets/frontend/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/frontend/assets/mstile-144x144.png">
+    <meta name="msapplication-TileImage" content="/assets/frontend/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
     <%= if is_authed?(@conn) do %>
-      <%= tag(:meta, name: "channel_token", content: Phoenix.Token.sign(@conn, "user", get_current_user(@conn).username)) %>
+      <% username = get_current_user(@conn).username %>
+      <%= tag(:meta, name: "channel_token", content: Phoenix.Token.sign(@conn, "user", username)) %>
+      <%= tag(:meta, name: "authed-username", content: username) %>
     <% end %>
   </head>
 
@@ -44,7 +46,7 @@
     <header id="nav-stripe" class="stripe">
       <a id="header-logo" class="logo" href="<%= page_path(@conn, :index) %>">
         <img
-         src="<%= static_path(@conn, "/frontend/assets/images/Logo.svg") %>"
+         src="<%= static_path(@conn, "/assets/frontend/images/Logo.svg") %>"
          alt="<%= get_conf(:site_name) %> logo"
          title="<%= get_conf(:site_name) %>"
         />
@@ -138,7 +140,7 @@
       </section>
     </footer>
 
-    <script async type="text/javascript" src="<%= static_path(@conn, "/frontend/js/frontend.js") %>"></script>
+    <script async type="text/javascript" src="<%= static_path(@conn, "/js/frontend.js") %>"></script>
     <%= raw get_conf(:analytics_code) %>
   </body>
 </html>

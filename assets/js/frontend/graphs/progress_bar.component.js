@@ -1,5 +1,5 @@
 import {el} from 'redom';
-import {get_level, get_next_level_xp, get_level_progress} from '../../../common/js/xp_utils';
+import {get_level, get_next_level_xp, get_level_progress} from '../../common/xp_utils';
 
 
 class ProgressBarComponent {

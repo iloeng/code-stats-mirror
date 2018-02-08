@@ -30,7 +30,7 @@
 
     <img
      class="plugin-image"
-     src="<%= static_path(@conn, "/frontend/assets/images/atom-logo.svg") %>"
+     src="<%= static_path(@conn, "/assets/frontend/images/atom-logo.svg") %>"
      title="Atom editor"
      alt="Atom editor logo"
     />
@@ -59,7 +59,7 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
 
     <img
      class="plugin-image"
-     src="<%= static_path(@conn, "/frontend/assets/images/jetbrains-logo.svg") %>"
+     src="<%= static_path(@conn, "/assets/frontend/images/jetbrains-logo.svg") %>"
      title="JetBrains"
      alt="JetBrains logo"
     />
@@ -80,7 +80,7 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
 
     <img
      class="plugin-image"
-     src="<%= static_path(@conn, "/frontend/assets/images/sublime-logo.png") %>"
+     src="<%= static_path(@conn, "/assets/frontend/images/sublime-logo.png") %>"
      title="Sublime Text"
      alt="Sublime Text logo"
     />
@@ -105,7 +105,7 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
 
     <img
      class="plugin-image"
-     src="<%= static_path(@conn, "/frontend/assets/images/vscode-logo.png") %>"
+     src="<%= static_path(@conn, "/assets/frontend/images/vscode-logo.png") %>"
      title="Visual Studio Code"
      alt="Visual Studio Code logo"
     />

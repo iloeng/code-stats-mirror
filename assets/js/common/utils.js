@@ -2,9 +2,7 @@
  * Miscellaneous utilities
  */
 
-import 'core-js/es6/promise';
-import 'core-js/fn/promise/finally';
-import {Socket} from "phoenix";
+import {Socket} from '../../node_modules/phoenix/priv/static/phoenix.js';
 
 /**
  * Get live update socket for the correct backend socket path.
@@ -24,15 +22,6 @@ function get_live_update_socket() {
 }
 
 /**
- * Destroy all of a DOM element's children.
- */
-function clear_children(elem) {
-  while (elem.lastChild) {
-    elem.removeChild(elem.lastChild);
-  }
-}
-
-/**
  * Returns a promise that is resolved when page is loaded enough to run JavaScripts.
  */
 function wait_for_load() {
@@ -47,4 +36,4 @@ function wait_for_load() {
   });
 }
 
-export { get_live_update_socket, clear_children, wait_for_load };
+export { get_live_update_socket, wait_for_load };

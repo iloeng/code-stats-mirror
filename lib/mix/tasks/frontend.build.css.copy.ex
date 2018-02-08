@@ -10,7 +10,7 @@ defmodule Mix.Tasks.Frontend.Build.Css.Copy do
   ]
 
   def in_path(), do: Mix.Tasks.Frontend.Build.Css.Compile.out_path()
-  def out_path(), do: dist_path(frontend_prefix(), ["css"])
+  def out_path(), do: Path.join([base_dist_path(), "css"])
 
   task _ do
     Copy.task(in_path(), out_path())

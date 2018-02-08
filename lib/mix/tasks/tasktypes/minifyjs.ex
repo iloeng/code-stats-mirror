@@ -10,6 +10,12 @@ defmodule CodeStats.BuildTasks.MinifyJS do
       "filename='#{out_file}.map',content='#{in_file}.map',url='#{Path.basename(out_file)}.map'",
       "--compress",
       "--mangle",
+      # ;_;
+      "--safari10",
+      "--ecma",
+      "8",
+      "--comments",
+      "--timings",
       "-o",
       out_file,
       "--",
