@@ -32,7 +32,7 @@ async function preferences_page() {
         });
 
         const blob = await resp.blob();
-        await saveAs(blob, "pulses.csv", true);
+        saveAs(blob, "pulses.csv", true);
       }
       catch (err) {
         alert("Error exporting data:\n\n" + err.message);
