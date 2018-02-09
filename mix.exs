@@ -47,7 +47,8 @@ defmodule CodeStats.Mixfile do
   defp deps do
     [
       {:phoenix, "~> 1.3.0"},
-      {:postgrex, ">= 0.0.0"},
+      {:postgrex,
+       github: "danj3/postgrex", ref: "b7d1722a6541f29629f34158b042008d29d50b3d", override: true},
       {:phoenix_pubsub, "~> 1.0.2"},
       {:phoenix_ecto, "~> 3.3.0"},
       {:phoenix_html, "~> 2.10.4"},
