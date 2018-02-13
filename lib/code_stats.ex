@@ -16,12 +16,16 @@ defmodule CodeStats do
       # Start the endpoint when the application starts
       supervisor(CodeStatsWeb.Endpoint, []),
 
-      # Start XPCacheRefresher
-      # worker(CodeStats.XP.XPCacheRefresher, []),
-
       # Start The Terminator
       worker(CodeStats.User.Terminator, [])
     ]
+
+    # Start XPCacheRefresher if in prod
+    children =
+      case Mix.env() do
+        :dev -> children
+        _ -> children ++ [worker(CodeStats.XP.XPCacheRefresher, [])]
+      end
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
