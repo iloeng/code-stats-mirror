@@ -1,4 +1,4 @@
-import {el, mount, setChildren} from 'redom';
+import {el, mount, unmount, setChildren} from 'redom';
 import LevelCounterComponent from '../graphs/level_counter.component';
 import ProgressBarComponent from '../graphs/progress_bar.component';
 
@@ -23,18 +23,16 @@ class TotalInfoComponent {
     }
 
     this.usernameEl = el('h1#profile-username', {'data-name': this.username}, this.username);
+
+    this.lastProgrammedEl = this._getLastProgrammedEl();
+
     this.profileDetailList = el('ul#profile-detail-list', [
       el('li', [
         'User since ',
-        el('time', this._formatDate(this.registeredAt), {datetime: this.registeredAt}),
+        this._getDateEl(this.registeredAt),
         '.'
       ]),
-      el('li', [
-        'Last programmed ',
-        (this.lastDayCoded != null) && el('time', this._formatDate(this.lastDayCoded), {datetime: this.lastDayCoded}),
-        (this.lastDayCoded == null) && el('em', 'never'),
-        '.'
-      ])
+      this.lastProgrammedEl
     ]);
 
     this.levelCounter = new LevelCounterComponent('h2', null, this.totalXp, this.newXp);
@@ -60,11 +58,16 @@ class TotalInfoComponent {
     this._updateChildren();
   }
 
-  update({xps}) {
+  update({xps, sent_at_local}) {
     let new_xp = xps.reduce((acc, {amount}) => acc + amount, 0);
 
     this.totalXp += new_xp;
     this.newXp += new_xp;
+
+    this.lastDayCoded = DateTime.fromISO(sent_at_local);
+    unmount(this.profileDetailList, this.lastProgrammedEl);
+    this.lastProgrammedEl = this._getLastProgrammedEl();
+    mount(this.profileDetailList, this.lastProgrammedEl);
 
     this._updateChildren();
   }
@@ -76,6 +79,19 @@ class TotalInfoComponent {
 
   _formatDate(date) {
     return date.toFormat('LLL d, yyyy');
+  }
+
+  _getDateEl(date) {
+    return el('time', this._formatDate(date), {datetime: date.toISODate()});
+  }
+
+  _getLastProgrammedEl() {
+    return el('li', [
+      'Last programmed ',
+      (this.lastDayCoded != null) && this._getDateEl(this.lastDayCoded),
+      (this.lastDayCoded == null) && el('em', 'never'),
+      '.'
+    ]);
   }
 }
 
