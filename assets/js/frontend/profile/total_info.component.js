@@ -48,6 +48,18 @@ class TotalInfoComponent {
     mount(init_el, this.totalProgress);
   }
 
+  setInitData({total_langs, recent_langs}) {
+    if (total_langs != null) {
+      this.totalXp = total_langs.reduce((total, {xp}) => total += xp, 0);
+    }
+
+    if (recent_langs != null) {
+      this.newXp = recent_langs.reduce((total, {xp}) => total += xp, 0);
+    }
+
+    this._updateChildren();
+  }
+
   update({xps}) {
     let new_xp = xps.reduce((acc, {amount}) => acc + amount, 0);
 

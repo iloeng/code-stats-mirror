@@ -1,5 +1,4 @@
 import {el, mount, setChildren} from 'redom';
-import {DateTime} from 'luxon';
 import LoadingIndicatorComponent from '../../common/loading-indicator.component';
 import StartupInstructionsComponent from './startup-instructions.component';
 
@@ -16,14 +15,7 @@ class MainInfoComponent {
   }
 
   getDataRequest() {
-    const now = DateTime.utc();
-
-    const since_recent = now.minus({hours: 12});
-
-    return {
-      total_langs: 'languages {name xp}',
-      recent_langs: `languages(since: ${since_recent}) {name xp}`
-    };
+    return {};
   }
 
   setInitData(data) {
