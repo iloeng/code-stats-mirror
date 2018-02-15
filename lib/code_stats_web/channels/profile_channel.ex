@@ -33,17 +33,26 @@ defmodule CodeStatsWeb.ProfileChannel do
   Chooses the correct user channel based on the user. The given pulse must have
   xps and machine preloaded, xps themselves must have language preloaded.
   """
-  def send_pulse(%User{} = user, %Pulse{xps: xps, machine: machine})
+  def send_pulse(%User{} = user, %Pulse{
+        xps: xps,
+        machine: machine,
+        sent_at_local: sent_at_local,
+        sent_at: sent_at
+      })
       when not is_nil(xps) and not is_nil(machine) do
     formatted_xps =
       for xp <- xps do
         %{
           amount: xp.amount,
-          machine: machine.name,
           language: xp.language.name
         }
       end
 
-    CodeStatsWeb.Endpoint.broadcast("users:#{user.username}", "new_pulse", %{xps: formatted_xps})
+    CodeStatsWeb.Endpoint.broadcast("users:#{user.username}", "new_pulse", %{
+      xps: formatted_xps,
+      sent_at_local: NaiveDateTime.to_iso8601(sent_at_local),
+      sent_at: DateTime.to_iso8601(sent_at),
+      machine: machine.name
+    })
   end
 end
