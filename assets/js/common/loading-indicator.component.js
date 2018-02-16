@@ -93,6 +93,14 @@ const INDICATORS = [
       x.fillRect(940+S(-t%3)*300,550+C(t)*290,20,20);
     }
   },
+  {
+    author: 'BirdsTweetCodersDweet',
+    url: 'https://www.dwitter.net/d/6706',
+    f: t => {
+      let a, b, d;
+      for(c.width=a=2e3;a--;x.beginPath(x.stroke()))b=255,d=C(a)*20,x.strokeStyle=R(b*S(a)+b,25*d,99+d,.5),x.arc(960+b*C(a+t),540+b*C(a),70+d,0,7);
+    }
+  },
 ];
 
 class LoadingIndicatorComponent {

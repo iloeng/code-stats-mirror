@@ -3,11 +3,12 @@ div.loading-indicator {
   $indicator-height: 480px;
 
   display: grid;
-  grid-template: 'loading   copy      '
-                 'indicator indicator ' #{$indicator-height}
-           #{'/'} 1fr       1fr;
+  grid-template: 'loading  '
+                 'copy     '
+                 'indicator' #{$indicator-height}
+           #{'/'} auto;
   align-items: center;
-  grid-gap: 20px;
+  grid-gap: 10px;
 
   .canvas-wrapper {
     grid-area: indicator;
@@ -25,11 +26,11 @@ div.loading-indicator {
 
   .loading-text {
     grid-area: loading;
-    text-align: right;
+    text-align: center;
   }
 
   .loading-author {
     grid-area: copy;
-    text-align: left;
+    text-align: center;
   }
 }
