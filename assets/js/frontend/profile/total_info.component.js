@@ -1,4 +1,4 @@
-import {el, mount, unmount, setChildren} from 'redom';
+import {el, mount, unmount, setChildren, text} from 'redom';
 import LevelCounterComponent from '../graphs/level_counter.component';
 import ProgressBarComponent from '../graphs/progress_bar.component';
 
@@ -24,7 +24,7 @@ class TotalInfoComponent {
 
     this.usernameEl = el('h1#profile-username', {'data-name': this.username}, this.username);
 
-    this.lastProgrammedEl = this._getLastProgrammedEl();
+    this.lastProgrammedEl = el('li', this._getLastProgrammedElems());
 
     this.profileDetailList = el('ul#profile-detail-list', [
       el('li', [
@@ -65,9 +65,7 @@ class TotalInfoComponent {
     this.newXp += new_xp;
 
     this.lastDayCoded = DateTime.fromISO(sent_at_local);
-    unmount(this.profileDetailList, this.lastProgrammedEl);
-    this.lastProgrammedEl = this._getLastProgrammedEl();
-    mount(this.profileDetailList, this.lastProgrammedEl);
+    setChildren(this.lastProgrammedEl, this._getLastProgrammedElems());
 
     this._updateChildren();
   }
@@ -85,12 +83,12 @@ class TotalInfoComponent {
     return el('time', this._formatDate(date), {datetime: date.toISODate()});
   }
 
-  _getLastProgrammedEl() {
+  _getLastProgrammedElems() {
     return el('li', [
-      'Last programmed ',
+      text('Last programmed '),
       (this.lastDayCoded != null) && this._getDateEl(this.lastDayCoded),
       (this.lastDayCoded == null) && el('em', 'never'),
-      '.'
+      text('.')
     ]);
   }
 }
