@@ -40,20 +40,12 @@ class TotalInfoComponent {
 
     this.totalProgress = el('div#total-progress', [this.levelCounter, this.progressBar]);
 
-    setChildren(init_el, []);
-    mount(init_el, this.usernameEl);
-    mount(init_el, this.profileDetailList);
-    mount(init_el, this.totalProgress);
+    setChildren(init_el, [this.usernameEl, this.profileDetailList, this.totalProgress]);
   }
 
   setInitData({total_langs, recent_langs}) {
-    if (total_langs != null) {
-      this.totalXp = total_langs.reduce((total, {xp}) => total += xp, 0);
-    }
-
-    if (recent_langs != null) {
-      this.newXp = recent_langs.reduce((total, {xp}) => total += xp, 0);
-    }
+    this.totalXp = total_langs.reduce((total, {xp}) => total += xp, 0);
+    this.newXp = recent_langs.reduce((total, {xp}) => total += xp, 0);
 
     this._updateChildren();
   }

@@ -71,27 +71,33 @@ const PROFILE_API_PATH = '/profile-graph';
  * Request data from backend profile GraphQL API. `spec` should be a map of GraphQL requests for data from the
  * profile object, with keys being string names.
  *
- * Returns a list of promises, one for each key in the spec, that each resolve with the data of that respective
- * spec.
+ * Returns a promise that resolves with a map where the input keys have their respective responses, or rejects
+ * on error.
  */
-function request_profile(username, spec) {
-  return Object.keys(spec).map(async (key) => {
-    const body = `{
+async function request_profile(username, spec) {
+  const str_spec = Object.keys(spec).reduce((acc, key) => {
+    acc += `${key}: ${spec[key]}
+`;
+    return acc;
+  }, '');
+
+  const body = `
+    {
       profile(username: ${JSON.stringify(username)}) {
-        ${key}: ${spec[key]}
+        ${str_spec}
       }
-    }`;
+    }
+  `;
 
-    const resp =  await fetch(PROFILE_API_PATH, {
-      method: 'POST',
-      credentials: 'same-origin',
-      mode: 'same-origin',
-      body
-    });
-
-    const json = await resp.json();
-    return json.data.profile;
+  const resp = await fetch(PROFILE_API_PATH, {
+    method: 'POST',
+    credentials: 'same-origin',
+    mode: 'same-origin',
+    body
   });
+
+  const json = await resp.json();
+  return json.data.profile;
 }
 
 export { get_live_update_socket, wait_for_load, request_profile, race_promises };

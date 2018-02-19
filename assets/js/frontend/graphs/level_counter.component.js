@@ -26,9 +26,13 @@ class LevelCounterComponent {
     this._refresh();
   }
 
-  update(total_xp, new_xp) {
+  update(total_xp, new_xp, prefix=null) {
     this.totalXp = total_xp;
     this.newXp = new_xp;
+
+    if (prefix != null) {
+      this.prefixEl.textContent = prefix;
+    }
 
     this._refresh();
   }

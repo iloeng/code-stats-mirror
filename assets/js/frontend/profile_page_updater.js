@@ -15,6 +15,9 @@ class ProfilePageUpdater {
     // While loading is true, new XP will not be processed
     this.loading = true;
 
+    // Is this the first connect to socket instead of reconnect?
+    this.firstConnect = true;
+
     this.username = document.getElementById('profile-username').dataset.name;
     [this.totalXp, this.newXp] = this._parseTotalProgress();
 
@@ -24,11 +27,9 @@ class ProfilePageUpdater {
 
     // Main components
     this.tuApp = new TotalInfoComponent(this.tuDiv, this.totalXp, this.newXp, this.username);
-    this.muApp = new MainInfoComponent();
+    this.muApp = new MainInfoComponent(this.totalXp);
 
-    setChildren(this.muDiv, []);
-
-    mount(this.muDiv, this.muApp);
+    setChildren(this.muDiv, [this.muApp]);
 
     this.loadBaseData();
     this.initSocket();
@@ -44,10 +45,13 @@ class ProfilePageUpdater {
       .receive('ok', () => {
         console.log('Connection successful.');
 
-        if (!this.loading) {
-          this.loading = true;
+        // On every (re)connection, fetch latest base data from backend to avoid desync, only then start to accept
+        // new pulse data. Unless this is the first connect, as data is loading already when component initialises.
+        if (!this.firstConnect) {
           this.loadBaseData();
         }
+
+        this.firstConnect = false;
       })
       .receive('error', resp => console.error('Connection failed:', resp));
 
@@ -55,6 +59,9 @@ class ProfilePageUpdater {
   }
 
   async loadBaseData() {
+    this.loading = true;
+    this.muApp.setLoadingStatus(this.loading);
+
     // Data wanted by both components
     const now = DateTime.utc();
     const since_recent = now.minus({hours: 12});
@@ -65,16 +72,15 @@ class ProfilePageUpdater {
 
     const spec = Object.assign(common_spec, this.muApp.getDataRequest());
 
-    let promises = request_profile(this.username, spec);
-
-    while (promises.length > 0) {
-      const [data, new_promises] = await race_promises(promises);
+    request_profile(this.username, spec).then(data => {
+      if (this.loading) {
+        this.loading = false;
+        this.muApp.setLoadingStatus(this.loading);
+      }
 
       this.tuApp.setInitData(data);
       this.muApp.setInitData(data);
-
-      promises = new_promises;
-    }
+    });
   }
 
   newPulse(msg) {
