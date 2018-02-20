@@ -1,6 +1,6 @@
 import {el, list} from 'redom';
 import CombinedLevelProgressComponent from '../../graphs/combined-level-progress.component';
-import LevelCounterComponent from '../../graphs/level_counter.component';
+import ListableLevelCounterComponent from '../../graphs/listable-level-counter.component';
 
 // How many languages to show in top list at maximum
 const MAX_TOP_LANGS = 10;
@@ -8,7 +8,7 @@ const MAX_TOP_LANGS = 10;
 class TopLanguagesComponent {
   constructor() {
     this.topLangList = list('div', CombinedLevelProgressComponent, null, ['h4']);
-    this.otherLangList = list('div');
+    this.otherLangList = list('ul', ListableLevelCounterComponent, null, ['li', '', 0, 0]);
 
     this.el = el('section.top-languages', [
       el('div.top-lang-list', [this.topLangList]),
@@ -72,8 +72,8 @@ class TopLanguagesComponent {
   _updateElems() {
     const top_langs = this._languages.slice(0, MAX_TOP_LANGS);
     const other_langs = this._languages.slice(MAX_TOP_LANGS + 1);
-    console.log(top_langs, other_langs);
     this.topLangList.update(top_langs);
+    this.otherLangList.update(other_langs);
   }
 
   // Sort languages descending by total XP

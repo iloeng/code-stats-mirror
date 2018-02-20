@@ -6,7 +6,7 @@ import ProgressBarComponent from './progress_bar.component';
  * Shows a level progress title and a progress bar under it.
  */
 class CombinedLevelProgressComponent {
-  constructor(title_element_type) {
+  constructor([title_element_type]) {
     this._levelCounter = new LevelCounterComponent(title_element_type, '', 0, 0);
     this._progressBar = new ProgressBarComponent(0, 0);
 
