@@ -20,22 +20,18 @@ class TopLanguagesComponent {
   }
 
   setInitData({total_langs, recent_langs}) {
-    if (total_langs != null) {
-      for (const {name, xp} of total_langs) {
-        this._updateLang(name, l => {
-          l.xp = xp;
-          return l;
-        });
-      }
+    for (const {name, xp} of total_langs) {
+      this._updateLang(name, l => {
+        l.xp = xp;
+        return l;
+      });
     }
 
-    if (recent_langs != null) {
-      for (const {name, xp} of recent_langs) {
-        this._updateLang(name, l => {
-          l.recent_xp = xp;
-          return l;
-        });
-      }
+    for (const {name, xp} of recent_langs) {
+      this._updateLang(name, l => {
+        l.recent_xp = xp;
+        return l;
+      });
     }
 
     this._sortLangs();

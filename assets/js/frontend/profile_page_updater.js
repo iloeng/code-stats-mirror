@@ -4,6 +4,8 @@ import TotalInfoComponent from './profile/total_info.component';
 import {request_profile, race_promises} from '../common/utils';
 import {DateTime} from 'luxon';
 
+import {RECENT_HOURS} from './config';
+
 /**
  * Handles connecting to the profile page socket and sending updates to the components.
  */
@@ -64,7 +66,7 @@ class ProfilePageUpdater {
 
     // Data wanted by both components
     const now = DateTime.utc();
-    const since_recent = now.minus({hours: 12});
+    const since_recent = now.minus({hours: RECENT_HOURS});
     const common_spec = {
       total_langs: 'languages {name xp}',
       recent_langs: `languages(since: ${JSON.stringify(since_recent.toISO())}) {name xp}`

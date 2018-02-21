@@ -1,8 +1,11 @@
 import {el, mount, setChildren} from 'redom';
 import LoadingIndicatorComponent from '../../common/loading-indicator.component';
 import StartupInstructionsComponent from './startup-instructions.component';
+import {DateTime} from 'luxon';
+import {RECENT_HOURS} from '../config';
 
 import TopLanguagesComponent from './graphs/top-languages.component';
+import TopMachinesComponent from './graphs/top-machines.component';
 
 /**
  * MainInfoComponent handles showing either the loading indicator, startup instructions, or list of graphs, and
@@ -22,7 +25,13 @@ class MainInfoComponent {
   }
 
   getDataRequest() {
-    return {};
+    const now = DateTime.utc();
+    const since_recent = now.minus({hours: RECENT_HOURS});
+
+    return {
+      total_machines: 'machines {name xp}',
+      recent_machines: `machines(since: ${JSON.stringify(since_recent.toISO())}) {name xp}`,
+    };
   }
 
   setInitData(data) {
@@ -61,6 +70,7 @@ class MainInfoComponent {
   _getStatsElems() {
     return [
       new TopLanguagesComponent(),
+      new TopMachinesComponent(),
     ];
   }
 
