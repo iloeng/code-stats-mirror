@@ -1,0 +1,11 @@
+.top-machines {
+  grid-area: top-m;
+
+  .combined-level-progress {
+    margin-bottom: 10px;
+
+    .level-counter {
+      margin-bottom: 0;
+    }
+  }
+}

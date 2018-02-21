@@ -4,7 +4,7 @@
                  'total-progress'
                  'profile-details'
                  / auto;
-  grid-gutter: 20px;
+  grid-gap: 0;
 
   @media #{$md} {
     grid-template: 'username         total-progress'
@@ -39,4 +39,19 @@
 #main-stats-container {
   margin-top: 40px;
   margin-bottom: 40px;
+
+  .main-info-graphs {
+    display: grid;
+    grid-template: 'top-l'
+                   'other-l'
+                   'top-m'
+                   / auto;
+    grid-gap: 20px;
+
+    @media #{$md} {
+      grid-template: 'top-l   top-m'
+                     'other-l top-m'
+                    / 1fr     1fr;
+    }
+  }
 }

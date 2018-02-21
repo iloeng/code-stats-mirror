@@ -4,7 +4,9 @@ import StartupInstructionsComponent from './startup-instructions.component';
 import {DateTime} from 'luxon';
 import {RECENT_HOURS} from '../config';
 
+import LanguagesDataSource from './graphs/languages.data-source';
 import TopLanguagesComponent from './graphs/top-languages.component';
+import OtherLanguagesComponent from './graphs/other-languages.component';
 import TopMachinesComponent from './graphs/top-machines.component';
 
 /**
@@ -13,7 +15,7 @@ import TopMachinesComponent from './graphs/top-machines.component';
  */
 class MainInfoComponent {
   constructor(total_xp) {
-    this.el = el('div', []);
+    this.el = el('div.main-info-graphs', []);
 
     this._loading = true;
 
@@ -22,6 +24,9 @@ class MainInfoComponent {
 
     // List of child graphs that should be sent data updates
     this._graphs = [];
+
+    // Data source for top languages components
+    this._langDataSource = new LanguagesDataSource();
   }
 
   getDataRequest() {
@@ -37,6 +42,8 @@ class MainInfoComponent {
   setInitData(data) {
     console.log('setInitData', data);
 
+    this._langDataSource.setInitData(data);
+
     for (const graph of this._graphs) {
       graph.setInitData(data);
     }
@@ -50,6 +57,8 @@ class MainInfoComponent {
     }
 
     console.log('update', data);
+
+    this._langDataSource.update(data);
 
     for (const graph of this._graphs) {
       graph.update(data);
@@ -67,9 +76,10 @@ class MainInfoComponent {
     }
   }
 
-  _getStatsElems() {
-    return [
-      new TopLanguagesComponent(),
+  _buildStatsElems() {
+    this._graphs = [
+      new TopLanguagesComponent(this._langDataSource),
+      new OtherLanguagesComponent(this._langDataSource),
       new TopMachinesComponent(),
     ];
   }
@@ -80,7 +90,7 @@ class MainInfoComponent {
       setChildren(this.el, [new StartupInstructionsComponent()]);
     }
     else {
-      this._graphs = this._getStatsElems();
+      this._buildStatsElems();
       setChildren(this.el, this._graphs);
     }
   }

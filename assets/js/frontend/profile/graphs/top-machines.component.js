@@ -1,9 +1,14 @@
-import {list} from 'redom';
+import {el, list} from 'redom';
 import CombinedLevelProgressComponent from '../../graphs/combined-level-progress.component';
 
 class TopMachinesComponent {
   constructor() {
-    this.el = list('ul', CombinedLevelProgressComponent, null, ['li']);
+    this.progressList = list('div', CombinedLevelProgressComponent, null, ['p']);
+
+    this.el = el('section.top-machines', [
+      el('h4', 'Machines'),
+      this.progressList,
+    ]);
 
     this._machines = [];
   }
@@ -24,7 +29,7 @@ class TopMachinesComponent {
     }
 
     this._sortMachines();
-    this.el.update(this._machines);
+    this.progressList.update(this._machines);
   }
 
   // Update a single machine with the given operation
