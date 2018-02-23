@@ -3,6 +3,81 @@
     <%= get_conf(:site_name) %> plugins
   </h1>
 
+  <div class="plugin-icon-list">
+    <a href="#atom">
+      <img
+       class="plugin-image"
+       src="<%= static_path(@conn, "/assets/frontend/images/atom-logo.svg") %>"
+       title="Atom editor"
+       alt="Atom editor logo"
+      />
+    </a>
+    <a href="#jetbrains">
+      <img
+       class="plugin-image"
+       src="<%= static_path(@conn, "/assets/frontend/images/jetbrains-logo.svg") %>"
+       title="JetBrains"
+       alt="JetBrains logo"
+      />
+    </a>
+    <a href="#st3">
+      <%=
+        render(
+          CodeStatsWeb.ComponentsView,
+          "picture.html",
+          src: static_path(@conn, "/assets/frontend/images/sublime-logo.png"),
+          alt: "Sublime Text logo",
+          title: "Sublime Text",
+          class: "plugin-image"
+        )
+      %>
+    </a>
+    <a href="#vim">
+      <%=
+        render(
+          CodeStatsWeb.ComponentsView,
+          "picture.html",
+          src: static_path(@conn, "/assets/frontend/images/vim-logo.gif"),
+          alt: "Vim logo",
+          title: "Vim",
+          class: "plugin-image"
+        )
+      %>
+    </a>
+    <a href="#vs">
+      <img
+       class="plugin-image"
+       src="<%= static_path(@conn, "/assets/frontend/images/vs-logo.svg") %>"
+       title="Visual Studio"
+       alt="Visual Studio logo"
+      />
+    </a>
+    <a href="#vscode">
+      <%=
+        render(
+          CodeStatsWeb.ComponentsView,
+          "picture.html",
+          src: static_path(@conn, "/assets/frontend/images/vscode-logo.png"),
+          alt: "Visual Studio Code logo",
+          title: "Visual Studio Code",
+          class: "plugin-image"
+        )
+      %>
+    </a>
+    <a href="#zsh">
+      <%=
+        render(
+          CodeStatsWeb.ComponentsView,
+          "picture.html",
+          src: static_path(@conn, "/assets/frontend/images/zsh-logo.png"),
+          alt: "Zsh logo",
+          title: "Zsh",
+          class: "plugin-image"
+        )
+      %>
+    </a>
+  </div>
+
   <h2>A note about the functionality of the plugins</h2>
 
   <p>
@@ -16,7 +91,7 @@
   <hr />
 
   <div class="plugin">
-    <h2>Atom</h2>
+    <h2 id="atom">Atom</h2>
 
     <div class="plugin-description">
       <p>
@@ -24,7 +99,7 @@
       </p>
 
       <p>
-        <a href="https://atom.io/packages/code-stats-atom">Link to the plugin on Atom's site.</a>
+        <a target="_blank" href="https://atom.io/packages/code-stats-atom">Link to the plugin on Atom's site.</a>
       </p>
     </div>
 
@@ -37,15 +112,15 @@
   </div>
 
   <div class="plugin">
-    <h2>JetBrains IDEs</h2>
+    <h2 id="jetbrains">JetBrains IDEs</h2>
 
     <div class="plugin-description">
       <p>
-        To install, use the IDEs builtin package manager, click on "Browse repositories…" and search for <code>Code::Stats</code>. After installation, go to Settings -> Other Settings -> Code::Stats and insert your API key.
+        To install, use the IDE's builtin package manager, click on "Browse repositories…" and search for <code>Code::Stats</code>. After installation, go to Settings → Other Settings → Code::Stats and insert your API key.
       </p>
 
       <p>
-        <a href="https://plugins.jetbrains.com/plugin/8393?pr=">Link to the plugin on JetBrain's site.</a>
+        <a target="_blank" href="https://plugins.jetbrains.com/plugin/8393?pr=">Link to the plugin on JetBrain's site.</a>
       </p>
 
       <p>
@@ -66,7 +141,32 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
   </div>
 
   <div class="plugin">
-    <h2>Sublime Text 3</h2>
+    <h2 id="notepadpp">Notepad++</h2>
+
+    <div class="plugin-description">
+      <p>
+        You can find installation and setup instructions <a target="_blank" href="https://github.com/p0358/notepadpp-CodeStats">in the project's GitHub repository</a>.
+      </p>
+
+      <p>
+        <em>Thanks to <a target="_blank" href="https://github.com/p0358">p0358</a> for the Notepad++ extension.</em>
+      </p>
+    </div>
+
+    <%=
+      render(
+        CodeStatsWeb.ComponentsView,
+        "picture.html",
+        src: static_path(@conn, "/assets/frontend/images/notepadpp-logo.png"),
+        alt: "Notepad++ logo",
+        title: "Notepad++",
+        class: "plugin-image"
+      )
+    %>
+  </div>
+
+  <div class="plugin">
+    <h2 id="st3">Sublime Text 3</h2>
 
     <div class="plugin-description">
       <p>
@@ -74,20 +174,74 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
       </p>
 
       <p>
-        <a href="https://packagecontrol.io/packages/CodeStats">Link to the plugin on Package Control's site.</a>
+        <a target="_blank" href="https://packagecontrol.io/packages/CodeStats">Link to the plugin on Package Control's site.</a>
+      </p>
+    </div>
+
+    <%=
+      render(
+        CodeStatsWeb.ComponentsView,
+        "picture.html",
+        src: static_path(@conn, "/assets/frontend/images/sublime-logo.png"),
+        alt: "Sublime Text logo",
+        title: "Sublime Text",
+        class: "plugin-image"
+      )
+    %>
+  </div>
+
+  <div class="plugin">
+    <h2 id="vim">Vim</h2>
+
+    <div class="plugin-description">
+      <p>
+        You can find installation and setup instructions <a target="_blank" href="https://gitlab.com/code-stats/code-stats-vim">in the project's GitLab repository</a>.
+      </p>
+
+      <p>
+        <em>Thanks to <a target="_blank" href="https://github.com/dancek">Hannu Hartikainen</a> and Antti Keränen for the Vim extension.</em>
+      </p>
+    </div>
+
+    <%=
+      render(
+        CodeStatsWeb.ComponentsView,
+        "picture.html",
+        src: static_path(@conn, "/assets/frontend/images/vim-logo.gif"),
+        alt: "Vim logo",
+        title: "Vim",
+        class: "plugin-image"
+      )
+    %>
+  </div>
+
+  <div class="plugin">
+    <h2 id="vs">Visual Studio</h2>
+
+    <div class="plugin-description">
+      <p>
+        To install, download the extension from <a target="_blank" href="https://marketplace.visualstudio.com/items?itemName=MathiasSTorm.CodeStatsClient">the Visual Studio Marketplace.</a> and run the installer. After installation, go to Extras → Options → CodeStats and insert your API key.
+      </p>
+
+      <p>
+        <a target="_blank" href="https://marketplace.visualstudio.com/items?itemName=MathiasSTorm.CodeStatsClient">Link to the plugin in the Visual Studio Marketplace.</a>
+      </p>
+
+      <p>
+        <em>Thanks to <a target="_blank" href="https://github.com/mastorm">Mathias Storm</a> for the Visual Studio extension.</em>
       </p>
     </div>
 
     <img
      class="plugin-image"
-     src="<%= static_path(@conn, "/assets/frontend/images/sublime-logo.png") %>"
-     title="Sublime Text"
-     alt="Sublime Text logo"
+     src="<%= static_path(@conn, "/assets/frontend/images/vs-logo.svg") %>"
+     title="Visual Studio"
+     alt="Visual Studio logo"
     />
   </div>
 
   <div class="plugin">
-    <h2>Visual Studio Code</h2>
+    <h2 id="vscode">Visual Studio Code</h2>
 
     <div class="plugin-description">
       <p>
@@ -95,20 +249,49 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
       </p>
 
       <p>
-        <a href="https://marketplace.visualstudio.com/items?itemName=juha-ristolainen.code-stats-vscode">Link to the plugin on the Visual Studio Marketplace.</a>
+        <a target="_blank" href="https://marketplace.visualstudio.com/items?itemName=juha-ristolainen.code-stats-vscode">Link to the plugin in the Visual Studio Marketplace.</a>
       </p>
 
       <p>
-        <em>Thanks to <a href="http://www.juharistolainen.com/">Juha Ristolainen</a> for the VSCode extension.</em>
+        <em>Thanks to <a target="_blank" href="http://www.juharistolainen.com/">Juha Ristolainen</a> for the VSCode extension.</em>
       </p>
     </div>
 
-    <img
-     class="plugin-image"
-     src="<%= static_path(@conn, "/assets/frontend/images/vscode-logo.png") %>"
-     title="Visual Studio Code"
-     alt="Visual Studio Code logo"
-    />
+    <%=
+      render(
+        CodeStatsWeb.ComponentsView,
+        "picture.html",
+        src: static_path(@conn, "/assets/frontend/images/vscode-logo.png"),
+        alt: "Visual Studio Code logo",
+        title: "Visual Studio Code",
+        class: "plugin-image"
+      )
+    %>
+  </div>
+
+  <div class="plugin">
+    <h2 id="zsh">Zsh</h2>
+
+    <div class="plugin-description">
+      <p>
+        You can find installation and setup instructions <a target="_blank" href="https://gitlab.com/code-stats/code-stats-zsh">in the project's GitLab repository</a>.
+      </p>
+
+      <p>
+        <em>Thanks to <a target="_blank" href="https://github.com/dancek">Hannu Hartikainen</a> for the Zsh extension.</em>
+      </p>
+    </div>
+
+    <%=
+      render(
+        CodeStatsWeb.ComponentsView,
+        "picture.html",
+        src: static_path(@conn, "/assets/frontend/images/zsh-logo.png"),
+        alt: "Zsh logo",
+        title: "Zsh",
+        class: "plugin-image"
+      )
+    %>
   </div>
 
   <div class="media">
@@ -124,7 +307,7 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
 
     <p>
       <em>
-        All logos are the intellectual property and possible trademarks of their respective owners. The Atom editor logo is licensed under the MIT licence. The JetBrains logo is used with permission from JetBrains s.r.o. It is believed that the Sublime Text and Visual Studio Code logos are used according to the fair use rules of the Finnish law.
+        All logos are the intellectual property and possible trademarks of their respective owners. The Atom editor logo is licensed under the MIT licence. The JetBrains logo is used with permission from JetBrains s.r.o. The Notepad++ logo (© Dan Ho) is licensed under CC-BY-SA 3.0. It is believed that the rest of the logos are used according to the fair use rules of Finnish law.
       </em>
     </p>
   </div>

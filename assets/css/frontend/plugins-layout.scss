@@ -1,6 +1,26 @@
 $image-size: 120px;
 $gap: 20px;
 
+.plugin-icon-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+  align-items: center;
+  text-align: center;
+
+  @media #{$sm} {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  @media #{$md} {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+
+  picture, img {
+    max-width: $image-size;
+  }
+}
+
 .plugin {
   margin: 40px 0;
 
@@ -22,6 +42,14 @@ $gap: 20px;
             'desc  img'
             / auto $image-size;
       grid-column-gap: $gap;
+
+      // Make every other thing align right with the logo, it looks funky
+      text-align: right;
+
+      // Except code
+      pre {
+        text-align: left;
+      }
     }
   }
 
@@ -34,8 +62,13 @@ $gap: 20px;
     grid-area: desc;
   }
 
-  >.plugin-image {
+  .plugin-image {
     grid-area: img;
     max-width: 120px;
+
+    // In case plugin-image is a <picture>, make the img a proper size
+    >img {
+      width: 100%;
+    }
   }
 }

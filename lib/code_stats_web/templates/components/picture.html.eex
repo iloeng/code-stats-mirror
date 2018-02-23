@@ -8,7 +8,10 @@
     @title Title text
 
   Optional:
-    @attrs Any extra HTML attrs to add to picture element.
+    @id ID to add to the picture element.
+    @img_id ID to add to the img element.
+    @class Class to add to the picture element.
+    @img_class Class to add to the img element.
 %>
 
 <%
@@ -22,11 +25,21 @@
       ".jpeg" -> "image/jpeg"
       ".jpg" -> "image/jpeg"
       ".png" -> "image/png"
+      ".gif" -> "image/gif"
     end
 %>
 
-<picture>
+<picture
+ <%= if assigns[:id], do: raw(~s(id="#{@id}")), else: "" %>
+ <%= if assigns[:class], do: raw(~s(class="#{@class}")), else: "" %>
+>
   <source srcset="<%= no_ext %>.webp" type="image/webp" />
   <source srcset="<%= @src %>" type="<%= type %>" />
-  <img src=<%= @src %> alt="<%= @alt %>" title="<%= @title %>" />
+  <img
+   src=<%= @src %>
+   alt="<%= @alt %>"
+   title="<%= @title %>"
+   <%= if assigns[:img_id], do: raw(~s(id="#{@img_id}")), else: "" %>
+   <%= if assigns[:img_class], do: raw(~s(class="#{@img_class}")), else: "" %>
+  />
 </picture>
