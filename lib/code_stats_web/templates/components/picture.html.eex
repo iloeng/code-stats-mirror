@@ -1,0 +1,32 @@
+<%#
+  Picture element that uses <picture> to attempt to use WebP versions of images, if browser
+  supports them.
+
+  Requires:
+    @src Filename, extension will be replaced with `.webp` for WebP version.
+    @alt Alt text
+    @title Title text
+
+  Optional:
+    @attrs Any extra HTML attrs to add to picture element.
+%>
+
+<%
+  no_ext = Path.rootname(@src)
+
+  type =
+    @src
+    |> Path.extname()
+    |> String.downcase()
+    |> case  do
+      ".jpeg" -> "image/jpeg"
+      ".jpg" -> "image/jpeg"
+      ".png" -> "image/png"
+    end
+%>
+
+<picture>
+  <source srcset="<%= no_ext %>.webp" type="image/webp" />
+  <source srcset="<%= @src %>" type="<%= type %>" />
+  <img src=<%= @src %> alt="<%= @alt %>" title="<%= @title %>" />
+</picture>
