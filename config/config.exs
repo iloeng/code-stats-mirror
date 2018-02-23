@@ -85,19 +85,7 @@ config :number,
     separator: "."
   ]
 
-config :geolix,
-  databases: [
-    %{
-      id: :city,
-      adapter: Geolix.Adapter.MMDB2,
-      source: "#{__DIR__}/geoip-cities.gz"
-    },
-    %{
-      id: :country,
-      adapter: Geolix.Adapter.MMDB2,
-      source: "#{__DIR__}/geoip-countries.gz"
-    }
-  ]
+config :geolix, init: {CodeStatsWeb.Geolix, :init}
 
 config :geolite2data,
   geolix_updater: true,
