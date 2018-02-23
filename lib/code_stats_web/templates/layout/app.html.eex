@@ -81,7 +81,7 @@
       </div>
     <% end %>
 
-    <%= if false and get_conf(:beta_mode) do %>
+    <%= if get_conf(:beta_mode) do %>
       <section class="stripe flash-stripe" role="alert">
         <strong>Note!</strong>
         This instance is in beta mode. You can register as normal and use this instance for testing
