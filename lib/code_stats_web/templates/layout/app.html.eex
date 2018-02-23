@@ -106,9 +106,9 @@
       <section>
         <h6 class="no-margin">Rendered in <%= CodeStatsWeb.RequestTimePlug.calculate_time(@conn) %>.</h6>
         <a href="<%= page_path(@conn, :changes)%>"><%= get_conf(:version) %>-<%= get_conf(:commit_hash) %></a>
+        <a href="<%= page_path(@conn, :plugins) %>">Plugins</a>
         <a href="<%= page_path(@conn, :api_docs) %>">API docs</a>
         <a href="<%= page_path(@conn, :terms) %>">Legal</a>
-        <a href="<%= page_path(@conn, :plugins) %>">Plugins</a>
       </section>
 
       <%= if not Enum.empty?(get_conf(:social_links)) do %>

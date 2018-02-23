@@ -17,6 +17,10 @@
     <p>
       Code::Stats has plugins for various editors. If you wish to make one for your own favourite editor, you are free to check out the API documentation!
     </p>
+
+    <p>
+      <a href="<%= page_path(@conn, :plugins) %>">See available plugins →</a>
+    </p>
   </section>
   <section class="frontpage-ad">
     <h3>
@@ -35,8 +39,8 @@
     </p>
 
     <p>
-      <a class="button" href="">
-        See example profile
+      <a href="<%= profile_path(@conn, :profile, "Nicd") %>">
+        See example profile →
       </a>
     </p>
   </section>
