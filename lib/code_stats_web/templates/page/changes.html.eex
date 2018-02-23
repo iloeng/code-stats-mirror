@@ -5,30 +5,8 @@
     Code::Stats and its plugins are open source software, licensed under the 3-clause BSD licence. You can study the inner workings of the code and suggest improvements. You are also free to fork the code.
   </p>
 
-  <h2>Code repositories</h2>
-
   <p>
-    <ul>
-      <li>
-        <strong>Code::Stats main site:</strong>
-        <a href="https://gitlab.com/code-stats/code-stats">code-stats/code-stats</a>
-      </li>
-
-      <li>
-        <strong>Atom plugin:</strong>
-        <a href="https://gitlab.com/code-stats/code-stats-atom">code-stats/code-stats-atom</a>
-      </li>
-
-      <li>
-        <strong>JetBrains plugin:</strong>
-        <a href="https://gitlab.com/code-stats/code-stats-intellij">code-stats/code-stats-intellij</a>
-      </li>
-
-      <li>
-        <strong>Sublime Text 3 plugin:</strong>
-        <a href="https://gitlab.com/code-stats/code-stats-sublime">code-stats/code-stats-sublime</a>
-      </li>
-    </ul>
+    <a target="_blank" href="https://gitlab.com/code-stats">View Code::Stats source code on GitLab →</a>
   </p>
 </div>
 
@@ -43,9 +21,9 @@
       <p class="subtitle">Lead developer</p>
 
       <p>
-        <a href="https://blog.nytsoi.net/">Blog</a>
-        / <a href="https://github.com/Nicd">GitHub</a>
-        / <a href="https://gitlab.com/Nicd">GitLab</a>
+        <a target="_blank" href="https://blog.nytsoi.net/">Blog</a>
+        / <a target="_blank" href="https://github.com/Nicd">GitHub</a>
+        / <a target="_blank" href="https://gitlab.com/Nicd">GitLab</a>
       </p>
     </div>
 
@@ -53,10 +31,15 @@
       <img src="<%= static_path(@conn, "/assets/frontend/images/Logo.svg") %>" alt="Code::Stats logo" />
 
       <h3>Hannu Hartikainen</h3>
-      <p class="subtitle"><a href="">code-stats-zsh</a> developer</p>
+      <p class="subtitle">
+        <a target="_blank" href="https://gitlab.com/code-stats/code-stats-zsh">code-stats-zsh</a>
+        &
+        <a target="_blank" href="https://gitlab.com/code-stats/code-stats-vim">code-stats-vim</a>
+        developer
+      </p>
 
       <p>
-        <a href="https://github.com/dancek">GitHub</a>
+        <a target="_blank" href="https://github.com/dancek">GitHub</a>
       </p>
     </div>
 
@@ -66,8 +49,8 @@
       <h3>Niko Lehtovirta</h3>
 
       <p>
-        <a href="https://github.com/nikolauska">GitHub</a>
-        / <a href="https://gitlab.com/nikolauska">GitLab</a>
+        <a target="_blank" href="https://github.com/nikolauska">GitHub</a>
+        / <a target="_blank" href="https://gitlab.com/nikolauska">GitLab</a>
       </p>
     </div>
 
@@ -75,10 +58,10 @@
       <img src="<%= static_path(@conn, "/assets/frontend/images/contributors/aman.jpeg") %>" alt="Aman Mittal" title="Aman Mittal" />
 
       <h3>Aman Mittal</h3>
-      <p class="subtitle"><a href="https://gitlab.com/code-stats/codestats-cli">codestats-cli</a> developer</p>
+      <p class="subtitle"><a target="_blank" href="https://gitlab.com/code-stats/codestats-cli">codestats-cli</a> developer</p>
 
       <p>
-        <a href="https://github.com/amandeepmittal">GitHub</a>
+        <a target="_blank" href="https://github.com/amandeepmittal">GitHub</a>
       </p>
     </div>
 
@@ -86,12 +69,12 @@
       <img src="<%= static_path(@conn, "/assets/frontend/images/contributors/riussi.jpg") %>" alt="Juha Ristolainen" title="Juha Ristolainen" />
 
       <h3>Juha Ristolainen</h3>
-      <p class="subtitle"><a href="https://marketplace.visualstudio.com/items?itemName=juha-ristolainen.code-stats-vscode">code-stats-vscode</a> developer</p>
+      <p class="subtitle"><a target="_blank" href="https://marketplace.visualstudio.com/items?itemName=juha-ristolainen.code-stats-vscode">code-stats-vscode</a> developer</p>
 
       <p>
-        <a href="https://github.com/riussi">GitHub</a>
-        / <a href="https://twitter.com/riussi">Twitter</a>
-        / <a href="http://www.juharistolainen.com/">Site</a>
+        <a target="_blank" href="https://github.com/riussi">GitHub</a>
+        / <a target="_blank" href="https://twitter.com/riussi">Twitter</a>
+        / <a target="_blank" href="http://www.juharistolainen.com/">Site</a>
       </p>
     </div>
 
@@ -99,10 +82,10 @@
       <img src="<%= static_path(@conn, "/assets/frontend/images/contributors/mastorm.png") %>" alt="Mathias Storm" title="Mathias Storm" />
 
       <h3>Mathias Storm</h3>
-      <p class="subtitle"><a href="https://marketplace.visualstudio.com/items?itemName=MathiasSTorm.CodeStatsClient">CodeStats.Client</a> developer</p>
+      <p class="subtitle"><a target="_blank" href="https://marketplace.visualstudio.com/items?itemName=MathiasSTorm.CodeStatsClient">CodeStats.Client</a> developer</p>
 
       <p>
-        <a href="https://github.com/mastorm">GitHub</a>
+        <a target="_blank" href="https://github.com/mastorm">GitHub</a>
       </p>
     </div>
   </div>
