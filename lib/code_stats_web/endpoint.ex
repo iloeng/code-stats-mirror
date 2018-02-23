@@ -52,4 +52,28 @@ defmodule CodeStatsWeb.Endpoint do
 
   use Appsignal.Phoenix
   plug(CodeStatsWeb.Router)
+
+  def init(_key, config) do
+    if config[:load_from_system_env] do
+      port = get_env("PORT", :int)
+      host = get_env("HOST", :str)
+      host_port = get_env("HOST_PORT", :int)
+
+      config =
+        Keyword.put(config, :http, port: port)
+        |> Keyword.put(:url, host: host, port: host_port)
+
+      {:ok, config}
+    else
+      {:ok, config}
+    end
+  end
+
+  defp get_env(var, type) when is_binary(var) and type in [:str, :int] do
+    val = System.get_env(var) || raise "Environment variable '#{var}' missing!"
+    get_with_type(val, type)
+  end
+
+  defp get_with_type(val, :str), do: val
+  defp get_with_type(val, :int), do: String.to_integer(val)
 end
