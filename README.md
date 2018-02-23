@@ -6,7 +6,7 @@ Code::Stats is a free stats tracking service for programmers: [https://codestats
 
 This repository contains the Phoenix application that implements the service backend.
 
-## Installation for development
+## Development
 
 ### Requirements
 
@@ -50,7 +50,35 @@ nano config/dev.secret.exs  # Set up dev config with at least the line "use Mix.
 * `mix frontend.clean`: Clean frontend output and build artifacts
 * `MINIFY=true mix frontend.build`: Build frontend with minification.
 
-Ready to run in production? Please [check the Phoenix deployment guides](http://www.phoenixframework.org/docs/deployment).
+## Production
+
+Generate [Distillery](https://hex.pm/packages/distillery) release:
+
+```
+MIX_ENV=prod COOKIE=somesecretcookie mix release --env=prod
+```
+
+Note that the release must be generated on the same architecture and OS type as the target system.
+So for an amd64 Linux target, use an amd64 Linux build machine. Take note of the cookie you used,
+it will be needed to connect to the running instance.
+
+To run release:
+
+```
+/path/to/release/code_stats/bin/code_stats migrate    # Migrate database to latest version
+/path/to/release/code_stats/bin/code_stats foreground # Run in foreground (current shell)
+/path/to/release/code_stats/bin/code_stats start      # Run as daemon
+/path/to/release/code_stats/bin/code_stats console    # Run and open console
+```
+
+**NOTE:** You will need to set these environment variables when running the release:
+
+```
+PORT=1337         # Internal port number that Phoenix will listen on
+HOST=some.example # Domain of the website, used for generating links
+HOST_PORT=443     # External port of the website, that is used by clients. Can be different to PORT
+                  # in case the service is reverse proxied like with Nginx.
+```
 
 ## Developer/API documentation
 
