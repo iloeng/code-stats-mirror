@@ -14,6 +14,7 @@ defmodule CodeStats.ReleasePlugins.BuildStatics do
     end
 
     Mix.Task.run("frontend.build")
+    Mix.Task.run("phx.digest")
     release
   end
 
