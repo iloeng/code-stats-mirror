@@ -67,10 +67,6 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-# Import environment specific config. This must remain at the bottom
-# of this file so it overrides the configuration defined above.
-import_config "#{Mix.env()}.exs"
-
 # Configure phoenix generators
 config :phoenix, :generators,
   migration: true,
@@ -112,4 +108,16 @@ config :appsignal, :config,
     "machine_name"
   ]
 
+# Store mix env used to compile app, since Mix won't be available in release
+config :code_stats, compile_env: Mix.env()
+
+# Store app version and commit hash at compile time
+config :code_stats,
+  commit_hash: System.cmd("git", ["rev-parse", "--verify", "--short", "HEAD"]) |> elem(0),
+  version: Mix.Project.config()[:version]
+
 import_config "appsignal.exs"
+
+# Import environment specific config. This must remain at the bottom
+# of this file so it overrides the configuration defined above.
+import_config "#{Mix.env()}.exs"

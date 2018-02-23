@@ -22,7 +22,7 @@ defmodule CodeStats do
 
     # Start XPCacheRefresher if in prod
     children =
-      case Mix.env() do
+      case CodeStats.Utils.get_conf(:compile_env) do
         :dev -> children
         _ -> children ++ [worker(CodeStats.XP.XPCacheRefresher, [])]
       end
