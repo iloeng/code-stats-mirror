@@ -1,3 +1,17 @@
+<%
+  plugin_icon = fn img, editor ->
+    render(
+      CodeStatsWeb.ComponentsView,
+      "picture.html",
+      conn: @conn,
+      src: "/assets/frontend/images/#{img}",
+      alt: "#{editor} logo",
+      title: editor,
+      class: "plugin-image"
+    )
+  end
+%>
+
 <div class="stripe">
   <h1>
     <%= get_conf(:site_name) %> plugins
@@ -21,40 +35,13 @@
       />
     </a>
     <a href="#notepadpp">
-      <%=
-        render(
-          CodeStatsWeb.ComponentsView,
-          "picture.html",
-          src: static_path(@conn, "/assets/frontend/images/notepadpp-logo.png"),
-          alt: "Notepad++ logo",
-          title: "Notepad++",
-          class: "plugin-image"
-        )
-      %>
+      <%= plugin_icon.("notepadpp-logo.png", "Notepad++") %>
     </a>
     <a href="#st3">
-      <%=
-        render(
-          CodeStatsWeb.ComponentsView,
-          "picture.html",
-          src: static_path(@conn, "/assets/frontend/images/sublime-logo.png"),
-          alt: "Sublime Text logo",
-          title: "Sublime Text",
-          class: "plugin-image"
-        )
-      %>
+      <%= plugin_icon.("sublime-logo.png", "Sublime Text") %>
     </a>
     <a href="#vim">
-      <%=
-        render(
-          CodeStatsWeb.ComponentsView,
-          "picture.html",
-          src: static_path(@conn, "/assets/frontend/images/vim-logo.gif"),
-          alt: "Vim logo",
-          title: "Vim",
-          class: "plugin-image"
-        )
-      %>
+      <%= plugin_icon.("vim-logo.gif", "Vim") %>
     </a>
     <a href="#vs">
       <img
@@ -65,28 +52,10 @@
       />
     </a>
     <a href="#vscode">
-      <%=
-        render(
-          CodeStatsWeb.ComponentsView,
-          "picture.html",
-          src: static_path(@conn, "/assets/frontend/images/vscode-logo.png"),
-          alt: "Visual Studio Code logo",
-          title: "Visual Studio Code",
-          class: "plugin-image"
-        )
-      %>
+      <%= plugin_icon.("vscode-logo.png", "Visual Studio Code") %>
     </a>
     <a href="#zsh">
-      <%=
-        render(
-          CodeStatsWeb.ComponentsView,
-          "picture.html",
-          src: static_path(@conn, "/assets/frontend/images/zsh-logo.png"),
-          alt: "Zsh logo",
-          title: "Zsh",
-          class: "plugin-image"
-        )
-      %>
+      <%= plugin_icon.("zsh-logo.png", "Zsh") %>
     </a>
   </div>
 
@@ -165,16 +134,7 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
       </p>
     </div>
 
-    <%=
-      render(
-        CodeStatsWeb.ComponentsView,
-        "picture.html",
-        src: static_path(@conn, "/assets/frontend/images/notepadpp-logo.png"),
-        alt: "Notepad++ logo",
-        title: "Notepad++",
-        class: "plugin-image"
-      )
-    %>
+    <%= plugin_icon.("notepadpp-logo.png", "Notepad++") %>
   </div>
 
   <div class="plugin">
@@ -190,16 +150,7 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
       </p>
     </div>
 
-    <%=
-      render(
-        CodeStatsWeb.ComponentsView,
-        "picture.html",
-        src: static_path(@conn, "/assets/frontend/images/sublime-logo.png"),
-        alt: "Sublime Text logo",
-        title: "Sublime Text",
-        class: "plugin-image"
-      )
-    %>
+    <%= plugin_icon.("sublime-logo.png", "Sublime Text") %>
   </div>
 
   <div class="plugin">
@@ -215,16 +166,7 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
       </p>
     </div>
 
-    <%=
-      render(
-        CodeStatsWeb.ComponentsView,
-        "picture.html",
-        src: static_path(@conn, "/assets/frontend/images/vim-logo.gif"),
-        alt: "Vim logo",
-        title: "Vim",
-        class: "plugin-image"
-      )
-    %>
+    <%= plugin_icon.("vim-logo.gif", "Vim") %>
   </div>
 
   <div class="plugin">
@@ -269,16 +211,7 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
       </p>
     </div>
 
-    <%=
-      render(
-        CodeStatsWeb.ComponentsView,
-        "picture.html",
-        src: static_path(@conn, "/assets/frontend/images/vscode-logo.png"),
-        alt: "Visual Studio Code logo",
-        title: "Visual Studio Code",
-        class: "plugin-image"
-      )
-    %>
+    <%= plugin_icon.("vscode-logo.png", "Visual Studio Code") %>
   </div>
 
   <div class="plugin">
@@ -294,16 +227,7 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
       </p>
     </div>
 
-    <%=
-      render(
-        CodeStatsWeb.ComponentsView,
-        "picture.html",
-        src: static_path(@conn, "/assets/frontend/images/zsh-logo.png"),
-        alt: "Zsh logo",
-        title: "Zsh",
-        class: "plugin-image"
-      )
-    %>
+    <%= plugin_icon.("zsh-logo.png", "Zsh") %>
   </div>
 
   <div class="media">

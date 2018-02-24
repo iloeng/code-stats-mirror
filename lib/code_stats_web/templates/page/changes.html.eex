@@ -1,7 +1,7 @@
 <%
   # Helper to cleanup code for profile pictures
   profile_pic = fn img, title ->
-    render(CodeStatsWeb.ComponentsView, "picture.html", src: static_path(@conn, "/assets/frontend/images/contributors/#{img}"), alt: title, title: title)
+    render(CodeStatsWeb.ComponentsView, "picture.html", conn: @conn, src: "/assets/frontend/images/contributors/#{img}", alt: title, title: title)
   end
 %>
 
