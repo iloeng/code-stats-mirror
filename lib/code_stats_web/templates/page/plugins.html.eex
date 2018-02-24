@@ -20,6 +20,18 @@
        alt="JetBrains logo"
       />
     </a>
+    <a href="#notepadpp">
+      <%=
+        render(
+          CodeStatsWeb.ComponentsView,
+          "picture.html",
+          src: static_path(@conn, "/assets/frontend/images/notepadpp-logo.png"),
+          alt: "Notepad++ logo",
+          title: "Notepad++",
+          class: "plugin-image"
+        )
+      %>
+    </a>
     <a href="#st3">
       <%=
         render(
