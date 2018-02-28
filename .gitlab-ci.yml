@@ -48,6 +48,8 @@ deploy_beta:
     - code-stats-beta
   script:
     - cp /var/codestats/beta/config/{appsignal,dev.secret,prod.secret}.exs config/
+    - mix local.hex --force
+    - mix local.rebar --force
     - mix deps.get
     - mix compile
     - mix release --env=prod
