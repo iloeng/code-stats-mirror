@@ -61,6 +61,7 @@ deploy_beta:
     - cd ../
     - mix release --env=prod
     - sudo systemctl stop beta.codestats.net
+    - sudo rm -rf /var/codestats/beta/_build
     - _build/prod/rel/code_stats/bin/code_stats migrate
     - cp -r _build /var/codestats/beta
     - sudo systemctl start beta.codestats.net
