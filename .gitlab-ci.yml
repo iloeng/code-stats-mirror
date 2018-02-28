@@ -37,3 +37,16 @@ pages:
   artifacts:
     paths:
       - public
+
+deploy_beta:
+  variables:
+    MIX_ENV: prod
+    COOKIE: thisisbeta
+  only:
+    - test-ci@code-stats/code-stats
+  tags:
+    - code-stats-beta
+  script:
+    - mix deps.get
+    - mix compile
+    - mix release --env=prod
