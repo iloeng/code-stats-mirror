@@ -47,7 +47,7 @@ deploy_beta:
     MIX_ENV: prod
     COOKIE: thisisbeta
   only:
-    - test-ci@code-stats/code-stats
+    - master@code-stats/code-stats
   tags:
     - code-stats-beta
   script:
