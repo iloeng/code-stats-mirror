@@ -47,6 +47,7 @@ deploy_beta:
   tags:
     - code-stats-beta
   script:
+    - mv /var/codestats/beta/config/{appsignal,dev.secret,prod.secret}.exs config/
     - mix deps.get
     - mix compile
     - mix release --env=prod
