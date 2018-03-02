@@ -1,5 +1,13 @@
 <div class="stripe">
   <h1>Sign up</h1>
+  <div class="external-login">
+    <%= if url = CodeStats.Auth.Github.url() do %>
+      <a href="<%= url %>" class="github-login">
+        <img src="<%= static_path(@conn, "/frontend/assets/images/github-logo.svg") %>">
+        <span>Sign up with GitHub</span>
+      </a>
+    <% end %>
+  </div>
   <%= form_for(@changeset, auth_path(@conn, :signup), fn f -> %>
     <label for="user_username" class="<%= if f.errors[:username], do: "has-error" %>">Username (required)</label>
     <div class="input">

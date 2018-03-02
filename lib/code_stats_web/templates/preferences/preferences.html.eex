@@ -31,29 +31,31 @@
 <div class="stripe flash-stripe flash-success" role="alert"><%= get_flash(@conn, :password_success) %></div>
 <div class="stripe flash-stripe flash-error" role="alert"><%= get_flash(@conn, :password_error) %></div>
 
-<div class="stripe">
-  <h2>Change password</h2>
+<%= if get_current_user(@conn).from == "codestats" do %>
+  <div class="stripe">
+    <h2>Change password</h2>
 
-  <%= form_tag(preferences_path(@conn, :change_password)) %>
-    <label for="old_password" class="<%= if assigns[:old_password_error], do: "has-error" %>">Old password (required)</label>
-    <div class="input">
-      <input type="password" id="old_password" name="old_password" required />
-      <%= if assigns[:old_password_error] do %>
-        <p class="help-block has-error"><%= assigns[:old_password_error] %></p>
-      <% end %>
-    </div>
+    <%= form_tag(preferences_path(@conn, :change_password)) %>
+      <label for="old_password" class="<%= if assigns[:old_password_error], do: "has-error" %>">Old password (required)</label>
+      <div class="input">
+        <input type="password" id="old_password" name="old_password" required />
+        <%= if assigns[:old_password_error] do %>
+          <p class="help-block has-error"><%= assigns[:old_password_error] %></p>
+        <% end %>
+      </div>
 
-    <label for="new_password" class="<%= if assigns[:new_password_error], do: "has-error" %>">New password (required)</label>
-    <div class="input">
-      <input type="password" id="new_password" name="new_password" class="form-control" required />
-      <%= if assigns[:new_password_error] do %>
-        <p class="help-block has-error"><%= assigns[:new_password_error] %></p>
-      <% end %>
-    </div>
+        <label for="new_password" class="<%= if assigns[:new_password_error], do: "has-error" %>">New password (required)</label>
+        <div class="input">
+          <input type="password" id="new_password" name="new_password" class="form-control" required />
+          <%= if assigns[:new_password_error] do %>
+            <p class="help-block has-error"><%= assigns[:new_password_error] %></p>
+          <% end %>
+        </div>
 
-    <div class="submit"><button type="submit" class="btn btn-primary">Change password</button></div>
-  </form>
-</div>
+      <div class="submit"><button type="submit" class="btn btn-primary">Change password</button></div>
+    </form>
+  </div>
+<% end %>
 
 <div class="stripe flash-stripe flash-error" role="alert"><%= get_flash(@conn, :delete_error) %></div>
 

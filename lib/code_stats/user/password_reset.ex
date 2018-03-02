@@ -61,11 +61,11 @@ defmodule CodeStats.User.PasswordReset do
 
         case Repo.one(q) do
           # Invalidate changeset, error message is not shown so it is not needed
-          nil ->
-            {add_error(cset, :username, ""), nil}
-
-          %User{} = u ->
+          %User{from: "codestats"} = u ->
             {put_change(cset, :user_id, u.id), u}
+
+          _ ->
+            {add_error(cset, :username, ""), nil}
         end
     end
   end

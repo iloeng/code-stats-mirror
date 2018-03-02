@@ -1,5 +1,15 @@
 <div class="stripe">
   <h1>Log in</h1>
+
+  <div class="external-login">
+    <%= if url = CodeStats.Auth.Github.url() do %>
+      <a href="<%= url %>" class="github-login">
+        <img src="<%= static_path(@conn, "/frontend/assets/images/github-logo.svg") %>">
+        <span>Log in with GitHub</span>
+      </a>
+    <% end %>
+  </div>
+
   <%= form_tag("", method: :post) %>
     <label for="username">Username</label>
     <input type="text" class="form-control" id="username" name="username" value="<%= assigns[:username_input] %>" required />
