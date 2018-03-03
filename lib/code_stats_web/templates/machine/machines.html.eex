@@ -35,11 +35,11 @@
     <div class="alert alert-info">
       You don't have any machines configured. :( You should add one below!
     </div>
+  <% else %>
+    <div class="alert alert-warning">
+      Note that if you regenerate a machine's API key, the old API key will stop working immediately. You should do this if you lose your API key or the machine that was connected to it.
+    </div>
   <% end %>
-
-  <div class="alert alert-warning">
-    Note that if you regenerate a machine's API key, the old API key will stop working immediately. You should do this if you lose your API key or the machine that was connected to it.
-  </div>
 
   <h2>Add new machine</h2>
 
