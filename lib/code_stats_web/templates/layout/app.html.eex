@@ -65,37 +65,39 @@
       </nav>
     </header>
 
-    <%= if get_flash(@conn, :info) do %>
-      <div class="stripe flash-stripe" role="alert">
-        <%= get_flash(@conn, :info) %>
-      </div>
-    <% end %>
-    <%= if get_flash(@conn, :success) do %>
-      <div class="stripe flash-stripe flash-success" role="alert">
-        <%= get_flash(@conn, :success) %>
-      </div>
-    <% end %>
-    <%= if get_flash(@conn, :error) do %>
-      <div class="stripe flash-stripe flash-error" role="alert">
-        <%= get_flash(@conn, :error) %>
-      </div>
-    <% end %>
+    <section id="flash-stripe">
+      <%= if flash = get_flash(@conn, :info) do %>
+        <div class="stripe flash-stripe" role="alert">
+          <%= flash %>
+        </div>
+      <% end %>
+      <%= if flash = get_flash(@conn, :success) do %>
+        <div class="stripe flash-stripe flash-success" role="alert">
+          <%= flash %>
+        </div>
+      <% end %>
+      <%= if flash = get_flash(@conn, :error) do %>
+        <div class="stripe flash-stripe flash-error" role="alert">
+          <%= flash %>
+        </div>
+      <% end %>
 
-    <%= if get_conf(:beta_mode) do %>
-      <section class="stripe flash-stripe" role="alert">
-        <strong>Note!</strong>
-        This instance is in beta mode. You can register as normal and use this instance for testing
-        purposes, such as for developing a new editor plugin. The database may be reset at any time.
+      <%= if get_conf(:beta_mode) do %>
+        <section class="stripe flash-stripe" role="alert">
+          <strong>Note!</strong>
+          This instance is in beta mode. You can register as normal and use this instance for testing
+          purposes, such as for developing a new editor plugin. The database may be reset at any time.
+        </section>
+      <% end %>
+
+      <section id="ie-warning" class="stripe stripe-warning" role="alert">
+        <strong>⚠️ Warning!</strong>
+        It seems you are using Internet Explorer, which is an unsupported browser. This website uses technologies not supported
+        by your browser and as such will probably not work. Please try using some recent browser, like
+        <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">Google Chrome</a>,
+        <a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Mozilla Firefox</a>,
+        or <a href="https://vivaldi.com/" target="_blank">Vivaldi</a>.
       </section>
-    <% end %>
-
-    <section id="ie-warning" class="stripe stripe-warning" role="alert">
-      <strong>⚠️ Warning!</strong>
-      It seems you are using Internet Explorer, which is an unsupported browser. This website uses technologies not supported
-      by your browser and as such will probably not work. Please try using some recent browser, like
-      <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">Google Chrome</a>,
-      <a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Mozilla Firefox</a>,
-      or <a href="https://vivaldi.com/" target="_blank">Vivaldi</a>.
     </section>
 
     <main>
