@@ -29,8 +29,7 @@ defmodule CodeStatsWeb.AuthController do
 
   def oauth(conn, %{"app" => "github", "code" => code}) do
     with {:ok, body} <- Github.user(code: code),
-         {user = %User{}, _} <- {AuthUtils.get_user(body["login"], from: "GitHub"), body}
-    do
+         {user = %User{}, _} <- {AuthUtils.get_user(body["login"], from: "GitHub"), body} do
       conn
       |> AuthUtils.force_auth_user_id(user.id)
       |> redirect(to: profile_path(conn, :my_profile))
@@ -42,9 +41,11 @@ defmodule CodeStatsWeb.AuthController do
           username: body["login"],
           password: "github",
           email: body["email"],
-          from: "github",
+          from: "github"
         }
+
         token = Token.sign(conn, "codestats_oauth", {"GitHub", params.username, params.email})
+
         conn
         |> assign(:provider, "GitHub")
         |> assign(:changeset, User.changeset(%User{}, params))
@@ -60,7 +61,7 @@ defmodule CodeStatsWeb.AuthController do
   end
 
   def login(conn, %{"username" => username, "password" => password} = params) do
-    with %User{} = user      <- AuthUtils.get_user(username, case_insensitive: true),
+    with %User{} = user <- AuthUtils.get_user(username, case_insensitive: true),
          %Plug.Conn{} = conn <- AuthUtils.auth_user(conn, user, password),
          %Plug.Conn{} = conn <- maybe_remember_me(conn, user, params) do
       redirect(conn, to: profile_path(conn, :my_profile))
@@ -102,12 +103,15 @@ defmodule CodeStatsWeb.AuthController do
   end
 
   def oauth_signup(conn, %{"user" => %{"token" => token}}) do
-    with {:ok, {from, username, email}} <- Token.verify(conn, "codestats_oauth", token, max_age: 86400),
+    with {:ok, {from, username, email}} <-
+           Token.verify(conn, "codestats_oauth", token, max_age: 86400),
          params <- %{username: username, from: from, email: email, password: from},
-         %User{} <- %User{} |> User.changeset(params) |> AuthUtils.create_user()
-    do
+         %User{} <- %User{} |> User.changeset(params) |> AuthUtils.create_user() do
       conn
-      |> put_flash(:success, "Great success! Your account was created and you can now log in with #{from}.")
+      |> put_flash(
+        :success,
+        "Great success! Your account was created and you can now log in with #{from}."
+      )
       |> redirect(to: auth_path(conn, :render_login))
     else
       {:error, :invalid} ->
@@ -121,7 +125,8 @@ defmodule CodeStatsWeb.AuthController do
         |> redirect(to: auth_path(conn, :render_login))
 
       %Changeset{} = ch ->
-        IO.inspect ch.errors
+        IO.inspect(ch.errors)
+
         conn
         |> put_flash(:error, "Failed to create new user")
         |> redirect(to: auth_path(conn, :render_login))

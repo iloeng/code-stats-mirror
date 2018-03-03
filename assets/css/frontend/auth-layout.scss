@@ -1,0 +1,67 @@
+.auth-page {
+  display: grid;
+
+  grid-template-areas: 'title'
+                       'normal'
+                       'ext'
+                       'help';
+
+  grid-gap: 20px 40px;
+
+  @media #{$md} {
+    grid-template-areas: 'title  title'
+                         'normal ext  '
+                         'help   help ';
+    grid-template-columns: 1fr   1fr;
+  }
+
+  h1 {
+    grid-area: title;
+  }
+
+  .normal-auth {
+    grid-area: normal;
+  }
+
+  .external-login {
+    grid-area: ext;
+  }
+
+  .forgot-password-help {
+    grid-area: help;
+  }
+}
+
+.external-login {
+  a {
+    text-decoration: none;
+    display: block;
+    padding: 0.5em;
+    margin-bottom: 1em;
+    width: 12em;
+    border-radius: 5px;
+
+    &:hover {
+      text-decoration: none;
+      background-color: #656565;
+    }
+  }
+
+  .github-login {
+    background-color: #6d6d6d;
+    color: #fff;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+      fill: currentColor;
+    }
+
+    >span {
+      margin-left: 10px;
+    }
+  }
+}
