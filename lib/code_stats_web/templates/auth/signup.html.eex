@@ -53,9 +53,8 @@
   <% end) %>
 
   <div class="external-login">
-    <p><strong>… or, by using external service</strong></p>
-
     <%= if url = CodeStats.Auth.Github.url() do %>
+      <p><strong>… or, by using external service</strong></p>
       <a href="<%= url %>" class="github-login">
         <img alt="GitHub logo" src="<%= static_path(@conn, "/assets/frontend/images/github-logo-white.svg") %>">
         <span>Sign up with GitHub</span>
