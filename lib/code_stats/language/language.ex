@@ -6,6 +6,9 @@ defmodule CodeStats.Language do
 
   alias CodeStats.Repo
 
+  # Default language name if given language name is invalid
+  @default_name "Plain text"
+
   schema "languages" do
     field(:name, :string)
 
@@ -43,6 +46,8 @@ defmodule CodeStats.Language do
   """
   @spec get_or_create(String.t()) :: {:ok, %__MODULE__{}} | {:error, :unknown}
   def get_or_create(language_name) do
+    language_name = sanitize_language(language_name)
+
     # Get-create-get to handle race conditions
     get_query =
       from(
@@ -69,6 +74,15 @@ defmodule CodeStats.Language do
               nil -> {:error, :unknown}
             end
         end
+    end
+  end
+
+  # Sanitize language name to what makes sense in the system by trimming whitespace and converting
+  # empty name to default name
+  defp sanitize_language(name) when is_binary(name) do
+    case String.trim(name) do
+      "" -> @default_name
+      name -> name
     end
   end
 end
