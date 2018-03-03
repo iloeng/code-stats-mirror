@@ -17,7 +17,7 @@
         </form>
 
         <%= form_tag(machine_path(@conn, :regen_machine_key, machine.id), class: "regenerate-form") %>
-          <button type="submit" class="button-warning">Regenerate API key</button>
+          <button type="submit" class="button-warning machine-regenerate-button">Regenerate API key</button>
         </form>
 
         <%= form_tag(machine_path(@conn, :deactivate, machine.id), class: "deactivate-form") %>
