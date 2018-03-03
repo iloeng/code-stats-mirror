@@ -19,6 +19,12 @@ defmodule CodeStatsWeb.AuthUtils do
   @private_info_key :_codestats_session_user
 
   @doc """
+  Get auth key used for storing user data in session.
+  """
+  @spec auth_key() :: atom
+  def auth_key(), do: @auth_key
+
+  @doc """
   Is the current user authenticated?
   """
   @spec is_authed?(%Conn{}) :: boolean
@@ -47,7 +53,7 @@ defmodule CodeStatsWeb.AuthUtils do
   end
 
   @doc """
-  Get private key used for sessions
+  Get private key used for sessions.
   """
   @spec private_info_key() :: atom
   def private_info_key do
@@ -61,7 +67,7 @@ defmodule CodeStatsWeb.AuthUtils do
 
   Returns nil if user was not found.
   """
-  @spec get_user(String.t, boolean) :: %User{} | nil
+  @spec get_user(String.t(), boolean) :: %User{} | nil
   def get_user(username, opts \\ []) do
     query =
       case Keyword.get(opts, :case_insensitive, false) do

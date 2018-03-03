@@ -59,18 +59,16 @@ defmodule CodeStatsWeb.PreferencesController do
     user = AuthUtils.get_current_user(conn)
 
     if delete == "DELETE" do
-      case AuthUtils.delete_user(user) do
-        true ->
-          conn
-          |> AuthUtils.unauth_user()
-          |> put_flash(:info, "Your user account has been deleted.")
-          |> redirect(to: page_path(conn, :index))
+      # Delete user in background task to prevent the request from timing out, as deleting all of
+      # user's XP will take a long time.
+      Task.start(AuthUtils, :delete_user, [user])
 
-        false ->
-          conn
-          |> put_flash(:delete_error, "There was an error deleting your account.")
-          |> redirect(to: preferences_path(conn, :edit))
-      end
+      # We cannot delete the whole session here, or the flash message will not be shown. So just
+      # delete the auth data.
+      conn
+      |> delete_session(AuthUtils.auth_key())
+      |> put_flash(:info, "Your user account will be deleted in a few moments.")
+      |> redirect(to: page_path(conn, :index))
     else
       conn
       |> put_flash(

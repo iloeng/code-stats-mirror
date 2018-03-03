@@ -85,19 +85,28 @@ defmodule CodeStatsWeb.MachineController do
     user = AuthUtils.get_current_user(conn)
 
     with %Machine{} = machine <- get_machine_or_404(conn, user, id) do
-      case delete_machine(machine) do
-        true ->
-          # Regenerate user's cache in a background process
-          Task.start(User, :update_cached_xps, [user, true])
+      # Deactivate machine first, then delete it in a background process, as it may have too much
+      # data to delete in request process.
+      case do_activate(machine, false) do
+        {:ok, _} ->
+          Task.start(fn ->
+            Repo.delete(machine)
+
+            # Regenerate user's cache to remove references to machine in it
+            User.update_cached_xps(user, true)
+          end)
 
           conn
-          |> put_flash(:success, "Machine deleted.")
+          |> put_flash(
+            :success,
+            "The machine has been deactivated and will be deleted in a few moments."
+          )
           |> redirect(to: machine_path(conn, :list))
 
-        false ->
+        {:error, _} ->
           conn
           |> put_flash(:error, "Machine could not be deleted.")
-          |> redirect(to: machine_path(conn, :view_single, machine.id))
+          |> redirect(to: machine_path(conn, :list))
       end
     end
   end
@@ -115,8 +124,7 @@ defmodule CodeStatsWeb.MachineController do
     verb = if active, do: "activated", else: "deactivated"
 
     with %Machine{} = machine <- get_machine_or_404(conn, user, id) do
-      with changeset = Machine.activation_changeset(machine, %{active: active}),
-           {:ok, machine} <- Repo.update(changeset) do
+      with {:ok, machine} <- do_activate(machine, active) do
         conn
         |> put_flash(:success, "Machine #{machine.name} #{verb}.")
         |> redirect(to: machine_path(conn, :list))
@@ -179,18 +187,17 @@ defmodule CodeStatsWeb.MachineController do
     end
   end
 
-  defp delete_machine(machine) do
-    case Repo.delete(machine) do
-      {:ok, _} -> true
-      {:error, _} -> false
-    end
-  end
-
   defp machines_title(conn), do: assign(conn, :title, "Machines")
 
   defp single_machine_assigns(conn, %Machine{} = machine) do
     conn
     |> assign(:title, "Machine: #{machine.name}")
     |> assign(:machine, machine)
+  end
+
+  defp do_activate(%Machine{} = machine, status) when is_boolean(status) do
+    machine
+    |> Machine.activation_changeset(%{active: status})
+    |> Repo.update()
   end
 end
