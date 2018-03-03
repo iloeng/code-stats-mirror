@@ -43,8 +43,7 @@ defmodule CodeStatsWeb.MachineController do
     with %Machine{} = machine <- get_machine_or_404(conn, user, id),
          changeset = Machine.changeset(machine) do
       conn
-      |> assign(:machine, machine)
-      |> assign(:title, "Machine: #{machine.name}")
+      |> single_machine_assigns(machine)
       |> render("single_machine.html", changeset: changeset)
     end
   end
@@ -52,13 +51,21 @@ defmodule CodeStatsWeb.MachineController do
   def edit(conn, %{"id" => id, "machine" => params}) do
     user = AuthUtils.get_current_user(conn)
 
-    with %Machine{} = machine <- get_machine_or_404(conn, user, id),
-         changeset = Machine.update_changeset(machine, params),
-         %Machine{} = machine <- edit_machine_or_flash(conn, changeset) do
-      conn
-      |> assign(:machine, machine)
-      |> put_flash(:success, "Machine edited successfully.")
-      |> redirect(to: machine_path(conn, :view_single, machine.id))
+    with %Machine{} = machine <- get_machine_or_404(conn, user, id) do
+      with changeset = Machine.update_changeset(machine, params),
+           {:ok, machine} <- Repo.update(changeset) do
+        conn
+        |> single_machine_assigns(machine)
+        |> put_flash(:success, "Machine edited successfully.")
+        |> redirect(to: machine_path(conn, :view_single, machine.id))
+      else
+        {:error, changeset} ->
+          conn
+          |> single_machine_assigns(machine)
+          |> put_status(500)
+          |> put_flash(:error, "Error editing machine.")
+          |> render("single_machine.html", changeset: changeset)
+      end
     end
   end
 
@@ -107,12 +114,18 @@ defmodule CodeStatsWeb.MachineController do
     user = AuthUtils.get_current_user(conn)
     verb = if active, do: "activated", else: "deactivated"
 
-    with %Machine{} = machine <- get_machine_or_404(conn, user, id),
-         changeset = Machine.activation_changeset(machine, %{active: active}),
-         %Machine{} = machine <- edit_machine_or_flash(conn, changeset) do
-      conn
-      |> put_flash(:success, "Machine #{machine.name} #{verb}.")
-      |> redirect(to: machine_path(conn, :list))
+    with %Machine{} = machine <- get_machine_or_404(conn, user, id) do
+      with changeset = Machine.activation_changeset(machine, %{active: active}),
+           {:ok, machine} <- Repo.update(changeset) do
+        conn
+        |> put_flash(:success, "Machine #{machine.name} #{verb}.")
+        |> redirect(to: machine_path(conn, :list))
+      else
+        {:error, changeset} ->
+          conn
+          |> put_flash(:error, "Error changing machine activation status.")
+          |> render("machines.html", changeset: changeset)
+      end
     end
   end
 
@@ -166,21 +179,6 @@ defmodule CodeStatsWeb.MachineController do
     end
   end
 
-  defp edit_machine_or_flash(conn, changeset) do
-    changeset
-    |> Repo.update()
-    |> case do
-      {:ok, machine} ->
-        machine
-
-      {:error, changeset} ->
-        conn
-        |> put_status(500)
-        |> put_flash(:error, "Error editing machine.")
-        |> render("single_machine.html", changeset: changeset)
-    end
-  end
-
   defp delete_machine(machine) do
     case Repo.delete(machine) do
       {:ok, _} -> true
@@ -189,4 +187,10 @@ defmodule CodeStatsWeb.MachineController do
   end
 
   defp machines_title(conn), do: assign(conn, :title, "Machines")
+
+  defp single_machine_assigns(conn, %Machine{} = machine) do
+    conn
+    |> assign(:title, "Machine: #{machine.name}")
+    |> assign(:machine, machine)
+  end
 end

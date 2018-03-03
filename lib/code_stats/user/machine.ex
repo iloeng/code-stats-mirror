@@ -15,6 +15,11 @@ defmodule CodeStats.User.Machine do
   end
 
   @doc """
+  Maximum length of machine's name.
+  """
+  def machine_name_max_length(), do: 64
+
+  @doc """
   Creates a changeset based on the `data` and `params`.
 
   If no params are provided, an invalid changeset is returned
@@ -53,7 +58,7 @@ defmodule CodeStats.User.Machine do
   defp name_validations(changeset) do
     changeset
     |> validate_required([:name])
-    |> validate_length(:name, min: 1, max: 64)
+    |> validate_length(:name, min: 1, max: machine_name_max_length())
     |> unique_constraint(:name, name: :machines_name_user_id_index)
   end
 

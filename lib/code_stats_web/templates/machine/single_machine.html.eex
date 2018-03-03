@@ -5,7 +5,7 @@
   <label for="machine_name" class="<%= if f.errors[:name], do: "has-error" %>">Name (required)</label>
 
     <div class="input">
-      <%= text_input(f, :name, required: true) %>
+      <%= text_input(f, :name, required: true, maxlength: machine_name_max_length()) %>
       <%= if message = f.errors[:name] do %>
         <p class="help-block"><%= translate_error(message) %></p>
       <% end %>
