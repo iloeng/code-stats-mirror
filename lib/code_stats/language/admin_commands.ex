@@ -81,7 +81,7 @@ defmodule CodeStats.Language.AdminCommands do
 
   All aliased XP will be moved back to this language.
   """
-  @spec unalias_language(String.t()) :: nil
+  @spec unalias_language(String.t()) :: :ok
   def unalias_language(lang_name) do
     {:ok, language} = Language.get_or_create(lang_name)
 

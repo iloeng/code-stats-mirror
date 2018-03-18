@@ -31,8 +31,8 @@ defmodule CodeStats.XP do
   @doc """
   Get all of a user's XP's by user ID.
   """
-  @spec xps_by_user_id(integer) :: [%__MODULE__{}]
-  def xps_by_user_id(user_id) do
+  @spec xps_by_user_id(integer) :: %Ecto.Query{}
+  def xps_by_user_id(user_id) when is_integer(user_id) do
     from(
       x in __MODULE__,
       join: p in CodeStats.User.Pulse,

@@ -91,7 +91,7 @@ defmodule CodeStats.Auth.Github do
   Returns user information only.
   To return token before querying for user, see `get_user/3`
   """
-  @spec user(keyword, keyword) :: map
+  @spec user(keyword, keyword) :: {:error, any} | {:ok, binary}
   def user(params \\ [], opts \\ []) do
     with {:ok, client} <- token(params, opts),
          {:ok, %{status_code: 200, body: body}} <- Client.get(client, "/user")

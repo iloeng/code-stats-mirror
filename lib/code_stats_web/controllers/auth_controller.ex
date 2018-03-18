@@ -52,7 +52,7 @@ defmodule CodeStatsWeb.AuthController do
         |> assign(:token, token)
         |> render("oauth_signup.html")
 
-      _ret ->
+      {:error, _} ->
         conn
         |> assign(:title, "Login")
         |> put_flash(:error, "Failed to login with GitHub")
