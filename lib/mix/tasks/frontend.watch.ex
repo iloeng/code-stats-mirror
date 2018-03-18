@@ -1,5 +1,5 @@
 defmodule Mix.Tasks.Frontend.Watch do
-  use MBU.BuildTask
+  use MBU.BuildTask, auto_path: false, create_out_path: false
   import MBU.TaskUtils
   alias Mix.Tasks.Frontend.Build.Js.Bundle, as: FrontendBundleJS
   alias Mix.Tasks.Frontend.Build.Js.Copy, as: FrontendCopyJS

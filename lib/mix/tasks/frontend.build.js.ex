@@ -1,5 +1,5 @@
 defmodule Mix.Tasks.Frontend.Build.Js do
-  use MBU.BuildTask
+  use MBU.BuildTask, auto_path: false, create_out_path: false
   import MBU.TaskUtils
 
   @shortdoc "Build the frontend JavaScript"

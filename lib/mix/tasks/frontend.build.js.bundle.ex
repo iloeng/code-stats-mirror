@@ -8,7 +8,6 @@ defmodule Mix.Tasks.Frontend.Build.Js.Bundle do
   def in_path(), do: js_path()
   def in_file(), do: Path.join([in_path(), "frontend", "frontend.js"])
 
-  def out_path(), do: Path.join([base_tmp_path(), "bundled", "js"])
   def out_file(), do: Path.join([out_path(), "frontend.js"])
 
   task _ do

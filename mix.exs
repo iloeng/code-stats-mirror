@@ -63,7 +63,7 @@ defmodule CodeStats.Mixfile do
       {:bamboo, "1.0.0-rc.1"},
       {:corsica, "~> 1.1.0"},
       {:appsignal, "~> 1.4"},
-      {:mbu, "~> 2.0.0"},
+      {:mbu, "~> 3.0.0"},
       {:geolix, "~> 0.15.1"},
       {:geolite2data, "~> 0.0.3"},
       {:remote_ip, "~> 0.1.3"},

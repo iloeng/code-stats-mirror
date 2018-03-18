@@ -1,10 +1,9 @@
 defmodule Mix.Tasks.Frontend.Build.Js.Minify do
-  use MBU.BuildTask
+  use MBU.BuildTask, auto_path: false
   import CodeStats.FrontendConfs
   alias CodeStats.BuildTasks.MinifyJS
 
   @shortdoc "Minify built JS files"
-  @preferred_cli_env :prod
 
   @deps [
     "frontend.build.js.bundle"
@@ -17,6 +16,6 @@ defmodule Mix.Tasks.Frontend.Build.Js.Minify do
   def out_file(), do: Path.join([out_path(), "frontend.js"])
 
   task _ do
-    MinifyJS.task(out_path(), in_file(), out_file())
+    MinifyJS.task(in_file(), out_file())
   end
 end

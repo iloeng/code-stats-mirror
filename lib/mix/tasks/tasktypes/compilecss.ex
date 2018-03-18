@@ -13,9 +13,6 @@ defmodule CodeStats.BuildTasks.CompileCSS do
     ]
 
   def task(out_path, in_file) do
-    # Ensure output path exists
-    File.mkdir_p!(out_path)
-
     bin() |> exec(args(in_file, out_path)) |> listen()
 
     # Output file is input file where extension is changed

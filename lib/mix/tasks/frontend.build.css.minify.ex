@@ -1,10 +1,9 @@
 defmodule Mix.Tasks.Frontend.Build.Css.Minify do
-  use MBU.BuildTask
+  use MBU.BuildTask, auto_path: false
   import CodeStats.FrontendConfs
   alias CodeStats.BuildTasks.MinifyCSS
 
   @shortdoc "Minify built frontend CSS files"
-  @preferred_cli_env :prod
 
   @deps [
     "frontend.build.css.compile"
@@ -17,6 +16,6 @@ defmodule Mix.Tasks.Frontend.Build.Css.Minify do
   def out_file(), do: Path.join([out_path(), "frontend.css"])
 
   task _ do
-    MinifyCSS.task(out_path(), in_file(), out_file())
+    MinifyCSS.task(in_file(), out_file())
   end
 end

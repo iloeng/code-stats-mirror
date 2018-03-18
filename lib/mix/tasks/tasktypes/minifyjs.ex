@@ -23,9 +23,7 @@ defmodule CodeStats.BuildTasks.MinifyJS do
     ]
   end
 
-  def task(out_path, in_file, out_file) do
-    File.mkdir_p!(out_path)
-
+  def task(in_file, out_file) do
     bin() |> exec(args(in_file, out_file)) |> listen()
 
     print_size(out_file, in_file)

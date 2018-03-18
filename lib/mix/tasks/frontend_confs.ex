@@ -28,11 +28,6 @@ defmodule CodeStats.FrontendConfs do
   def base_src_path(), do: Path.join([proj_path(), "assets"])
 
   @doc """
-  Get absolute path to temp directory for build artifacts.
-  """
-  def base_tmp_path(), do: Path.join([proj_path(), ".tmp"])
-
-  @doc """
   Get absolute path to target directory for frontend build.
   """
   def base_dist_path(), do: Path.join([proj_path(), "priv", "static"])

@@ -120,6 +120,11 @@ config :code_stats,
   commit_hash: System.cmd("git", ["rev-parse", "--verify", "--short", "HEAD"]) |> elem(0),
   version: Mix.Project.config()[:version]
 
+config :mbu,
+  auto_paths: true,
+  create_out_paths: true,
+  tmp_path: Path.expand(".tmp")
+
 import_config "appsignal.exs"
 
 # Import environment specific config. This must remain at the bottom

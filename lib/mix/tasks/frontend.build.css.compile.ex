@@ -8,8 +8,6 @@ defmodule Mix.Tasks.Frontend.Build.Css.Compile do
   def in_path(), do: Path.join([base_src_path(), "css", "frontend"])
   def in_file(), do: Path.join([in_path(), "frontend.scss"])
 
-  def out_path(), do: Path.join([base_tmp_path(), "compiled", "css"])
-
   task _ do
     CompileCSS.task(out_path(), in_file())
   end
