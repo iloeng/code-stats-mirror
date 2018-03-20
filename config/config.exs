@@ -85,11 +85,11 @@ config :number,
     separator: "."
   ]
 
-config :geolix, init: {CodeStatsWeb.Geolix, :init}
-
-config :geolite2data,
-  geolix_updater: true,
-  logger: true
+config :geolix,
+  databases: [
+    %{id: :city, init: {CodeStatsWeb.Geolix, :init_cities}},
+    %{id: :country, init: {CodeStatsWeb.Geolix, :init_countries}}
+  ]
 
 # Appsignal configuration
 
