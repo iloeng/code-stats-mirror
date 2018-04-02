@@ -240,21 +240,21 @@ defmodule CodeStats.User do
   # Unformat data from DB to native datatypes
   defp unformat_cache_from_db(cache) do
     languages =
-      Map.get(cache, "languages")
+      Map.get(cache, "languages", %{})
       |> str_keys_to_int()
 
     machines =
-      Map.get(cache, "machines")
+      Map.get(cache, "machines", %{})
       |> str_keys_to_int()
 
     dates =
-      Map.get(cache, "dates")
+      Map.get(cache, "dates", %{})
       |> Map.to_list()
       |> Enum.map(fn {key, value} -> {Date.from_iso8601!(key), value} end)
       |> Map.new()
 
     hours =
-      Map.get(cache, :hours)
+      Map.get(cache, "hours", %{})
       |> Map.to_list()
       |> Enum.map(fn {key, value} -> {String.to_integer(key), value} end)
       |> Map.new()
