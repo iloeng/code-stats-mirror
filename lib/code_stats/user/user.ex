@@ -4,8 +4,6 @@ defmodule CodeStats.User do
   import Ecto.Changeset
   import Ecto.Query
 
-  @null_datetime "1970-01-01T00:00:00Z"
-
   alias Comeonin.Bcrypt
 
   alias CodeStats.Repo
@@ -103,8 +101,7 @@ defmodule CodeStats.User do
       if not update_all and user.last_cached != nil do
         user.last_cached
       else
-        {:ok, datetime} = Calendar.DateTime.Parse.rfc3339_utc(@null_datetime)
-        datetime
+        DateTime.from_naive!(~N[1970-01-01T00:00:00], "Etc/UTC")
       end
 
     # If update_all is given or user cache is empty, don't use any previous cache data
@@ -112,6 +109,7 @@ defmodule CodeStats.User do
       languages: %{},
       machines: %{},
       dates: %{},
+      hours: %{},
       # Time taken for the last partial cache update
       caching_duration: 0,
       # Time taken for the last full cache update
@@ -144,11 +142,13 @@ defmodule CodeStats.User do
     language_data = generate_language_cache(cached_data.languages, xps)
     machine_data = generate_machine_cache(cached_data.machines, xps)
     date_data = generate_date_cache(cached_data.dates, xps)
+    hour_data = generate_hour_cache(cached_data.hours, xps)
 
     cache_contents = %{
       languages: language_data,
       machines: machine_data,
-      dates: date_data
+      dates: date_data,
+      hours: hour_data
     }
 
     # Correct key for storing caching duration
@@ -165,7 +165,7 @@ defmodule CodeStats.User do
     # Persist cache changes and update user's last cached timestamp
     user
     |> cast(%{cache: stored_cache}, [:cache])
-    |> put_change(:last_cached, Calendar.DateTime.now_utc())
+    |> put_change(:last_cached, DateTime.utc_now())
     |> Repo.update!()
 
     # Return the cache data for the caller
@@ -174,30 +174,36 @@ defmodule CodeStats.User do
 
   defp generate_language_cache(language_data, xps) do
     Enum.reduce(xps, language_data, fn {_, xp}, acc ->
-      Map.get_and_update(acc, xp.language_id, fn old_val ->
-        {old_val, val_or_0(old_val) + xp.amount}
-      end)
-      |> elem(1)
+      Map.update(acc, xp.language_id, 0, &(&1 + xp.amount))
     end)
   end
 
   defp generate_machine_cache(machine_data, xps) do
     Enum.reduce(xps, machine_data, fn {pulse, xp}, acc ->
-      Map.get_and_update(acc, pulse.machine_id, fn old_val ->
-        {old_val, val_or_0(old_val) + xp.amount}
-      end)
-      |> elem(1)
+      Map.update(acc, pulse.machine_id, 0, &(&1 + xp.amount))
     end)
   end
 
   defp generate_date_cache(date_data, xps) do
     Enum.reduce(xps, date_data, fn {pulse, xp}, acc ->
-      date = DateTime.to_date(pulse.sent_at)
+      date =
+        case try_sent_at_local(pulse) do
+          %NaiveDateTime{} = dt ->
+            NaiveDateTime.to_date(dt)
 
-      Map.get_and_update(acc, date, fn old_val ->
-        {old_val, val_or_0(old_val) + xp.amount}
-      end)
-      |> elem(1)
+          # If sent_at_local wasn't stored, use older more inaccurate data
+          %DateTime{} = dt ->
+            DateTime.to_date(dt)
+        end
+
+      Map.update(acc, date, 0, &(&1 + xp.amount))
+    end)
+  end
+
+  defp generate_hour_cache(hour_data, xps) do
+    Enum.reduce(xps, hour_data, fn {pulse, xp}, acc ->
+      hour = try_sent_at_local(pulse).hour
+      Map.update(acc, hour, 0, &(&1 + xp.amount))
     end)
   end
 
@@ -217,10 +223,17 @@ defmodule CodeStats.User do
       |> Enum.map(fn {key, value} -> {Date.to_iso8601(key), value} end)
       |> Map.new()
 
+    hours =
+      Map.get(cache, :hours)
+      |> Map.to_list()
+      |> Enum.map(fn {key, value} -> {Integer.to_string(key), value} end)
+      |> Map.new()
+
     %{
       languages: languages,
       machines: machines,
-      dates: dates
+      dates: dates,
+      hours: hours
     }
   end
 
@@ -240,10 +253,17 @@ defmodule CodeStats.User do
       |> Enum.map(fn {key, value} -> {Date.from_iso8601!(key), value} end)
       |> Map.new()
 
+    hours =
+      Map.get(cache, :hours)
+      |> Map.to_list()
+      |> Enum.map(fn {key, value} -> {String.to_integer(key), value} end)
+      |> Map.new()
+
     %{
       languages: languages,
       machines: machines,
       dates: dates,
+      hours: hours,
       caching_duration: Map.get(cache, "caching_duration", 0),
       total_caching_duration: Map.get(cache, "total_caching_duration", 0)
     }
@@ -257,9 +277,6 @@ defmodule CodeStats.User do
     changeset
     |> validate_format(:email, ~r/^$|@/)
   end
-
-  defp val_or_0(nil), do: 0
-  defp val_or_0(val) when is_number(val), do: val
 
   defp int_keys_to_str(map) do
     map
@@ -278,5 +295,13 @@ defmodule CodeStats.User do
   defp get_caching_duration(start_time) do
     Calendar.DateTime.diff(DateTime.utc_now(), start_time)
     |> (fn {:ok, s, us, _} -> s + us / 1_000_000 end).()
+  end
+
+  # Try using local sent_at time if available, fall back on more inaccurate sent_at
+  defp try_sent_at_local(%Pulse{} = pulse) do
+    case pulse.sent_at_local do
+      %NaiveDateTime{} = dt -> dt
+      nil -> pulse.sent_at
+    end
   end
 end

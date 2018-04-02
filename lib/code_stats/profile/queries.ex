@@ -137,4 +137,39 @@ defmodule CodeStats.Profile.Queries do
     |> Enum.map(fn data -> %{data | date: Date.from_iso8601!(data.date)} end)
     |> Enum.filter(fn %{date: date} -> Date.compare(date, since) != :lt end)
   end
+
+  @doc """
+  Get days of week when profile has been active and their total XPs.
+  """
+  def cached_days_of_week(%{"dates" => dates}) when is_map(dates) do
+    cached_dates(%{"dates" => dates})
+    |> Enum.reduce(%{}, fn %{date: date, xp: xp}, acc ->
+      dow_reducer(acc, date, xp)
+    end)
+  end
+
+  @doc """
+  Get days of week when profile has been active and their total XPs since given date.
+  """
+  def cached_days_of_week(%{"dates" => dates}, %Date{} = since) when is_map(dates) do
+    cached_dates(%{"dates" => dates}, since)
+    |> Enum.reduce(%{}, fn %{date: date, xp: xp}, acc ->
+      dow_reducer(acc, date, xp)
+    end)
+  end
+
+  defp dow_reducer(acc, date, xp) when is_map(acc) and is_binary(date) and is_integer(xp) do
+    case Date.from_iso8601(date) do
+      {:ok, dt} ->
+        dow_reducer(acc, dt, xp)
+
+      {:error, _} ->
+        acc
+    end
+  end
+
+  defp dow_reducer(acc, %Date{} = date, xp) when is_map(acc) and is_integer(xp) do
+    dow = Date.day_of_week(date)
+    Map.update(acc, dow, xp, &(&1 + xp))
+  end
 end

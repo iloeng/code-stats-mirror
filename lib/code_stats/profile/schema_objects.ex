@@ -43,11 +43,11 @@ defmodule CodeStats.Profile.SchemaObjects do
 
     @desc "User's dates when they have been active and their XP"
     field :dates, list_of(:profile_date) do
-      arg(:since, type: :datetime)
+      arg(:since, type: :date)
 
       resolve(fn
         %{cache: cache}, %{since: since}, _ ->
-          {:ok, Queries.cached_dates(cache, DateTime.to_date(since))}
+          {:ok, Queries.cached_dates(cache, since)}
 
         %{cache: cache}, _, _ ->
           {:ok, Queries.cached_dates(cache)}
@@ -56,10 +56,60 @@ defmodule CodeStats.Profile.SchemaObjects do
 
     @desc "User's dates since given date with their summed XP per language per day"
     field :day_language_xps, list_of(:profile_daylanguage) do
-      arg(:since, type: :date)
+      arg(:since, type: non_null(:date))
 
       resolve(fn %{id: uid}, %{since: since}, _ ->
-        {:ok, Queries.day_languages(uid, since) |> IO.inspect()}
+        {:ok, Queries.day_languages(uid, since)}
+      end)
+    end
+
+    @desc "User's XP by day of week"
+    field :day_of_week_xps, list_of(:profile_dow_xp) do
+      arg(:since, type: :date)
+
+      resolve(fn
+        %{cache: cache}, %{since: since}, _ ->
+          dow_data =
+            Queries.cached_days_of_week(cache, since)
+            |> Map.to_list()
+            |> Enum.map(fn {day, xp} -> %{day: day, xp: xp} end)
+
+          {:ok, dow_data}
+
+        %{cache: cache}, _, _ ->
+          dow_data =
+            Queries.cached_days_of_week(cache)
+            |> Map.to_list()
+            |> Enum.map(fn {day, xp} -> %{day: day, xp: xp} end)
+
+          {:ok, dow_data}
+      end)
+    end
+
+    @desc "User's XP by day of year"
+    field :day_of_year_xps, :profile_doy_xp do
+      resolve(fn %{cache: cache}, _, _ ->
+        date_to_key = fn date ->
+          Calendar.Date.day_number_in_year(date)
+        end
+
+        # 2000 was a leap year, so it contains all possible days (includes leap day)
+        doys =
+          Date.range(~D[2000-01-01], ~D[2000-12-31])
+          |> Enum.map(fn date ->
+            key = date_to_key.(date)
+            {key, 0}
+          end)
+          |> Enum.into(%{})
+
+        doy_data =
+          Queries.cached_dates(cache)
+          |> Enum.reduce(doys, fn %{date: date, xp: xp}, acc ->
+            key = date |> Date.from_iso8601!() |> date_to_key.()
+            Map.update!(acc, key, &(&1 + xp))
+          end)
+
+        {:ok, doy_data}
       end)
     end
   end
@@ -88,6 +138,18 @@ defmodule CodeStats.Profile.SchemaObjects do
     field(:date, :date)
     field(:language, :string)
     field(:xp, :integer)
+  end
+
+  @desc "Day of week and its combined XP"
+  object :profile_dow_xp do
+    field(:day, :integer)
+    field(:xp, :integer)
+  end
+
+  scalar :profile_doy_xp,
+    description:
+      "Map where key is number of day of year (including leap day, like in the year 2000) and value is amount of XP" do
+    serialize(fn m -> m end)
   end
 
   scalar :datetime, description: "RFC3339 time with timezone" do
