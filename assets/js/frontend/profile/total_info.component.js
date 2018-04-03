@@ -1,8 +1,8 @@
-import {el, mount, unmount, setChildren, text} from 'redom';
+import { el, mount, unmount, setChildren, text } from 'redom';
 import LevelCounterComponent from '../graphs/level_counter.component';
 import ProgressBarComponent from '../graphs/progress_bar.component';
 
-import {DateTime} from 'luxon';
+import { DateTime } from 'luxon';
 
 /**
  * Renders the profile information and total XP of the user.
@@ -22,7 +22,7 @@ class TotalInfoComponent {
       this.lastDayCoded = DateTime.fromISO(last_day_coded_el.getAttribute('datetime'));
     }
 
-    this.usernameEl = el('h1#profile-username', {'data-name': this.username}, this.username);
+    this.usernameEl = el('h1#profile-username', { 'data-name': this.username }, this.username);
 
     this.lastProgrammedEl = el('li', this._getLastProgrammedElems());
 
@@ -43,15 +43,15 @@ class TotalInfoComponent {
     setChildren(init_el, [this.usernameEl, this.profileDetailList, this.totalProgress]);
   }
 
-  setInitData({total_langs, recent_langs}) {
-    this.totalXp = total_langs.reduce((total, {xp}) => total += xp, 0);
-    this.newXp = recent_langs.reduce((total, {xp}) => total += xp, 0);
+  setInitData({ total_langs, recent_langs }) {
+    this.totalXp = total_langs.reduce((total, { xp }) => total += xp, 0);
+    this.newXp = recent_langs.reduce((total, { xp }) => total += xp, 0);
 
     this._updateChildren();
   }
 
-  update({xps, sent_at_local}) {
-    let new_xp = xps.reduce((acc, {amount}) => acc + amount, 0);
+  update({ xps, sent_at_local }) {
+    const new_xp = xps.reduce((acc, { amount }) => acc + amount, 0);
 
     this.totalXp += new_xp;
     this.newXp += new_xp;
@@ -72,7 +72,7 @@ class TotalInfoComponent {
   }
 
   _getDateEl(date) {
-    return el('time', this._formatDate(date), {datetime: date.toISODate()});
+    return el('time', this._formatDate(date), { datetime: date.toISODate() });
   }
 
   _getLastProgrammedElems() {

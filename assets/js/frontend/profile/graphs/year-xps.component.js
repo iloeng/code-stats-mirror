@@ -1,0 +1,139 @@
+import { el, list } from 'redom';
+import { DateTime } from 'luxon';
+import { ACCENT_COLOR, BACKGROUND_COLOR, TEXT_COLOR, ACCENT_TEXT, ACCENT_TEXT_FLIP_PERCENT } from '../../config';
+import { hex_to_color, color_to_rgb_str } from '../../../common/utils';
+import { LOCALE } from '../../../common/config';
+import { XP_FORMATTER } from '../../../common/xp_utils';
+
+// Year to use when simulating a leap year
+const YEAR = 2000;
+
+const MONTHS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+class YearXpsTableHeadingComponent {
+  constructor() {
+    this.el = el('th');
+  }
+
+  update(day) {
+    this.el.textContent = day;
+  }
+}
+
+const MAX_COLOR = hex_to_color(ACCENT_COLOR);
+const MIN_COLOR = hex_to_color(BACKGROUND_COLOR);
+const MAX_TEXT_COLOR = hex_to_color(ACCENT_TEXT);
+const MIN_TEXT_COLOR = hex_to_color(TEXT_COLOR);
+
+const CELL_FORMATTER = new Intl.NumberFormat(LOCALE, {
+  maximumFractionDigits: 0,
+});
+
+class YearXpsTableCellComponent {
+  constructor() {
+    this.el = el('td');
+  }
+
+  update(data, index, items, max_val) {
+    if (typeof data === 'string') {
+      // For first column, just print the month name
+      this.el.textContent = data;
+    }
+    else {
+      const { date, xp } = data;
+      this.el.textContent = this._formatValue(xp);
+
+      const max_scale = xp / max_val;
+
+      const scale_color = c => Math.round(MIN_COLOR[c] + ((MAX_COLOR[c] - MIN_COLOR[c]) * max_scale));
+
+      const bg_color = { r: scale_color('r'), g: scale_color('g'), b: scale_color('b') };
+      this.el.style.backgroundColor = color_to_rgb_str(bg_color);
+
+      if (max_scale * 100 > ACCENT_TEXT_FLIP_PERCENT) {
+        this.el.style.color = color_to_rgb_str(MAX_TEXT_COLOR);
+      }
+      else {
+        this.el.style.color = color_to_rgb_str(MIN_TEXT_COLOR);
+      }
+
+      this.el.title = `${MONTHS[date.month - 1]} ${date.day}: ${XP_FORMATTER.format(xp)} XP`;
+    }
+  }
+
+  // Attempt to format value to max 3 chars + unit
+  _formatValue(value) {
+    if (value < 1000) {
+      return value.toString();
+    }
+    else if (value < 1000000) {
+      return CELL_FORMATTER.format(value / 1000) + 'K';
+    }
+    else {
+      return CELL_FORMATTER.format(value / 1000000) + 'M';
+    }
+  }
+}
+
+class YearXpsTableRowComponent {
+  constructor() {
+    this.data = {};
+
+    this.el = list('tr', YearXpsTableCellComponent);
+  }
+
+  update(data, index, items, max_val) {
+    this.data = data;
+    this.el.update(this.data.days, max_val);
+  }
+}
+
+class YearXpsComponent {
+  constructor() {
+    this.data = [...Array(12).keys()].map(i => {
+      return { month: i, days: [MONTHS[i]] };
+    });
+
+    this.headerList = list('tr', YearXpsTableHeadingComponent);
+    this.months = list('tbody', YearXpsTableRowComponent);
+
+    this.el = el('div.year-xps', [
+      el('h4', 'Total XP by day of year'),
+      el('table.year-xps', [
+        el('thead', [this.headerList]),
+        this.months,
+      ])
+    ]);
+    this.headerList.update([null, ...(Array.from(new Array(31), (_, i) => i + 1))]);
+  }
+
+  setInitData({ day_of_year_xps }) {
+    let max_val = 0;
+    for (const ord of Object.keys(day_of_year_xps)) {
+      const xp = day_of_year_xps[ord];
+      if (xp > max_val) {
+        max_val = xp;
+      }
+
+      const date = DateTime.fromObject({ ordinal: parseInt(ord), year: YEAR });
+      this.data[date.month - 1]['days'][date.day] = { date, xp };
+    }
+
+    this.months.update(this.data, max_val);
+  }
+}
+
+export default YearXpsComponent;

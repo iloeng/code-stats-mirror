@@ -1,5 +1,5 @@
-import {el} from 'redom';
-import {get_level} from '../../common/xp_utils';
+import { el } from 'redom';
+import { get_level, XP_FORMATTER } from '../../common/xp_utils';
 
 class LevelCounterComponent {
   constructor(element_type, prefix, total_xp, new_xp) {
@@ -26,7 +26,7 @@ class LevelCounterComponent {
     this._refresh();
   }
 
-  update(total_xp, new_xp, prefix=null) {
+  update(total_xp, new_xp, prefix = null) {
     this.totalXp = total_xp;
     this.newXp = new_xp;
 
@@ -40,7 +40,7 @@ class LevelCounterComponent {
   _refresh() {
     this.level = get_level(this.totalXp);
 
-    let title = ` level ${this.level} (${this.totalXp.toLocaleString()} XP)`;
+    let title = ` level ${this.level} (${XP_FORMATTER.format(this.totalXp)} XP)`;
     let postfix = '';
 
     if (this.prefixEl == null) {
@@ -48,7 +48,7 @@ class LevelCounterComponent {
     }
 
     if (this.newXp > 0) {
-      postfix = ` (+${this.newXp.toLocaleString()})`;
+      postfix = ` (+${XP_FORMATTER.format(this.newXp)})`;
     }
 
     this.contentEl.textContent = title;

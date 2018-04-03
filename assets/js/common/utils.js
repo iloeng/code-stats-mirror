@@ -2,7 +2,7 @@
  * Miscellaneous utilities
  */
 
-import {Socket} from 'phoenix';
+import { Socket } from 'phoenix';
 
 /**
  * Get live update socket for the correct backend socket path.
@@ -12,7 +12,7 @@ import {Socket} from 'phoenix';
 function get_live_update_socket() {
   const meta_tag = document.getElementsByName('channel_token');
 
-  let data = {params: {}};
+  let data = { params: {} };
   if (meta_tag.length === 1) {
     data.params.token = meta_tag[0].content;
     console.log('Authentication exists, generating socket with token', data.params.token);
@@ -55,14 +55,14 @@ async function race_promises(promises) {
   const remove_promise = i => promises.splice(i, 1);
 
   return Promise.race(mapped)
-  .then(([i, r]) => {
-    remove_promise(i);
-    return Promise.resolve([r, promises]);
-  })
-  .catch(([i, r]) => {
-    remove_promise(i);
-    return Promise.reject([r, promises]);
-  });
+    .then(([i, r]) => {
+      remove_promise(i);
+      return Promise.resolve([r, promises]);
+    })
+    .catch(([i, r]) => {
+      remove_promise(i);
+      return Promise.reject([r, promises]);
+    });
 }
 
 const PROFILE_API_PATH = '/profile-graph';
@@ -100,4 +100,36 @@ async function request_profile(username, spec) {
   return json.data.profile;
 }
 
-export { get_live_update_socket, wait_for_load, request_profile, race_promises };
+const HEX_MATCHER = /^#?([0-9a-f]{6})$/i;
+
+/**
+ * Convert given hex string (with optional preceding #) to an RGB object.
+ * @param {String} hex_str
+ * @returns {{r: Number, g: Number, b: Number}}
+ */
+function hex_to_color(hex_str) {
+  const parts = hex_str.match(HEX_MATCHER)[1];
+  return {
+    r: parseInt(parts.substr(0, 2), 16),
+    g: parseInt(parts.substr(2, 2), 16),
+    b: parseInt(parts.substr(4, 2), 16)
+  };
+}
+
+/**
+ * Convert given RGB object to a CSS RGB string.
+ * @param {{r: Number, g: Number, b: Number}} param0 
+ * @returns {String}
+ */
+function color_to_rgb_str({ r, g, b }) {
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+export {
+  get_live_update_socket,
+  wait_for_load,
+  request_profile,
+  race_promises,
+  hex_to_color,
+  color_to_rgb_str,
+};

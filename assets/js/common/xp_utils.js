@@ -22,8 +22,13 @@ function get_level_progress(xp) {
   return Math.round((have_xp / needed_xp) * 100);
 }
 
+const XP_FORMATTER = new Intl.NumberFormat('en-US', {
+  maximumFractionDigits: 0,
+});
+
 export {
   get_level,
   get_next_level_xp,
-  get_level_progress
+  get_level_progress,
+  XP_FORMATTER,
 };

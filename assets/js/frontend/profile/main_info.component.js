@@ -1,13 +1,14 @@
-import {el, mount, setChildren} from 'redom';
+import { el, mount, setChildren } from 'redom';
 import LoadingIndicatorComponent from '../../common/loading-indicator.component';
 import StartupInstructionsComponent from './startup-instructions.component';
-import {DateTime} from 'luxon';
-import {RECENT_HOURS} from '../config';
+import { DateTime } from 'luxon';
+import { RECENT_HOURS } from '../config';
 
 import LanguagesDataSource from './graphs/languages.data-source';
 import TopLanguagesComponent from './graphs/top-languages.component';
 import OtherLanguagesComponent from './graphs/other-languages.component';
 import TopMachinesComponent from './graphs/top-machines.component';
+import YearXpsComponent from './graphs/year-xps.component';
 
 /**
  * MainInfoComponent handles showing either the loading indicator, startup instructions, or list of graphs, and
@@ -31,11 +32,16 @@ class MainInfoComponent {
 
   getDataRequest() {
     const now = DateTime.utc();
-    const since_recent = now.minus({hours: RECENT_HOURS});
+    const since_recent = now.minus({ hours: RECENT_HOURS });
+
+    const monday_this_week = DateTime.fromObject({ weekNumber: now.weekNumber });
+    const since_2weeks = monday_this_week.minus({ weeks: 1 });
 
     return {
       total_machines: 'machines {name xp}',
       recent_machines: `machines(since: ${JSON.stringify(since_recent.toISO())}) {name xp}`,
+      day_language_xps: `dayLanguageXps(since: ${JSON.stringify(since_2weeks.toISODate())}) {date language xp}`,
+      day_of_year_xps: `dayOfYearXps`,
     };
   }
 
@@ -81,6 +87,7 @@ class MainInfoComponent {
       new TopLanguagesComponent(this._langDataSource),
       new OtherLanguagesComponent(this._langDataSource),
       new TopMachinesComponent(),
+      new YearXpsComponent(),
     ];
   }
 
