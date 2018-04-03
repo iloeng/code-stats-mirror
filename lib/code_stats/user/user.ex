@@ -174,13 +174,13 @@ defmodule CodeStats.User do
 
   defp generate_language_cache(language_data, xps) do
     Enum.reduce(xps, language_data, fn {_, xp}, acc ->
-      Map.update(acc, xp.language_id, 0, &(&1 + xp.amount))
+      Map.update(acc, xp.language_id, xp.amount, &(&1 + xp.amount))
     end)
   end
 
   defp generate_machine_cache(machine_data, xps) do
     Enum.reduce(xps, machine_data, fn {pulse, xp}, acc ->
-      Map.update(acc, pulse.machine_id, 0, &(&1 + xp.amount))
+      Map.update(acc, pulse.machine_id, xp.amount, &(&1 + xp.amount))
     end)
   end
 
@@ -196,14 +196,14 @@ defmodule CodeStats.User do
             DateTime.to_date(dt)
         end
 
-      Map.update(acc, date, 0, &(&1 + xp.amount))
+      Map.update(acc, date, xp.amount, &(&1 + xp.amount))
     end)
   end
 
   defp generate_hour_cache(hour_data, xps) do
     Enum.reduce(xps, hour_data, fn {pulse, xp}, acc ->
       hour = try_sent_at_local(pulse).hour
-      Map.update(acc, hour, 0, &(&1 + xp.amount))
+      Map.update(acc, hour, xp.amount, &(&1 + xp.amount))
     end)
   end
 
