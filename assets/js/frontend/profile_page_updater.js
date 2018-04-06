@@ -1,10 +1,10 @@
-import {mount, setChildren} from 'redom';
+import { mount, setChildren } from 'redom';
 import MainInfoComponent from './profile/main_info.component';
 import TotalInfoComponent from './profile/total_info.component';
-import {request_profile, race_promises} from '../common/utils';
-import {DateTime} from 'luxon';
+import { request_profile, race_promises } from '../common/utils';
+import { DateTime } from 'luxon';
 
-import {RECENT_HOURS} from './config';
+import { RECENT_HOURS } from './config';
 
 /**
  * Handles connecting to the profile page socket and sending updates to the components.
@@ -66,7 +66,7 @@ class ProfilePageUpdater {
 
     // Data wanted by both components
     const now = DateTime.utc();
-    const since_recent = now.minus({hours: RECENT_HOURS});
+    const since_recent = now.minus({ hours: RECENT_HOURS });
     const common_spec = {
       total_langs: 'languages {name xp}',
       recent_langs: `languages(since: ${JSON.stringify(since_recent.toISO())}) {name xp}`
@@ -86,6 +86,12 @@ class ProfilePageUpdater {
   }
 
   newPulse(msg) {
+    // Calculate total and parse datetimes once so don't need to keep recalculating them
+    msg.new_xp = msg.xps.reduce((acc, { amount }) => acc + amount, 0);
+
+    msg.sent_at = DateTime.fromISO(msg.sent_at, { setZone: true });
+    msg.sent_at_local = DateTime.fromISO(msg.sent_at_local, { setZone: true });
+
     this.tuApp.update(msg);
     this.muApp.update(msg);
   }

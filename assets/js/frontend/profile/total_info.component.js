@@ -50,13 +50,10 @@ class TotalInfoComponent {
     this._updateChildren();
   }
 
-  update({ xps, sent_at_local }) {
-    const new_xp = xps.reduce((acc, { amount }) => acc + amount, 0);
-
+  update({ sent_at_local, new_xp }) {
     this.totalXp += new_xp;
     this.newXp += new_xp;
-
-    this.lastDayCoded = DateTime.fromISO(sent_at_local);
+    this.lastDayCoded = sent_at_local;
     setChildren(this.lastProgrammedEl, this._getLastProgrammedElems());
 
     this._updateChildren();
