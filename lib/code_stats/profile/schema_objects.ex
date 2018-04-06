@@ -96,16 +96,17 @@ defmodule CodeStats.Profile.SchemaObjects do
         # 2000 was a leap year, so it contains all possible days (includes leap day)
         doys =
           Date.range(~D[2000-01-01], ~D[2000-12-31])
-          |> Enum.map(fn date ->
-            key = date_to_key.(date)
-            {key, 0}
+          |> Enum.reduce(%{}, fn date, acc ->
+            Map.put(acc, date_to_key.(date), 0)
           end)
-          |> Enum.into(%{})
 
         doy_data =
           Queries.cached_dates(cache)
           |> Enum.reduce(doys, fn %{date: date, xp: xp}, acc ->
-            key = date |> Date.from_iso8601!() |> date_to_key.()
+            # Also move the XP date to 2000 so that day of year number matches correctly
+            date = Date.from_iso8601!(date)
+            {:ok, moved_date} = Date.new(2000, date.month, date.day)
+            key = date_to_key.(moved_date)
             Map.update!(acc, key, &(&1 + xp))
           end)
 
