@@ -45,12 +45,14 @@
     grid-template: 'top-l'
                    'other-l'
                    'top-m'
+                   'year-x'
                    / auto;
     grid-gap: 20px;
 
     @media #{$md} {
       grid-template: 'top-l   top-m'
                      'other-l top-m'
+                     'year-x  year-x'
                     / 1fr     1fr;
     }
   }

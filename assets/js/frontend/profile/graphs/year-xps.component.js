@@ -48,9 +48,10 @@ class YearXpsTableCellComponent {
   }
 
   update(data, index, items, max_val) {
-    if (typeof data === 'string') {
+    if (index === 0) {
       // For first column, just print the month name
       this.el.textContent = data;
+      this.el.classList.add('month-td');
     }
     else {
       const { date, xp } = data;
@@ -103,6 +104,10 @@ class YearXpsTableRowComponent {
 
 class YearXpsComponent {
   constructor() {
+    // XP by day of year
+    this.xpByDay = {};
+
+    // Data model for month list
     this.data = [...Array(12).keys()].map(i => {
       return { month: i, days: [MONTHS[i]] };
     });
@@ -110,29 +115,48 @@ class YearXpsComponent {
     this.headerList = list('tr', YearXpsTableHeadingComponent);
     this.months = list('tbody', YearXpsTableRowComponent);
 
-    this.el = el('div.year-xps', [
+    this.el = el('section.year-xps', [
       el('h4', 'Total XP by day of year'),
-      el('table.year-xps', [
-        el('thead', [this.headerList]),
-        this.months,
-      ])
+      el('div.table-container',
+        el('table', [
+          el('thead', [this.headerList]),
+          this.months,
+        ])
+      ),
     ]);
     this.headerList.update([null, ...(Array.from(new Array(31), (_, i) => i + 1))]);
   }
 
   setInitData({ day_of_year_xps }) {
-    let max_val = 0;
-    for (const ord of Object.keys(day_of_year_xps)) {
-      const xp = day_of_year_xps[ord];
-      if (xp > max_val) {
-        max_val = xp;
-      }
-
+    this.xpByDay = day_of_year_xps;
+    const max_val = this._findMaxXP();
+    for (const ord of Object.keys(this.xpByDay)) {
       const date = DateTime.fromObject({ ordinal: parseInt(ord), year: YEAR });
-      this.data[date.month - 1]['days'][date.day] = { date, xp };
+      this.data[date.month - 1]['days'][date.day] = { date, xp: this.xpByDay[ord] };
     }
 
     this.months.update(this.data, max_val);
+  }
+
+  update({ new_xp, sent_at_local }) {
+    const ord = sent_at_local.ordinal;
+    this.xpByDay[ord] += new_xp;
+    const max_val = this._findMaxXP();
+
+    this.data[sent_at_local.month - 1]['days'][sent_at_local.day].xp += new_xp;
+    this.months.update(this.data, max_val);
+  }
+
+  _findMaxXP() {
+    let max_val = 0;
+    for (const ord of Object.keys(this.xpByDay)) {
+      const xp = this.xpByDay[ord];
+      if (xp > max_val) {
+        max_val = xp;
+      }
+    }
+
+    return max_val;
   }
 }
 
