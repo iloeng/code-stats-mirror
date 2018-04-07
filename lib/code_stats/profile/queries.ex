@@ -21,7 +21,7 @@ defmodule CodeStats.Profile.Queries do
       on: x.pulse_id == p.id,
       join: m in Machine,
       on: p.machine_id == m.id,
-      where: p.user_id == ^user_id and p.sent_at >= ^since,
+      where: p.user_id == ^user_id and p.sent_at >= ^since and m.active == true,
       group_by: m.id,
       select: %{id: m.id, name: m.name, xp: sum(x.amount)}
     )
@@ -114,11 +114,17 @@ defmodule CodeStats.Profile.Queries do
     ids = Map.keys(intkeys)
 
     structs =
-      from(m in Machine, where: m.id in ^ids, select: {m.id, m.name})
+      from(m in Machine, where: m.id in ^ids and m.active == true, select: {m.id, m.name})
       |> Repo.all()
       |> Enum.into(%{})
 
-    Enum.map(ids, fn id -> %{name: structs[id], xp: intkeys[id]} end)
+    Enum.reduce(ids, [], fn id, acc ->
+      if Map.has_key?(structs, id) do
+        [%{name: structs[id], xp: intkeys[id]} | acc]
+      else
+        acc
+      end
+    end)
   end
 
   @doc """
