@@ -19,6 +19,9 @@ defmodule CodeStats.XPHistoryCache do
   # Group data into blocks of this many minutes. Use 1 to disable. This must divide 60 minutes evenly.
   @group_minutes 1
 
+  # Maximum XP per XP row to accept, so that cheaters and outliers can be evened out
+  @max_xp 400
+
   # ETS table name
   @table :xp_history_cache
 
@@ -92,7 +95,8 @@ defmodule CodeStats.XPHistoryCache do
               )
             }
           },
-          sum(x.amount)
+          # Even out the data by using least() to limit the XP of a single XP row
+          sum(fragment("least(?, ?)", x.amount, @max_xp))
         },
         group_by: [
           fragment("year"),

@@ -1,6 +1,11 @@
-import {el} from 'redom';
+import { el } from 'redom';
 import Chart from 'chart.js/dist/Chart.js';
-import {DateTime} from 'luxon';
+import { DateTime } from 'luxon';
+
+/**
+ * Max XP per single group, to smoothen out the graph from impossible peaks.
+ */
+const MAX_EVENT_VAL = 20000;
 
 // These MUST match the values in XPHistoryCache for the graph to be rendered properly!
 const HISTORY_HOURS = 4;
@@ -53,7 +58,7 @@ class HistoryGraphComponent {
     this.interval = setInterval(() => this._checkMove(), UPDATE_INTERVAL * 1000);
   }
 
-  init({xp_history: data}) {
+  init({ xp_history: data }) {
     data = this._mapTimes(data);
     data = this._transformData(data);
     this.dataset.data = data;
@@ -104,10 +109,10 @@ class HistoryGraphComponent {
   _transformData(data) {
     const now = DateTime.utc();
     const start_minute = Math.floor(now.get('minute') / GROUP_MINUTES) * GROUP_MINUTES;
-    const start = now.minus({hours: HISTORY_HOURS}).set({minute: start_minute, second: 0});
+    const start = now.minus({ hours: HISTORY_HOURS }).set({ minute: start_minute, second: 0 });
 
     let time = start;
-    const inc_time = t => t.plus({minutes: GROUP_MINUTES});
+    const inc_time = t => t.plus({ minutes: GROUP_MINUTES });
 
     const ret = data.reduce((acc, [data_time, xp]) => {
       // Skip all times that don't fit the range
@@ -119,6 +124,9 @@ class HistoryGraphComponent {
         acc.push(0);
         time = inc_time(time);
       }
+
+      // Max bound for XP per event to look more even
+      xp = Math.min(xp, MAX_EVENT_VAL);
 
       acc.push(xp);
       time = inc_time(data_time);
