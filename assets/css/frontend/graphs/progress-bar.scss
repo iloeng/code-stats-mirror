@@ -24,6 +24,8 @@ div.progress-bar {
       background-color: lighten(#f0ad4e, 5%);
       border-radius: 0 $border-radius $border-radius 0;
     }
+
+    transition: width 0.2s ease-out;
   }
 
   &:not(.stacked) {
