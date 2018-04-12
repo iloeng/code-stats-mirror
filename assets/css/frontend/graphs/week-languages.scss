@@ -1,0 +1,12 @@
+.week-languages {
+  grid-area: week-l;
+  height: 350px;
+
+  display: flex;
+  flex-direction: column;
+
+  .graph-container {
+    flex: 1 1 300px;
+    position: relative;
+  }
+}

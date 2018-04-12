@@ -42,7 +42,8 @@
 
   .main-info-graphs {
     display: grid;
-    grid-template: 'top-l'
+    grid-template: 'week-l'
+                   'top-l'
                    'other-l'
                    'top-m'
                    'year-x'
@@ -50,7 +51,8 @@
     grid-gap: 20px;
 
     @media #{$md} {
-      grid-template: 'top-l   top-m'
+      grid-template: 'week-l  week-l'
+                     'top-l   top-l'
                      'other-l top-m'
                      'year-x  year-x'
                     / 1fr     1fr;

@@ -9,6 +9,7 @@ import TopLanguagesComponent from './graphs/top-languages.component';
 import OtherLanguagesComponent from './graphs/other-languages.component';
 import TopMachinesComponent from './graphs/top-machines.component';
 import YearXpsComponent from './graphs/year-xps.component';
+import WeekLanguagesComponent from './graphs/week-languages.component';
 
 /**
  * MainInfoComponent handles showing either the loading indicator, startup instructions, or list of graphs, and
@@ -33,14 +34,12 @@ class MainInfoComponent {
   getDataRequest() {
     const now = DateTime.utc();
     const since_recent = now.minus({ hours: RECENT_HOURS });
-
-    const monday_this_week = DateTime.fromObject({ weekNumber: now.weekNumber });
-    const since_2weeks = monday_this_week.minus({ weeks: 1 });
+    const since_14d = now.minus({ weeks: 2 });
 
     return {
       total_machines: 'machines {name xp}',
       recent_machines: `machines(since: ${JSON.stringify(since_recent.toISO())}) {name xp}`,
-      day_language_xps: `dayLanguageXps(since: ${JSON.stringify(since_2weeks.toISODate())}) {date language xp}`,
+      day_language_xps: `dayLanguageXps(since: ${JSON.stringify(since_14d.toISODate())}) {date language xp}`,
       day_of_year_xps: `dayOfYearXps`,
     };
   }
@@ -83,11 +82,15 @@ class MainInfoComponent {
   }
 
   _buildStatsElems() {
+    const now = DateTime.utc();
+    const since_14d = now.minus({ weeks: 2 });
+
     this._graphs = [
       new TopLanguagesComponent(this._langDataSource),
       new OtherLanguagesComponent(this._langDataSource),
       new TopMachinesComponent(),
       new YearXpsComponent(),
+      new WeekLanguagesComponent(since_14d, now),
     ];
   }
 
