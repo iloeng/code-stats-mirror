@@ -39,8 +39,10 @@
 #main-stats-container {
   margin-top: 40px;
   margin-bottom: 40px;
+  width: 100%;
 
   .main-info-graphs {
+    width: 100%;
     display: grid;
     grid-template: 'week-l'
                    'top-l'
@@ -51,11 +53,17 @@
     grid-gap: 20px;
 
     @media #{$md} {
-      grid-template: 'week-l  week-l'
+      grid-template: 'load    load'
+                     'week-l  week-l'
                      'top-l   top-l'
                      'other-l top-m'
                      'year-x  year-x'
                     / 1fr     1fr;
+    }
+
+    .loading-indicator {
+      grid-area: load;
+      width: 100%;
     }
   }
 }
