@@ -3,6 +3,7 @@ import Chart from 'chart.js/dist/Chart.js';
 import { get_graph_color } from '../../../common/graph-colors';
 import { Interval } from 'luxon';
 import { XP_FORMATTER } from '../../../common/xp_utils';
+import { SMALL_BREAKPOINT } from '../../../common/config';
 
 /** Maximum amount of languages to show, grouping others under "Other". */
 const MAX_LANGS = 8;
@@ -60,7 +61,15 @@ class WeekLanguagesComponent {
               }
             }]
           },
-          maintainAspectRatio: false
+          maintainAspectRatio: false,
+          onResize: (chart, { width }) => {
+            if (width < SMALL_BREAKPOINT) {
+              chart.options.legend.display = false;
+            }
+            else {
+              chart.options.legend.display = true;
+            }
+          }
         }
       }
     );

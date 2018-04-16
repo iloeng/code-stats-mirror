@@ -1,4 +1,7 @@
 .week-languages {
+  // Forces graph to resize no matter the width
+  overflow: hidden;
+
   grid-area: week-l;
   height: 350px;
 
@@ -8,5 +11,11 @@
   .graph-container {
     flex: 1 1 300px;
     position: relative;
+    height: 300px;
+
+    >canvas {
+      // Attempt to fix Chart.js drawing height wrong when screen is made smaller and bigger again
+      height: 280px !important;
+    }
   }
 }
