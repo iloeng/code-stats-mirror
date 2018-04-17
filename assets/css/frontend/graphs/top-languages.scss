@@ -1,10 +1,14 @@
 .top-languages {
   grid-area: top-l;
 
-  .top-lang-list {
-    h4 {
-      margin-top: 15px;
-      margin-bottom: 5px;
+  >div {
+    display: grid;
+
+    grid-column-gap: 10px;
+    grid-template-columns: 1fr;
+
+    @media #{$md} {
+      grid-template-columns: 1fr 1fr;
     }
   }
 }
