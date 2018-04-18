@@ -32,7 +32,11 @@ defmodule CodeStats.XP.XPCacheRefresher do
     {:noreply, state}
   end
 
-  defp do_refresh() do
+  @doc """
+  Refresh XP caches of all users in the system.
+  """
+  @spec do_refresh() :: :ok
+  def do_refresh() do
     from(u in User, select: u)
     |> Repo.all()
     |> Enum.each(fn user -> User.update_cached_xps(user, true) end)
