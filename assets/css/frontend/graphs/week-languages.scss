@@ -3,19 +3,15 @@
   overflow: hidden;
 
   grid-area: week-l;
-  height: 350px;
-
-  display: flex;
-  flex-direction: column;
+  height: 300px;
 
   .graph-container {
-    flex: 1 1 300px;
     position: relative;
     height: 300px;
 
     >canvas {
       // Attempt to fix Chart.js drawing height wrong when screen is made smaller and bigger again
-      height: 280px !important;
+      height: 300px !important;
     }
   }
 }

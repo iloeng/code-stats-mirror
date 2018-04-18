@@ -15,7 +15,7 @@ class WeekLanguagesComponent {
 
     this.canvas = el('canvas');
     this.el = el('section.week-languages', [
-      el('h4', 'Daily progress during last 14 days'),
+      //el('h4', 'Daily progress during last 14 days'),
       el('div.graph-container', [this.canvas]),
     ]);
 
