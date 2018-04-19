@@ -10,8 +10,7 @@
     "luxon": "~1.0.0",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
-    "redom": "~3.11.1",
-    "uglify-es": "^3.3.10"
+    "redom": "~3.11.1"
   },
   "devDependencies": {
     "babel-cli": "~6.26.0",
@@ -25,6 +24,7 @@
     "rollup-plugin-babel": "~3.0.3",
     "rollup-plugin-commonjs": "~9.1.0",
     "rollup-plugin-node-resolve": "~3.3.0",
-    "rollup-plugin-sourcemaps": "~0.4.2"
+    "rollup-plugin-sourcemaps": "~0.4.2",
+    "uglify-es": "~3.3.9"
   }
 }
