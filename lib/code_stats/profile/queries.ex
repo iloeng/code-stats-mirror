@@ -164,6 +164,13 @@ defmodule CodeStats.Profile.Queries do
     end)
   end
 
+  @doc """
+  Get hours of day when profile has been active and their total XPs.
+  """
+  def cached_hours(cache) when is_map(cache) do
+    Map.get(cache, "hours", %{})
+  end
+
   defp dow_reducer(acc, date, xp) when is_map(acc) and is_binary(date) and is_integer(xp) do
     case Date.from_iso8601(date) do
       {:ok, dt} ->

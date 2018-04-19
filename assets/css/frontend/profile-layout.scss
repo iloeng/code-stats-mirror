@@ -46,6 +46,7 @@
     display: grid;
     grid-template: 'week-l'
                    'top-l'
+                   'hour-x'
                    'other-l'
                    'top-m'
                    'year-x'
@@ -56,6 +57,7 @@
       grid-template: 'load    load'
                      'week-l  week-l'
                      'top-l   top-l'
+                     'hour-x  hour-x'
                      'other-l top-m'
                      'year-x  year-x'
                     / 1fr     1fr;

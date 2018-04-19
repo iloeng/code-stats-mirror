@@ -10,6 +10,7 @@ import OtherLanguagesComponent from './graphs/other-languages.component';
 import TopMachinesComponent from './graphs/top-machines.component';
 import YearXpsComponent from './graphs/year-xps.component';
 import WeekLanguagesComponent from './graphs/week-languages.component';
+import HourXpsComponent from './graphs/hour-xps.component';
 
 /**
  * MainInfoComponent handles showing either the loading indicator, startup instructions, or list of graphs, and
@@ -40,7 +41,8 @@ class MainInfoComponent {
       total_machines: 'machines {name xp}',
       recent_machines: `machines(since: ${JSON.stringify(since_recent.toISO())}) {name xp}`,
       day_language_xps: `dayLanguageXps(since: ${JSON.stringify(since_14d.toISODate())}) {date language xp}`,
-      day_of_year_xps: `dayOfYearXps`,
+      day_of_year_xps: 'dayOfYearXps',
+      hour_of_day_xps: 'hourOfDayXps',
     };
   }
 
@@ -91,6 +93,7 @@ class MainInfoComponent {
       new TopMachinesComponent(),
       new YearXpsComponent(),
       new WeekLanguagesComponent(since_14d, now),
+      new HourXpsComponent(),
     ];
   }
 

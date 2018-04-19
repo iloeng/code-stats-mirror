@@ -87,7 +87,7 @@ defmodule CodeStats.Profile.SchemaObjects do
     end
 
     @desc "User's XP by day of year"
-    field :day_of_year_xps, :profile_doy_xp do
+    field :day_of_year_xps, :profile_day_of_year_xp do
       resolve(fn %{cache: cache}, _, _ ->
         date_to_key = fn date ->
           Calendar.Date.day_number_in_year(date)
@@ -111,6 +111,14 @@ defmodule CodeStats.Profile.SchemaObjects do
           end)
 
         {:ok, doy_data}
+      end)
+    end
+
+    @desc "User's XP by hour of day (in 24 hour format)"
+    field :hour_of_day_xps, :profile_hour_of_day_xp do
+      resolve(fn %{cache: cache}, _, _ ->
+        hod_data = Queries.cached_hours(cache)
+        {:ok, hod_data}
       end)
     end
   end
@@ -147,9 +155,14 @@ defmodule CodeStats.Profile.SchemaObjects do
     field(:xp, :integer)
   end
 
-  scalar :profile_doy_xp,
+  scalar :profile_day_of_year_xp,
     description:
       "Map where key is number of day of year (including leap day, like in the year 2000) and value is amount of XP" do
+    serialize(fn m -> m end)
+  end
+
+  scalar :profile_hour_of_day_xp,
+    description: "Map where key is hour of day (in 24 hour format) and value is amount of XP" do
     serialize(fn m -> m end)
   end
 
