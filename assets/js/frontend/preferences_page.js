@@ -1,8 +1,9 @@
-import {saveAs} from 'file-saver';
-import {mount, setChildren} from 'redom';
+import { saveAs } from 'file-saver';
+import { mount, setChildren } from 'redom';
 
-import {wait_for_load} from '../common/utils';
+import { wait_for_load } from '../common/utils';
 import LoadingIndicatorComponent from '../common/loading-indicator.component';
+import TabComponent from './preferences/tab.component';
 
 const EXPORT_PATH = '/my/pulses';
 
@@ -43,6 +44,14 @@ async function preferences_page() {
       setChildren(indicator_el, []);
     };
   }
+
+  const tab_container = document.getElementById('tab-container');
+  mount(tab_container, new TabComponent([
+    ['user-details', 'User details'],
+    ['change-password', 'Change password'],
+    ['export-data', 'Export data'],
+    ['delete-account', 'Delete account'],
+  ], 'preferences-container'));
 }
 
 export default preferences_page;

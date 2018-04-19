@@ -72,6 +72,7 @@ $button-y-padding: $button-padding;
 $button-x-padding: $button-padding * 2;
 $button-press-move: 1px;
 $button-shadow: 1px 1px 1px #000;
+$button-border-radius: 5px;
 
 button {
   padding: $button-padding ($button-padding * 2);
@@ -79,7 +80,7 @@ button {
   background-color: $accent-background;
   border: 1px solid $accent-background;
   box-shadow: $button-shadow;
-  border-radius: 5px;
+  border-radius: $button-border-radius;
 
   // Create "3D" effect of pressing button by moving text when it is active and moving box shadow inside
   &:active {

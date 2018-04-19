@@ -40,17 +40,17 @@ defmodule CodeStatsWeb.PreferencesController do
       case AuthUtils.update_user(password_changeset) do
         %User{} ->
           conn
-          |> put_flash(:password_success, "Password changed.")
+          |> put_flash(:success, "Password changed.")
           |> redirect(to: preferences_path(conn, :edit))
 
         %Ecto.Changeset{} ->
           conn
-          |> put_flash(:password_error, "Error changing password.")
+          |> put_flash(:error, "Error changing password.")
           |> redirect(to: preferences_path(conn, :edit))
       end
     else
       conn
-      |> put_flash(:password_error, "Old password was wrong!")
+      |> put_flash(:error, "Old password was wrong!")
       |> redirect(to: preferences_path(conn, :edit))
     end
   end
@@ -72,7 +72,7 @@ defmodule CodeStatsWeb.PreferencesController do
     else
       conn
       |> put_flash(
-        :delete_error,
+        :error,
         "Please confirm deletion by typing \"DELETE\" into the input field."
       )
       |> redirect(to: preferences_path(conn, :edit))

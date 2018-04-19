@@ -1,3 +1,51 @@
 div#export-data-processing {
   margin-top: 20px;
 }
+
+#preferences-stripe {
+  display: grid;
+
+  margin-bottom: 40px;
+
+  grid-column-gap: 40px;
+  grid-template: 'title'
+                 'tabs'
+                 'prefs';
+  
+  @media #{$sm} {
+    grid-template: 'title title'
+                   'tabs prefs'
+                  / 1fr 3fr;
+  }
+
+  h1 {
+    grid-area: title;
+  }
+
+  #tab-container {
+    grid-area: tabs;
+
+    ul.tabs {
+      list-style-type: none;
+      margin: 0;
+      padding-left: 0;
+
+      li {
+        padding: $button-padding;
+        border-radius: $button-border-radius;
+
+        &.active {
+          @include use-accent;
+        }
+      }
+    }
+  }
+
+  #preferences-container {
+    grid-area: prefs;
+
+    h2 {
+      margin-top: 0;
+    }
+  }
+}

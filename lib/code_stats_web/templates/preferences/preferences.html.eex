@@ -1,90 +1,89 @@
-<div class="stripe">
+<div id="preferences-stripe" class="stripe">
   <h1>Preferences</h1>
 
-  <h2>User details</h2>
+  <div id="tab-container"></div>
 
-  <%= form_for(@changeset, preferences_path(@conn, :do_edit), fn f -> %>
-    <label for="user_email" class="<%= if f.errors[:email], do: "has-error" %>">Email address</label>
-    <div class="input">
-      <%= email_input(f, :email) %>
-      <%= if message = f.errors[:email] do %>
-        <p class="help-block has-error"><%= message %></p>
-      <% end %>
-      <p class="help-block">
-        Email is only used for important notifications about the service, not for promotions or spam.
-      </p>
-    </div>
+  <div id="preferences-container">
+    <div id="user-details">
+      <h2>User details</h2>
 
-    <label for="user_private_profile">Private profile</label>
-    <div class="input">
-      <%= checkbox(f, :private_profile) %>
-
-      <p class="help-block">
-        Private profile can only be seen by yourself.
-      </p>
-    </div>
-
-    <div class="submit"><%= submit("Update preferences", class: "btn btn-primary") %></div>
-  <% end) %>
-</div>
-
-<div class="stripe flash-stripe flash-success" role="alert"><%= get_flash(@conn, :password_success) %></div>
-<div class="stripe flash-stripe flash-error" role="alert"><%= get_flash(@conn, :password_error) %></div>
-
-<%= if get_current_user(@conn).from == "codestats" do %>
-  <div class="stripe">
-    <h2>Change password</h2>
-
-    <%= form_tag(preferences_path(@conn, :change_password)) %>
-      <label for="old_password" class="<%= if assigns[:old_password_error], do: "has-error" %>">Old password (required)</label>
-      <div class="input">
-        <input type="password" id="old_password" name="old_password" required />
-        <%= if assigns[:old_password_error] do %>
-          <p class="help-block has-error"><%= assigns[:old_password_error] %></p>
-        <% end %>
-      </div>
-
-        <label for="new_password" class="<%= if assigns[:new_password_error], do: "has-error" %>">New password (required)</label>
+      <%= form_for(@changeset, preferences_path(@conn, :do_edit), fn f -> %>
+        <label for="user_email" class="<%= if f.errors[:email], do: "has-error" %>">Email address</label>
         <div class="input">
-          <input type="password" id="new_password" name="new_password" class="form-control" required />
-          <%= if assigns[:new_password_error] do %>
-            <p class="help-block has-error"><%= assigns[:new_password_error] %></p>
+          <%= email_input(f, :email) %>
+          <%= if message = f.errors[:email] do %>
+            <p class="help-block has-error"><%= message %></p>
+          <% end %>
+          <p class="help-block">
+            Email is only used for important notifications about the service, not for promotions or spam.
+          </p>
+        </div>
+
+        <label for="user_private_profile">Private profile</label>
+        <div class="input">
+          <%= checkbox(f, :private_profile) %>
+
+          <p class="help-block">
+            Private profile can only be seen by yourself.
+          </p>
+        </div>
+
+        <div class="submit"><%= submit("Update preferences", class: "btn btn-primary") %></div>
+      <% end) %>
+    </div>
+
+    <div id="change-password" class="stripe">
+      <h2>Change password</h2>
+
+      <%= form_tag(preferences_path(@conn, :change_password)) %>
+        <label for="old_password" class="<%= if assigns[:old_password_error], do: "has-error" %>">Old password (required)</label>
+        <div class="input">
+          <input type="password" id="old_password" name="old_password" required />
+          <%= if assigns[:old_password_error] do %>
+            <p class="help-block has-error"><%= assigns[:old_password_error] %></p>
           <% end %>
         </div>
 
-      <div class="submit"><button type="submit" class="btn btn-primary">Change password</button></div>
-    </form>
+          <label for="new_password" class="<%= if assigns[:new_password_error], do: "has-error" %>">New password (required)</label>
+          <div class="input">
+            <input type="password" id="new_password" name="new_password" class="form-control" required />
+            <%= if assigns[:new_password_error] do %>
+              <p class="help-block has-error"><%= assigns[:new_password_error] %></p>
+            <% end %>
+          </div>
+
+        <div class="submit"><button type="submit" class="btn btn-primary">Change password</button></div>
+      </form>
+    </div>
+
+    <div id="export-data">
+      <h2>Export data</h2>
+
+      <div id="export-data-container">
+        <p>
+          Press the button below to download your XP data in CSV format.
+        </p>
+
+        <button id="export-data-button" type="button" class="btn btn-primary">Download data</button>
+      </div>
+
+      <div id="export-data-processing"></div>
+    </div>
+
+    <div id="delete-account">
+      <h2>Delete account</h2>
+
+      <p>
+        If you wish to delete your account, please input "DELETE" into the field below and press
+        the delete button. If you do this, all your data will be removed and cannot be recovered.
+      </p>
+
+      <%= form_tag(preferences_path(@conn, :delete)) %>
+        <label><strong>This cannot be undone!</strong></label>
+        <input type="text" class="form-control" name="delete_confirmation" maxlength="6" required />
+
+        <div class="submit"><button type="submit" class="btn btn-danger">Delete account forever</button></div>
+      </form>
+    </div>
   </div>
-<% end %>
-
-<div class="stripe flash-stripe flash-error" role="alert"><%= get_flash(@conn, :delete_error) %></div>
-
-<div class="stripe stripe-warning">
-  <h2>Delete account</h2>
-
-  <p>
-    If you wish to delete your account, please input "DELETE" into the field below and press
-    the delete button. If you do this, all your data will be removed and cannot be recovered.
-  </p>
-
-  <%= form_tag(preferences_path(@conn, :delete)) %>
-    <label><strong>This cannot be undone!</strong></label>
-    <input type="text" class="form-control" name="delete_confirmation" maxlength="6" required />
-
-    <div class="submit"><button type="submit" class="btn btn-danger">Delete account forever</button></div>
-  </form>
-</div>
-
-<div class="stripe stripe-padded">
-  <h2>Export data</h2>
-
-  <div id="export-data-container">
-    <p>
-      Press the button below to download your XP data in CSV format.
-    </p>
-
-    <button id="export-data-button" type="button" class="btn btn-primary">Download data</button>
-  </div>
-
-  <div id="export-data-processing"></div>
 </div>
