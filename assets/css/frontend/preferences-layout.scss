@@ -33,6 +33,7 @@ div#export-data-processing {
       li {
         padding: $button-padding;
         border-radius: $button-border-radius;
+        cursor: pointer;
 
         &.active {
           @include use-accent;
