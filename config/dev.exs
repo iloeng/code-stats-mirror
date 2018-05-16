@@ -44,8 +44,6 @@ config :code_stats, CodeStats.Repo,
 
 config :appsignal, :config, active: true
 
-config :oauth2, debug: true
-
 # To avoid conflicts with workspaces
 # dev.secret.exs is not versioned, like prod.secret.exs
 import_config "dev.secret.exs"
