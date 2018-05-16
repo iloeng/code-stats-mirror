@@ -67,7 +67,9 @@ defmodule CodeStatsWeb.AuthUtils do
 
   Returns nil if user was not found.
   """
-  @spec get_user(String.t(), boolean) :: %User{} | nil
+  @type get_user_opt :: {:case_insensitive, boolean} | {:from, String.t()}
+  @type get_user_opts :: [get_user_opt]
+  @spec get_user(String.t(), get_user_opts) :: %User{} | nil
   def get_user(username, opts \\ []) do
     query =
       case Keyword.get(opts, :case_insensitive, false) do
