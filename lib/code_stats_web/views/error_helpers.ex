@@ -2,6 +2,7 @@ defmodule CodeStatsWeb.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
+
   use Phoenix.HTML
 
   @doc """
@@ -31,13 +32,13 @@ defmodule CodeStatsWeb.ErrorHelpers do
     #     dgettext "errors", "is invalid"
     #
     if count = opts[:count] do
-      Gettext.dngettext(CodeStatsWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(CodeStats.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(CodeStatsWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(CodeStats.Gettext, "errors", msg, opts)
     end
   end
 
   def translate_error(msg) do
-    Gettext.dgettext(CodeStatsWeb.Gettext, "errors", msg)
+    Gettext.dgettext(CodeStats.Gettext, "errors", msg)
   end
 end

@@ -3,7 +3,7 @@ defmodule CodeStatsWeb.AuthUtils do
   Authentication related utilities.
   """
 
-  import Ecto.Query
+  import Ecto.Query, only: [from: 2]
   alias Ecto.Changeset
 
   alias CodeStats.Repo
@@ -58,41 +58,6 @@ defmodule CodeStatsWeb.AuthUtils do
   @spec private_info_key() :: atom
   def private_info_key do
     @private_info_key
-  end
-
-  @doc """
-  Get user with the given username.
-
-  If second argument is true, case insensitive search is used instead.
-
-  Returns nil if user was not found.
-  """
-  @type get_user_opt :: {:case_insensitive, boolean} | {:from, String.t()}
-  @type get_user_opts :: [get_user_opt]
-  @spec get_user(String.t(), get_user_opts) :: %User{} | nil
-  def get_user(username, opts \\ []) do
-    query =
-      case Keyword.get(opts, :case_insensitive, false) do
-        false ->
-          User
-          |> where([u], u.username == ^username)
-
-        true ->
-          User
-          |> where([u], fragment("lower(?)", ^username) == fragment("lower(?)", u.username))
-      end
-
-    query =
-      case Keyword.get(opts, :from) do
-        nil ->
-          query
-
-        from ->
-          query
-          |> where([u], u.from == ^from)
-      end
-
-    Repo.one(query)
   end
 
   @doc """

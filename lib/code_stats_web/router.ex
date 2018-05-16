@@ -58,10 +58,8 @@ defmodule CodeStatsWeb.Router do
 
       get("/login", CodeStatsWeb.AuthController, :render_login)
       post("/login", CodeStatsWeb.AuthController, :login)
-      get("/login/oauth/:app", CodeStatsWeb.AuthController, :oauth)
       get("/signup", CodeStatsWeb.AuthController, :render_signup)
       post("/signup", CodeStatsWeb.AuthController, :signup)
-      post("/signup/:provider", CodeStatsWeb.AuthController, :oauth_signup)
       get("/forgot-password", CodeStatsWeb.AuthController, :render_forgot)
       post("/forgot-password", CodeStatsWeb.AuthController, :forgot)
       get("/reset-password/:token", CodeStatsWeb.AuthController, :render_reset)

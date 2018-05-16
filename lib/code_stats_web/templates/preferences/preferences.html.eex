@@ -1,4 +1,4 @@
-<div id="preferences-stripe" class="stripe">
+<div class="stripe">
   <h1>Preferences</h1>
 
   <div id="tab-container"></div>

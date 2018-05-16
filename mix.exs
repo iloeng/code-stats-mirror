@@ -66,7 +66,6 @@ defmodule CodeStats.Mixfile do
       {:mbu, "~> 3.0.0", runtime: false},
       {:geolix, "~> 0.16.0"},
       {:remote_ip, "~> 0.1.3"},
-      {:oauth2, "~> 0.9.2"},
       {:distillery, "~> 1.5.2", runtime: false},
       {:absinthe, "~> 1.4.9"},
       {:absinthe_plug, "~> 1.4.2"},

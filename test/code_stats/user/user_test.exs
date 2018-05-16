@@ -3,8 +3,7 @@ defmodule CodeStats.UserTest do
 
   alias CodeStats.User
 
-  @valid_attrs %{email: "some@content", username: "some content",
-                 password: "some content", from: "codestats"}
+  @valid_attrs %{email: "some@content", username: "some content", password: "some content"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

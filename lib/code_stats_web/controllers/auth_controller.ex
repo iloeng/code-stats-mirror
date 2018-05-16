@@ -1,8 +1,6 @@
 defmodule CodeStatsWeb.AuthController do
   use CodeStatsWeb, :controller
 
-  alias Phoenix.Token
-  alias Ecto.Changeset
   alias Calendar.DateTime, as: CDateTime
 
   alias CodeStatsWeb.AuthUtils
@@ -11,7 +9,6 @@ defmodule CodeStatsWeb.AuthController do
   alias CodeStats.Repo
   alias CodeStats.User
   alias CodeStats.User.PasswordReset
-  alias CodeStats.Auth.Github
 
   def render_login(conn, _params) do
     conn
@@ -27,41 +24,8 @@ defmodule CodeStatsWeb.AuthController do
     |> render("signup.html", changeset: changeset)
   end
 
-  def oauth(conn, %{"app" => "github", "code" => code}) do
-    with {:ok, body} <- Github.user(code: code),
-         {user = %User{}, _} <- {AuthUtils.get_user(body["login"], from: "GitHub"), body} do
-      conn
-      |> AuthUtils.force_auth_user_id(user.id)
-      |> redirect(to: profile_path(conn, :my_profile))
-    else
-      # Missing user
-      # Show signup page with all fields so user can accept privacy policy
-      {nil, body} ->
-        params = %{
-          username: body["login"],
-          password: "github",
-          email: body["email"],
-          from: "github"
-        }
-
-        token = Token.sign(conn, "codestats_oauth", {"GitHub", params.username, params.email})
-
-        conn
-        |> assign(:provider, "GitHub")
-        |> assign(:changeset, User.changeset(%User{}, params))
-        |> assign(:token, token)
-        |> render("oauth_signup.html")
-
-      {:error, _} ->
-        conn
-        |> assign(:title, "Login")
-        |> put_flash(:error, "Failed to login with GitHub")
-        |> render("login.html")
-    end
-  end
-
   def login(conn, %{"username" => username, "password" => password} = params) do
-    with %User{} = user <- AuthUtils.get_user(username, case_insensitive: true),
+    with %User{} = user <- User.get_by_username(username, true),
          %Plug.Conn{} = conn <- AuthUtils.auth_user(conn, user, password),
          %Plug.Conn{} = conn <- maybe_remember_me(conn, user, params) do
       redirect(conn, to: profile_path(conn, :my_profile))
@@ -82,10 +46,9 @@ defmodule CodeStatsWeb.AuthController do
   end
 
   def signup(conn, %{"user" => user_params}) do
-    %User{}
-    |> User.changeset(Map.put(user_params, "from", "codestats"))
-    |> AuthUtils.create_user()
-    |> case do
+    changeset = User.changeset(%User{}, user_params)
+
+    case AuthUtils.create_user(changeset) do
       %Ecto.Changeset{} = changeset ->
         conn
         |> assign(:title, "Signup")
@@ -98,37 +61,6 @@ defmodule CodeStatsWeb.AuthController do
           :success,
           "Great success! Your account was created and you can now log in with the details you provided."
         )
-        |> redirect(to: auth_path(conn, :render_login))
-    end
-  end
-
-  def oauth_signup(conn, %{"user" => %{"token" => token}}) do
-    with {:ok, {from, username, email}} <-
-           Token.verify(conn, "codestats_oauth", token, max_age: 86400),
-         params <- %{username: username, from: from, email: email, password: from},
-         %User{} <- %User{} |> User.changeset(params) |> AuthUtils.create_user() do
-      conn
-      |> put_flash(
-        :success,
-        "Great success! Your account was created and you can now log in with #{from}."
-      )
-      |> redirect(to: auth_path(conn, :render_login))
-    else
-      {:error, :invalid} ->
-        conn
-        |> put_flash(:error, "Invalid token given on oauth signup")
-        |> redirect(to: auth_path(conn, :render_login))
-
-      {:error, :expired} ->
-        conn
-        |> put_flash(:error, "Token was expired on oauth signup")
-        |> redirect(to: auth_path(conn, :render_login))
-
-      %Changeset{} = ch ->
-        IO.inspect(ch.errors)
-
-        conn
-        |> put_flash(:error, "Failed to create new user")
         |> redirect(to: auth_path(conn, :render_login))
     end
   end
@@ -153,18 +85,17 @@ defmodule CodeStatsWeb.AuthController do
 
     # If the changeset is valid, attempt to create password reset token
     # and send email
-    case Repo.insert(changeset) do
-      {:ok, %PasswordReset{token: token}} ->
-        EmailUtils.send_password_reset_email(user, token)
-
-      {:error, _} ->
-        nil
+    with true <- changeset.valid?,
+         %PasswordReset{token: token} <- Repo.insert!(changeset) do
+      EmailUtils.send_password_reset_email(user, token)
+    else
+      _ -> nil
     end
 
     conn
     |> put_flash(
       :info,
-      "A password reset email will be sent shortly to the email address linked to the account, if the account had one. If you do not receive an email, please check that you typed the account name correctly. Password reset won't also work if your account has been created with GitHub."
+      "A password reset email will be sent shortly to the email address linked to the account, if the account had one. If you do not receive an email, please check that you typed the account name correctly."
     )
     |> redirect(to: auth_path(conn, :render_forgot))
   end

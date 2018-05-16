@@ -17,7 +17,6 @@ defmodule CodeStats.User do
     field(:last_cached, :utc_datetime)
     field(:private_profile, :boolean)
     field(:cache, :map)
-    field(:from, :string)
 
     has_many(:pulses, Pulse)
 
@@ -32,8 +31,8 @@ defmodule CodeStats.User do
   """
   def changeset(data, params \\ %{}) do
     data
-    |> cast(params, [:username, :password, :email, :from])
-    |> validate_required([:username, :password, :from])
+    |> cast(params, [:username, :password, :email])
+    |> validate_required([:username, :password])
     |> update_change(:password, &hash_password/1)
     |> put_change(:private_profile, false)
     |> validate_length(:username, min: 1, max: 64)
