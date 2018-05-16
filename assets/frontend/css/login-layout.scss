@@ -1,0 +1,22 @@
+.external-login {
+  // TODO: Change to grid
+
+  a {
+    text-decoration: none;
+    display: block;
+    padding: 0.5em;
+    margin-bottom: 1em;
+    width: 12em;
+    border-radius: 5px;
+
+    &:hover {
+      text-decoration: none;
+      background-color: #656565;
+    }
+  }
+
+  .github-login {
+    background-color: #6d6d6d;
+    color: #fff;
+  }
+}

@@ -1,4 +1,4 @@
-<div class="stripe auth-page">
+<div class="stripe">
   <h1>Log in</h1>
   <%= form_tag("", method: :post) %>
     <label for="username">Username</label>
