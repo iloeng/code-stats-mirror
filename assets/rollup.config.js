@@ -2,9 +2,16 @@ import sourcemaps from 'rollup-plugin-sourcemaps';
 import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
+import analyze from 'rollup-analyzer-plugin';
+
+const analyze_opts = { limit: 5 };
 
 export default {
+  // Chart.js wants to import Moment, but we won't let it since we are using Luxon. This means we can't use the time
+  // scale in the charts since it needs Moment.
+  external: ['moment'],
   plugins: [
+    analyze(analyze_opts),
     sourcemaps(),
     resolve(),
     commonjs({
@@ -38,6 +45,6 @@ export default {
         'external-helpers'
       ],
       babelrc: false
-    })
+    }),
   ]
 };

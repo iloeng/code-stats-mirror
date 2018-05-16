@@ -1,5 +1,5 @@
 import { el } from 'redom';
-import Chart from 'chart.js/dist/Chart.js';
+import Chart from 'Chart.js';
 import { DateTime } from 'luxon';
 
 /**
