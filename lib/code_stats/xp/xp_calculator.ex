@@ -7,12 +7,23 @@ defmodule CodeStats.XP.XPCalculator do
 
   @doc """
   Get the level based on given XP.
+
+      iex> CodeStats.XP.XPCalculator.get_level(0)
+      0
+
+      iex> CodeStats.XP.XPCalculator.get_level(6400)
+      2
+
+      iex> CodeStats.XP.XPCalculator.get_level(-1000)
+      0
   """
   @spec get_level(Integer.t()) :: Integer.t()
-  def get_level(xp) do
+  def get_level(xp) when xp > 0 do
     Float.floor(@level_factor * :math.sqrt(xp))
     |> trunc
   end
+
+  def get_level(xp) when xp <= 0, do: 0
 
   @doc """
   Get the amount of XP required to reach the next level from the given level.
