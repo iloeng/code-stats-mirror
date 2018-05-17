@@ -2,22 +2,21 @@ defmodule CodeStats.BuildTasks.CompileCSS do
   import MBU.TaskUtils
   import CodeStats.FrontendConfs
 
-  def bin(), do: node_bin("node-sass")
+  def bin(), do: node_bin("sass")
 
-  def args(in_file, out_path),
+  def args(in_file, out_file),
     do: [
-      "--source-map-embed",
-      "--output",
-      out_path,
-      in_file
+      "--embed-source-map",
+      in_file,
+      out_file
     ]
 
   def task(out_path, in_file) do
-    bin() |> exec(args(in_file, out_path)) |> listen()
-
     # Output file is input file where extension is changed
-    out_file = Path.basename(in_file, "scss") <> "css"
+    out_file = Path.join([out_path, Path.basename(in_file, "scss") <> "css"])
 
-    print_size(Path.join(out_path, out_file))
+    bin() |> exec(args(in_file, out_file)) |> listen()
+
+    print_size(out_file)
   end
 end
