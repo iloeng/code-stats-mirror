@@ -142,6 +142,10 @@
       </section>
     </footer>
 
+    <!-- Mock moment.js until rollup-plugin-commonjs is fixed so we can ignore it instead of mocking -->
+    <script type="text/javascript">
+      window.moment = {};
+    </script>
     <script async type="text/javascript" src="<%= static_path(@conn, "/js/frontend.js") %>"></script>
     <%= raw get_conf(:analytics_code) %>
   </body>
