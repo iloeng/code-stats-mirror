@@ -47,15 +47,15 @@
   <h3>Data contained in the register</h3>
 
   <p>
-    The service collects the following data from the users:
+    The service collects the following personal data from the users:
   </p>
 
   <ul>
     <li>
-      Username and password for authentication purposes.
+      Username and password for authentication purposes. Stored as long as the user does not delete their account.
     </li>
     <li>
-      Email address (optional) for notifying the user about important announcements related to the service and for account recovery in the case of a lost password.
+      Email address (optional) for notifying the user about important announcements related to the service and for account recovery in the case of a lost password. Stored as long as user doesn't delete their account or remove the email in preferences.
     </li>
     <li>
       IP addresses and browser user agent strings from both authenticated and unauthenticated users are stored in the server request logs for 4 weeks. They are used for statistical purposes and abuse prevention.
@@ -65,7 +65,7 @@
   <h3>Data sources</h3>
 
   <p>
-    All data is provided by the user. No data is collected from other sources.
+    All data is provided by the user and their client software. No data is collected from other sources.
   </p>
 
   <h3>Sharing of data with 3<sup>rd</sup> parties</h3>
@@ -75,8 +75,9 @@
   </p>
 
   <ul>
-    <li>to send an email to a user from the service (the email address and the contents of the email must be transferred to the email delivery service), or</li>
-    <li>to comply with an official, legal, written order from the Finnish authorities to release customer data.</li>
+    <li>to send an email to a user from the service (the email address and the contents of the email must be transferred to the email delivery service),</li>
+    <li>to store backups with a backup storage provider described later in this document, or</li>
+    <li>to comply with an official, legal, written order from the Finnish authorities to release customer data (so far this has not happened).</li>
   </ul>
 
   <h3>Transfer of data to outside the EU or ETA</h3>
@@ -102,17 +103,33 @@
   <h3>Register data requests</h3>
 
   <p>
-    All users of the register have a right to request a copy of the data stored about them. To make such a request, send a free-form written request to the contact details provided above.
+    All users of the register have a right to get a copy of the data stored about them. To get a copy, use the data export feature in the preferences page when logged into your account. If you are not logged in, send a free form written request to the data register holder described above.
+  </p>
+
+  <h3>Deletion of data and stopping of data processing</h3>
+
+  <p>
+    If you wish to delete all your personal data from the register, use the account deletion feature in the preferences page. Your data will be deleted from the database immediately, and from any backups within 5 weeks.
+  </p>
+
+  <p>
+    When you delete your account, your data is no longer processed by the service, except for the IP addresses and user agent strings collected in the server logs as mentioned earlier.
+  </p>
+
+  <h3>Note about backups</h3>
+
+  <p>
+    The service's database is backed up periodically. The database level backups are stored in Jottacloud, a service by <a href="https://www.jottacloud.com/en/about.html" target="_blank">Jotta AS</a>, in Norway. Backups older than 5 weeks are deleted automatically.
   </p>
 
   <h3>Note about analytics</h3>
 
   <p>
-    The service uses Google Analytics to gather statistics about its use. The data is not used to track any single user. If you wish to prevent such data collection, you can use an extension such as <a href="https://support.google.com/analytics/answer/181881">Google Analytics opt-out browser add-on</a> or <a href="https://github.com/gorhill/uBlock">uBlock Origin</a> in your browser to block Google Analytics. Please refer to the <a href="https://support.google.com/analytics/answer/6004245?hl=en">Google Analytics data safeguarding page</a> for more information.
+    The service uses Google Analytics to gather statistics about its use. The data is not used to track any single user. If you wish to prevent such data collection, you can disable analytics collection in your preferences page. If you are not logged in, you can use an extension such as <a href="https://support.google.com/analytics/answer/181881">Google Analytics opt-out browser add-on</a> or <a href="https://github.com/gorhill/uBlock">uBlock Origin</a> in your browser to block Google Analytics. Please refer to the <a href="https://support.google.com/analytics/answer/6004245?hl=en">Google Analytics data safeguarding page</a> for more information.
   </p>
 
   <p>
-    Google does not have access to the data register itself.
+    The analytics provider does not have access to the data register itself.
   </p>
 
   <h3>Note about advertisements</h3>
@@ -138,7 +155,7 @@
   </p>
 
   <p>
-    This privacy policy was last changed on the 2<sup>nd</sup> of August 2016.
+    This privacy policy was last changed on the 25<sup>th</sup> of May 2018.
   </p>
 
   <h2>Terms of service <a id="terms" href="#terms">#</a></h2>
