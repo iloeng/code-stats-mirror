@@ -35,7 +35,7 @@
   <h3>Location of the register</h3>
 
   <p>
-    The user database is stored on a server hosted by <a href="https://www.online.net/en">Online SAS</a> in France.
+    The user database is stored on a server hosted by <a href="https://www.online.net/en" target="_blank">Online SAS</a> in France.
   </p>
 
   <h3>The purpose of data collection</h3>
@@ -125,7 +125,7 @@
   <h3>Note about analytics</h3>
 
   <p>
-    The service uses Google Analytics to gather statistics about its use. The data is not used to track any single user. If you wish to prevent such data collection, you can disable analytics collection in your preferences page. If you are not logged in, you can use an extension such as <a href="https://support.google.com/analytics/answer/181881">Google Analytics opt-out browser add-on</a> or <a href="https://github.com/gorhill/uBlock">uBlock Origin</a> in your browser to block Google Analytics. Please refer to the <a href="https://support.google.com/analytics/answer/6004245?hl=en">Google Analytics data safeguarding page</a> for more information.
+    The service uses Google Analytics to gather statistics about its use. The data is not used to track any single user. If you wish to prevent such data collection, you can disable analytics collection in your preferences page. If you are not logged in, you can use an extension such as <a href="https://support.google.com/analytics/answer/181881" target="_blank">Google Analytics opt-out browser add-on</a> or <a href="https://github.com/gorhill/uBlock" target="_blank">uBlock Origin</a> in your browser to block Google Analytics. Please refer to the <a href="https://support.google.com/analytics/answer/6004245?hl=en" target="_blank">Google Analytics data safeguarding page</a> for more information.
   </p>
 
   <p>
@@ -145,7 +145,7 @@
   <h3>Note about email</h3>
 
   <p>
-    Emails from the service are sent using either <a href="http://www.mailgun.com/">Mailgun</a> by Rackspace Inc, a US based company, or <a href="https://gmail.com/">Gmail</a> by Alphabet Inc, a US based company. This means user details contained in the emails (such as the user's email address) are sent to the email service as a necessary part of the email delivery process. If you do not wish to have your email address sent to either of these services, you can remove your email address in the preferences.
+    Emails from the service are sent using either <a href="http://www.mailgun.com/" target="_blank">Mailgun</a> by Rackspace Inc, a US based company, or <a href="https://gmail.com/" target="_blank">Gmail</a> by Alphabet Inc, a US based company. This means user details contained in the emails (such as the user's email address) are sent to the email service as a necessary part of the email delivery process. If you do not wish to have your email address sent to either of these services, you can remove your email address in the preferences.
   </p>
 
   <h3>Changes to the privacy policy</h3>
