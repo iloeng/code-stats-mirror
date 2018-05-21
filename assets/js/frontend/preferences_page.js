@@ -55,7 +55,7 @@ async function preferences_page() {
         const blob = await resp[0].blob();
         saveAs(blob, "pulses.csv", true);
 
-        if (resp.length == 2) {
+        if (resp.length === 2) {
           // Wait for a moment before continuing, to fix downloading multiple files on Chrome
           // See https://github.com/eligrey/FileSaver.js/issues/435
 
