@@ -28,7 +28,7 @@
           </p>
         </div>
 
-        <div class="submit"><%= submit("Update preferences", class: "btn btn-primary") %></div>
+        <div class="submit"><%= submit("Update preferences") %></div>
       <% end) %>
     </div>
 
@@ -52,7 +52,7 @@
             <% end %>
           </div>
 
-        <div class="submit"><button type="submit" class="btn btn-primary">Change password</button></div>
+        <div class="submit"><button type="submit">Change password</button></div>
       </form>
     </div>
 
@@ -64,7 +64,7 @@
           Press the button below to download your XP data in CSV format.
         </p>
 
-        <button id="export-data-button" type="button" class="btn btn-primary">Download data</button>
+        <button id="export-data-button" type="button">Download data</button>
       </div>
 
       <div id="export-data-processing"></div>
@@ -82,7 +82,7 @@
         <label><strong>This cannot be undone!</strong></label>
         <input type="text" class="form-control" name="delete_confirmation" maxlength="6" required />
 
-        <div class="submit"><button type="submit" class="btn btn-danger">Delete account forever</button></div>
+        <div class="submit"><button type="submit" class="button-danger">Delete account forever</button></div>
       </form>
     </div>
   </div>
