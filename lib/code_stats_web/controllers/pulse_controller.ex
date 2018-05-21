@@ -19,7 +19,7 @@ defmodule CodeStatsWeb.PulseController do
   alias CodeStats.User.Pulse
   alias CodeStats.XP
 
-  plug(GeoIPPlug)
+  plug(GeoIPPlug when action in [:add])
 
   def list(conn, _params) do
     csv =

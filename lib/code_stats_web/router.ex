@@ -101,6 +101,7 @@ defmodule CodeStatsWeb.Router do
     pipe_through(:browser_auth)
 
     get("/my/pulses", PulseController, :list)
+    get("/my/private", ProfileController, :export_private)
   end
 
   scope "/api", CodeStatsWeb do

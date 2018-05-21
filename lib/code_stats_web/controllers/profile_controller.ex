@@ -102,6 +102,24 @@ defmodule CodeStatsWeb.ProfileController do
     })
   end
 
+  def export_private(conn, _params) do
+    user = AuthUtils.get_current_user(conn)
+
+    data =
+      [
+        ["username", "email", "private_profile", "last_cached", "cache"],
+        [user.username, user.email, user.private_profile, user.last_cached, inspect(user.cache)]
+      ]
+      |> CSV.encode(separator: ?;, delimiter: "\n")
+      |> Enum.to_list()
+      |> to_string()
+
+    conn
+    |> put_resp_content_type("text/csv")
+    |> put_resp_header("content-disposition", "attachment; filename=\"private.csv\"")
+    |> send_resp(200, data)
+  end
+
   defp get_profile_data(%User{} = user) do
     %{dates: date_xps} = User.update_cached_xps(user)
 

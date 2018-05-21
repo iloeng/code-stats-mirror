@@ -61,10 +61,19 @@
 
       <div id="export-data-container">
         <p>
-          Press the button below to download your XP data in CSV format.
+          Press the button below to download your XP data in CSV format. You can also include all
+          private data contained in the service about your account. See the
+          <a href="<%= page_path(@conn, :terms) %>">privacy policy</a> for more information.
         </p>
 
-        <button id="export-data-button" type="button">Download data</button>
+        <form>
+          <label for="include-private-data">Include private data in CSV export</label>
+          <input type="checkbox" id="include-private-data">
+
+          <div class="submit">
+            <button id="export-data-button" type="button">Download data</button>
+          </div>
+        </form>
       </div>
 
       <div id="export-data-processing"></div>

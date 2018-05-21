@@ -5,7 +5,8 @@ import { wait_for_load } from '../common/utils';
 import LoadingIndicatorComponent from '../common/loading-indicator.component';
 import TabComponent from './preferences/tab.component';
 
-const EXPORT_PATH = '/my/pulses';
+const XP_EXPORT_PATH = '/my/pulses';
+const PRIVATE_EXPORT_PATH = '/my/private';
 
 /**
  * Code to execute on preferences page. Adds functionality for the data export button.
@@ -17,23 +18,52 @@ async function preferences_page() {
   const container = document.getElementById('export-data-container');
   const button = document.getElementById('export-data-button');
   const indicator_el = document.getElementById('export-data-processing');
+  const include_private_el = document.getElementById('include-private-data');
 
   if (button != null) {
     button.onclick = async () => {
       container.hidden = true;
       mount(indicator_el, new LoadingIndicatorComponent());
 
-      try {
-        const resp = await fetch(EXPORT_PATH, {
+      const include_private = include_private_el.checked;
+
+      const promises = [
+        fetch(XP_EXPORT_PATH, {
           method: 'GET',
           headers: {
             'accept': 'text/csv'
           },
           credentials: 'same-origin'
-        });
+        })
+      ];
 
-        const blob = await resp.blob();
+      if (include_private) {
+        promises.push(
+          fetch(PRIVATE_EXPORT_PATH, {
+            method: 'GET',
+            headers: {
+              'accept': 'text/csv'
+            },
+            credentials: 'same-origin'
+          })
+        );
+      }
+
+      try {
+        const resp = await Promise.all(promises);
+
+        const blob = await resp[0].blob();
         saveAs(blob, "pulses.csv", true);
+
+        if (resp.length == 2) {
+          // Wait for a moment before continuing, to fix downloading multiple files on Chrome
+          // See https://github.com/eligrey/FileSaver.js/issues/435
+
+          setTimeout(async () => {
+            const blob = await resp[1].blob();
+            saveAs(blob, "private.csv", true);
+          }, 500);
+        }
       }
       catch (err) {
         alert("Error exporting data:\n\n" + err.message);
