@@ -145,7 +145,11 @@
   <h3>Note about email</h3>
 
   <p>
-    Emails from the service are sent using either <a href="http://www.mailgun.com/" target="_blank">Mailgun</a> by Rackspace Inc, a US based company, or <a href="https://gmail.com/" target="_blank">Gmail</a> by Alphabet Inc, a US based company. This means user details contained in the emails (such as the user's email address) are sent to the email service as a necessary part of the email delivery process. If you do not wish to have your email address sent to either of these services, you can remove your email address in the preferences.
+    Emails from the service are sent using <a href="http://www.mailgun.com/" target="_blank">Mailgun</a> by Rackspace Inc, a US based company. This means user details contained in the emails (such as the user's email address) are sent to the email service as a necessary part of the email delivery process. If you do not wish to have your email address sent to either of these services, you can remove your email address in the preferences.
+  </p>
+
+  <p>
+    For more information, please see <a href="https://www.mailgun.com/gdpr" target="_blank">Mailgun's GDPR page</a>.
   </p>
 
   <h3>Changes to the privacy policy</h3>
