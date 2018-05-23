@@ -3,6 +3,7 @@ defmodule Mix.Tasks.Frontend.Watch do
   import MBU.TaskUtils
   alias Mix.Tasks.Frontend.Build.Js.Bundle, as: FrontendBundleJS
   alias Mix.Tasks.Frontend.Build.Js.Copy, as: FrontendCopyJS
+  alias Mix.Tasks.Frontend.Build.Js.Minify, as: FrontendMinifyJS
   alias Mix.Tasks.Frontend.Build.Css.Compile, as: FrontendCompileCSS
   alias Mix.Tasks.Frontend.Build.Css.Copy, as: FrontendCopyCSS
   alias Mix.Tasks.Frontend.Build.Assets, as: FrontendAssets
@@ -14,18 +15,13 @@ defmodule Mix.Tasks.Frontend.Watch do
   ]
 
   task _ do
-    [
+    watches = [
       exec(
         CodeStats.BuildTasks.BundleJS.bin(),
         CodeStats.BuildTasks.BundleJS.args(
           FrontendBundleJS.in_file(),
           FrontendBundleJS.out_file()
         ) ++ ["--watch"]
-      ),
-      watch(
-        "CopyFrontendJS",
-        FrontendCopyJS.in_path(),
-        FrontendCopyJS
       ),
       watch(
         "CompileFrontendCSS",
@@ -43,6 +39,28 @@ defmodule Mix.Tasks.Frontend.Watch do
         FrontendAssets
       )
     ]
-    |> listen(watch: true)
+
+    watches =
+      if System.get_env("MINIFY") != nil do
+        [
+          watch(
+            "MinifyFrontendJS",
+            FrontendMinifyJS.in_path(),
+            FrontendMinifyJS
+          )
+          | watches
+        ]
+      else
+        [
+          watch(
+            "CopyFrontendJS",
+            FrontendCopyJS.in_path(),
+            FrontendCopyJS
+          )
+          | watches
+        ]
+      end
+
+    watches |> listen(watch: true)
   end
 end
