@@ -3,7 +3,7 @@ import { mount, setChildren } from 'redom';
 
 import { wait_for_load } from '../common/utils';
 import LoadingIndicatorComponent from '../common/loading-indicator.component';
-import TabComponent from './preferences/tab.component';
+import TabComponent from '../common/tab.component';
 
 const XP_EXPORT_PATH = '/my/pulses';
 const PRIVATE_EXPORT_PATH = '/my/private';

@@ -7,6 +7,7 @@ defmodule CodeStatsWeb.Router do
     plug(:put_secure_browser_headers)
     plug(CodeStatsWeb.RememberMePlug)
     plug(CodeStatsWeb.SetSessionUserPlug)
+    plug(CodeStatsWeb.ConsentPlug)
   end
 
   pipeline :browser_html do
@@ -92,6 +93,10 @@ defmodule CodeStatsWeb.Router do
       post("/machines/:id/activate", MachineController, :activate)
       post("/machines/:id/deactivate", MachineController, :deactivate)
       post("/machines/:id/key", MachineController, :regen_machine_key)
+
+      get("/consent", TermsController, :ask_consent)
+      post("/consent", TermsController, :set_consent)
+      delete("/consent-delete", TermsController, :delete_account)
     end
   end
 

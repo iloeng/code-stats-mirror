@@ -25,22 +25,6 @@ div#export-data-processing {
 
   #tab-container {
     grid-area: tabs;
-
-    ul.tabs {
-      list-style-type: none;
-      margin: 0;
-      padding-left: 0;
-
-      li {
-        padding: $button-padding;
-        border-radius: $button-border-radius;
-        cursor: pointer;
-
-        &.active {
-          @include use-accent;
-        }
-      }
-    }
   }
 
   #preferences-container {

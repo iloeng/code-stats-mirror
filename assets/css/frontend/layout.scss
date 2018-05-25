@@ -108,6 +108,10 @@ main {
     border-bottom: 1px dashed $warning-text-color;
   }
 
+  &.stripe-info {
+    background-color: $info-color;
+  }
+
   // Stripe with nice padding for content
   &.stripe-content-padded {
     padding-top: 20px;

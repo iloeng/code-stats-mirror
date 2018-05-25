@@ -1,6 +1,23 @@
 <div class="stripe">
   <h1>Sign up</h1>
-  <%= form_for(@changeset, auth_path(@conn, :signup), fn f -> %>
+</div>
+
+<div class="stripe stripe-info stripe-content-padded">
+  <p>
+    Before signing up, please read through this privacy policy and terms of service. You will
+    need to accept the legal terms before you can sign up to use the service. The signup form
+    is at the end of the page.
+  </p>
+</div>
+
+<div class="stripe">
+  <%= render(CodeStatsWeb.PageView, "terms.html") %>
+</div>
+
+<div class="stripe">
+  <h2 id="signup-form">Sign up</h2>
+
+  <%= form_for(@changeset, auth_path(@conn, :signup) <> "#signup-form", fn f -> %>
     <label for="user_username" class="<%= if f.errors[:username], do: "has-error" %>">Username (required)</label>
     <div class="input">
       <%= text_input(f, :username, required: true) %>
@@ -37,9 +54,16 @@
       </p>
     </div>
 
-    <p class="description">
-      When registering, you accept that you have read, understood and accepted the <a href="<%= page_path(@conn, :terms) %>" target="_blank">Terms of Service and Privacy policy</a>.
-    </p>
+    <label for="user_not-underage">
+      I am 16 years of age or older and able to consent to the terms above
+    </label>
+    <%= checkbox(f, :"not-underage", required: true) %>
+
+    <label for="user_accept-terms">
+      I have read and understood the privacy policy and terms of service above, and I accept
+      them
+    </label>
+    <%= checkbox(f, :"accept-terms", required: true) %>
 
     <div class="submit">
       <%= submit("Register!") %>

@@ -1,0 +1,5 @@
+<div class="stripe" id="terms-stripe">
+  <h1>Legal matters</h1>
+
+  <%= render(CodeStatsWeb.PageView, "terms.html") %>
+</div>

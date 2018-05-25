@@ -1,0 +1,48 @@
+#consent-stripe {
+  display: grid;
+  grid-gap: 20px;
+  grid-template: 'tabs'
+                 'content'
+                 'accept';
+
+  @media #{$md} {
+    grid-template: 'tabs   content'
+                   'accept accept'
+                  / 1fr   3fr;
+  }
+
+  #terms-tabs {
+    grid-area: tabs;
+  }
+
+  #current-terms, #old-terms-diff {
+    grid-area: content;
+  }
+
+  #current-terms {
+    h2:first-of-type {
+      margin-top: 0;
+    }
+  }
+
+  #old-terms-diff {
+    white-space: pre-wrap;
+    font-family: monospace;
+
+    p {
+      margin: 0;
+    }
+
+    .diff-added {
+      background-color: $success-color;
+    }
+
+    .diff-removed {
+      background-color: $danger-color;
+    }
+  }
+
+  #consent-form {
+    grid-area: accept;
+  }
+}

@@ -45,7 +45,14 @@ defmodule CodeStatsWeb.AuthController do
     end
   end
 
+  @doc """
+  Process signup form submit and create new user.
+  """
+  @spec signup(Plug.Conn.t(), map) :: Plug.Conn.t()
   def signup(conn, %{"user" => user_params}) do
+    # User can only submit form if they accept the legal terms
+    user_params = Map.put(user_params, "terms_version", CodeStats.LegalTerms.get_latest_version())
+
     changeset = User.changeset(%User{}, user_params)
 
     case AuthUtils.create_user(changeset) do

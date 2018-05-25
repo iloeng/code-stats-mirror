@@ -1,10 +1,8 @@
 import { el } from 'redom';
 
-let component_id = 0;
-
 class TabComponent {
   constructor(tabs, tab_container_id) {
-    this.id = `tab-component-${component_id++}`;
+    this.id = `tab-component-for-${tab_container_id}`;
 
     this.tabEls = tabs.map(([id, text]) => {
       const title = `Click to view tab '${text}'`;

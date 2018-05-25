@@ -1,0 +1,64 @@
+<div class="stripe">
+  <h1>Accept new legal terms</h1>
+</div>
+
+<div class="stripe stripe-warning stripe-content-padded">
+  <p>
+    <%= get_conf(:site_name) %> has applied new legal terms, that include the privacy policy and
+    terms of service. Please read through the new terms that will govern your usage of the
+    service. An automatically generated diff has been provided for your convenience.
+  </p>
+
+  <p>
+    At the end of this page, you can accept the new terms. You cannot use the service without
+    accepting the new terms. If you do not wish to accept the new terms, you have the option of
+    deleting your account.
+  </p>
+</div>
+
+<div class="stripe stripe-content-padded" id="consent-stripe">
+  <div id="terms-tabs"></div>
+
+  <div id="current-terms">
+    <%= render(CodeStatsWeb.PageView, "terms.html") %>
+  </div>
+
+  <div id="old-terms-diff">
+    <%= @diff %>
+  </div>
+
+  <div id="consent-form">
+    <h2>Accept terms</h2>
+
+    <%= form_tag(terms_path(@conn, :set_consent)) %>
+      <label for="not-underage">
+        I am 16 years of age or older and able to consent to the terms above
+      </label>
+      <input type="checkbox" id="not-underage" name="not-underage" required />
+
+      <label for="accept-terms">
+        I have read and accept the privacy policy and terms of service
+      </label>
+      <input type="checkbox" id="accept-terms" name="accept-terms" required />
+
+      <div class="submit">
+        <button type="submit">Accept terms</button>
+      </div>
+    </form>
+
+    <h2>Delete account</h2>
+
+    <p>
+      If you do not wish, or are unable to, accept the new legal terms, you may delete your
+      account. This will delete all of your information and cannot be reversed. To delete your
+      account, type "DELETE" into the text input below, and press the button.
+    </p>
+
+    <%= form_tag(terms_path(@conn, :delete_account), method: :delete) %>
+      <label><strong>This cannot be undone!</strong></label>
+      <input type="text" class="form-control" name="delete_confirmation" maxlength="6" required />
+
+      <div class="submit"><button type="submit" class="button-danger">Delete account forever</button></div>
+    </form>
+  </div>
+</div>

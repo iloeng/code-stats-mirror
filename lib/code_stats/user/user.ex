@@ -1,6 +1,8 @@
 defmodule CodeStats.User do
   use Ecto.Schema
 
+  require Logger
+
   import Ecto.Changeset
   import Ecto.Query
 
@@ -18,34 +20,38 @@ defmodule CodeStats.User do
     field(:private_profile, :boolean)
     field(:cache, :map)
 
+    # The latest version of the legal terms that was accepted by the user
+    field(:terms_version, :date)
+
     has_many(:pulses, Pulse)
 
     timestamps(type: :utc_datetime)
   end
 
   @doc """
-  Creates a changeset based on the `data` and `params`.
+  Get a changeset based on the `data` and `params`.
 
   If no params are provided, an invalid changeset is returned
   with no validation performed.
   """
   def changeset(data, params \\ %{}) do
     data
-    |> cast(params, [:username, :password, :email])
-    |> validate_required([:username, :password])
+    |> cast(params, [:username, :password, :email, :terms_version])
+    |> validate_required([:username, :password, :terms_version])
     |> update_change(:password, &hash_password/1)
     |> put_change(:private_profile, false)
     |> validate_length(:username, min: 1, max: 64)
     |> validate_length(:email, min: 1, max: 255)
     |> validate_length(:password, min: 1, max: 255)
     |> validate_format(:username, ~r/^[^\/#%?&=+]+$/)
+    |> validate_latest_terms()
     |> validations()
     |> unique_constraint(:username)
     |> unique_constraint(:lower_username)
   end
 
   @doc """
-  Create changeset for updating a user's data.
+  Get changeset for updating a user's data.
   """
   def updating_changeset(data, params \\ %{}) do
     data
@@ -54,13 +60,37 @@ defmodule CodeStats.User do
   end
 
   @doc """
-  Create a changeset for changing a user's password.
+  Get a changeset for changing a user's password.
   """
   def password_changeset(data, params \\ %{}) do
     data
     |> cast(params, [:password])
     |> validate_required([:password])
     |> update_change(:password, &hash_password/1)
+  end
+
+  @doc """
+  Get a changeset for updating user's latest accepted legal terms.
+  """
+  @spec terms_changeset(map, map) :: Ecto.Changeset.t()
+  def terms_changeset(data, params \\ %{}) do
+    data
+    |> cast(params, [:terms_version])
+    |> validate_required([:terms_version])
+    |> validate_latest_terms()
+  end
+
+  @doc """
+  Update user's accepted legal terms version to the latest available.
+  """
+  @spec update_terms_version(%__MODULE__{}) :: :ok | {:error, [{atom, Ecto.Changeset.error()}]}
+  def update_terms_version(%__MODULE__{} = user) do
+    cset = terms_changeset(user, %{terms_version: CodeStats.LegalTerms.get_latest_version()})
+
+    case Repo.update(cset) do
+      {:ok, _} -> :ok
+      {:error, %Ecto.Changeset{} = err_cset} -> err_cset.errors
+    end
   end
 
   @doc """
@@ -272,9 +302,28 @@ defmodule CodeStats.User do
     Bcrypt.hashpwsalt(password)
   end
 
+  # Common validations for creating and editing users
   defp validations(changeset) do
     changeset
     |> validate_format(:email, ~r/^$|@/)
+  end
+
+  # Validate that the accepted terms version is the latest one, user cannot accept older
+  # terms
+  defp validate_latest_terms(changeset) do
+    validate_change(changeset, :terms_version, fn
+      _, %Date{} = d ->
+        if CodeStats.LegalTerms.is_current_version?(d) do
+          []
+        else
+          Logger.error("Invalid legal terms version #{inspect(d)}.")
+          ["Invalid legal terms version."]
+        end
+
+      _, val ->
+        Logger.error("Invalid legal terms type #{inspect(val)}.")
+        ["Error setting legal terms acceptance."]
+    end)
   end
 
   defp int_keys_to_str(map) do

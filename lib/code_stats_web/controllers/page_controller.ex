@@ -14,7 +14,7 @@ defmodule CodeStatsWeb.PageController do
   def terms(conn, _params) do
     conn
     |> assign(:title, "Legal")
-    |> render("terms.html")
+    |> render("terms_page.html")
   end
 
   def plugins(conn, _params) do

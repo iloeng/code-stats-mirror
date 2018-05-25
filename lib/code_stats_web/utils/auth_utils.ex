@@ -100,6 +100,7 @@ defmodule CodeStatsWeb.AuthUtils do
   @spec dummy_auth_user() :: nil
   def dummy_auth_user() do
     Bcrypt.dummy_checkpw()
+    nil
   end
 
   @doc """
@@ -129,6 +130,39 @@ defmodule CodeStatsWeb.AuthUtils do
     |> case do
       {:ok, user} -> user
       {:error, changeset} -> changeset
+    end
+  end
+
+  @doc """
+  Delete user's account if they input the correct thing into the input field. Give the route
+  helper and action to use as the last argument, user will be redirected there if they mistype
+  the input. Otherwise they will be redirected to the front page after deletion.
+  """
+  @spec delete_user_action(Conn.t(), map, {function, atom}) :: Conn.t()
+  def delete_user_action(conn, params, {route_helper, redirect_action}) do
+    user = get_current_user(conn)
+
+    if Map.get(params, "delete_confirmation") == "DELETE" do
+      # Delete user in background task to prevent the request from timing out, as deleting all of
+      # user's XP will take a long time.
+      Task.start(__MODULE__, :delete_user, [user])
+
+      # We cannot delete the whole session here, or the flash message will not be shown. So just
+      # delete the auth data.
+      conn
+      |> Conn.delete_session(auth_key())
+      |> Phoenix.Controller.put_flash(
+        :info,
+        "Your user account will be deleted in a few moments."
+      )
+      |> Phoenix.Controller.redirect(to: CodeStatsWeb.Router.Helpers.page_path(conn, :index))
+    else
+      conn
+      |> Phoenix.Controller.put_flash(
+        :error,
+        "Please confirm deletion by typing \"DELETE\" into the input field."
+      )
+      |> Phoenix.Controller.redirect(to: route_helper.(conn, redirect_action))
     end
   end
 
