@@ -95,7 +95,12 @@ defmodule CodeStatsWeb.PulseControllerTest do
   defp contains?(headers, key, value), do: Enum.member?(headers, {key, value})
 
   defp create_user(email, username) do
-    %User{email: email, username: username, password: "test_password"}
+    %User{
+      email: email,
+      username: username,
+      password: "test_password",
+      terms_version: CodeStats.LegalTerms.get_latest_version()
+    }
     |> User.changeset(%{})
     |> Repo.insert()
   end
