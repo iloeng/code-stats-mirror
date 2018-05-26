@@ -57,6 +57,6 @@ defmodule CodeStatsWeb.RememberMePlug do
   end
 
   defp unform_payload(conn, payload) do
-    Phoenix.Token.verify(conn, @cookie_name, payload)
+    Phoenix.Token.verify(conn, @cookie_name, payload, max_age: @cookie_age)
   end
 end
