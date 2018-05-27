@@ -7,7 +7,6 @@ defmodule CodeStatsWeb.EmailUtils do
 
   alias CodeStats.{
     User,
-    Utils,
     Mailer
   }
 
@@ -16,20 +15,14 @@ defmodule CodeStatsWeb.EmailUtils do
 
   NOTE: User must have an email! Check before calling this function.
   """
-  @spec send_password_reset_email(%User{}, String.t()) :: nil
-  def send_password_reset_email(user, token) do
-    base_email()
-    |> to(user.email)
+  @spec send_password_reset_email(%User{}, String.t()) :: Bamboo.Email.t()
+  def send_password_reset_email(%User{email: email}, token) do
+    CodeStats.EmailUtils.base_email()
+    |> to(email)
     |> subject("Code::Stats password reset request")
     |> assign(:token, token)
     |> put_layout({CodeStatsWeb.LayoutView, :email})
     |> render(:password_reset)
     |> Mailer.deliver_later()
-  end
-
-  defp base_email() do
-    new_email()
-    |> from(Utils.get_conf(:email_from))
-    |> put_header("Reply-To", Utils.get_conf(:reply_to))
   end
 end

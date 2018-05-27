@@ -81,6 +81,20 @@ defmodule CodeStats.User do
   end
 
   @doc """
+  Get all users in the system that have an email address. Returned as a list of tuples where the
+  first element is the username and the second element is the email address.
+  """
+  @spec get_all_with_email() :: [{String.t(), String.t()}]
+  def get_all_with_email() do
+    from(
+      u in __MODULE__,
+      where: not is_nil(u.email) and u.email != "",
+      select: {u.username, u.email}
+    )
+    |> Repo.all()
+  end
+
+  @doc """
   Update user's accepted legal terms version to the latest available.
   """
   @spec update_terms_version(%__MODULE__{}) :: :ok | {:error, [{atom, Ecto.Changeset.error()}]}
