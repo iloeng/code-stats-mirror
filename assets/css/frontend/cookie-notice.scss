@@ -1,0 +1,19 @@
+#cookie-notice {
+  @include use-accent;
+
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 20px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  button {
+    margin-left: 20px;
+  }
+}

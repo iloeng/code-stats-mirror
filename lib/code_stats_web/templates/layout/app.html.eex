@@ -142,6 +142,8 @@
       </section>
     </footer>
 
+    <div id="cookie-notice-container"></div>
+
     <!-- Mock moment.js until rollup-plugin-commonjs is fixed so we can ignore it instead of mocking -->
     <script type="text/javascript">
       window.moment = {};
