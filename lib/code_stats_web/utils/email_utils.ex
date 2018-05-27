@@ -3,7 +3,7 @@ defmodule CodeStatsWeb.EmailUtils do
   Utilities related to sending different emails from the system.
   """
 
-  use Bamboo.Phoenix, view: CodeStats.EmailView
+  use Bamboo.Phoenix, view: CodeStatsWeb.EmailView
 
   alias CodeStats.{
     User,
@@ -22,7 +22,7 @@ defmodule CodeStatsWeb.EmailUtils do
     |> to(user.email)
     |> subject("Code::Stats password reset request")
     |> assign(:token, token)
-    |> put_layout({CodeStats.LayoutView, :email})
+    |> put_layout({CodeStatsWeb.LayoutView, :email})
     |> render(:password_reset)
     |> Mailer.deliver_later()
   end
