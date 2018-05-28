@@ -135,7 +135,7 @@ class WeekLanguagesComponent {
   }
 
   update({ sent_at_local, xps }) {
-    const days_added = false;
+    let days_added = false;
 
     // Use date string comparison to avoid problems with comparing across timezones, we just need to know if
     // the date sent is newer than the latest displayed date on the graph.
