@@ -2,20 +2,18 @@ defmodule CodeStats.BuildTasks.BundleJS do
   import MBU.TaskUtils
   import CodeStats.FrontendConfs
 
-  def bin(), do: node_bin("rollup")
+  def bin(), do: node_bin("webpack")
 
   def args(in_file, out_file) do
     [
+      "--mode",
+      "development",
       "--config",
-      "assets/rollup.config.js",
-      "--input",
+      "assets/webpack.config.js",
+      "--entry",
       in_file,
-      "--output.file",
-      out_file,
-      "--output.format",
-      "iife",
-      "--sourcemap",
-      "#{out_file}.map"
+      "--output",
+      out_file
     ]
   end
 
