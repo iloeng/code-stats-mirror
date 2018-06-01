@@ -1,5 +1,5 @@
 import { el } from 'redom';
-import Chart from 'Chart.js';
+import Chart from 'chart.js';
 import { get_graph_color } from '../../../common/graph-colors';
 import { Interval } from 'luxon';
 import { XP_FORMATTER } from '../../../common/xp_utils';

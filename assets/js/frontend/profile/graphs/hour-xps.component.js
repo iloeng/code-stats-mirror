@@ -1,5 +1,5 @@
 import { el } from 'redom';
-import Chart from 'Chart.js';
+import Chart from 'chart.js';
 import { XP_FORMATTER } from '../../../common/xp_utils';
 
 class HourXpsComponent {
