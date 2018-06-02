@@ -5,6 +5,10 @@ defmodule Mix.Tasks.Frontend.Build.Js.Bundle do
 
   @shortdoc "Bundle and transpile JavaScript sources into bundles"
 
+  @deps [
+    "frontend.build.js.exthelp"
+  ]
+
   def in_path(), do: js_path()
   def in_file(), do: Path.join([in_path(), "frontend", "frontend.js"])
 
