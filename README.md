@@ -12,10 +12,10 @@ This repository contains the Phoenix application that implements the service bac
 
 These are current targets, older versions _might_ work:
 
-* Erlang 20.0+
-* Elixir 1.5+
-* PostgreSQL 9.6+
-* Node 8+ and NPM
+* Erlang 21.0+
+* Elixir 1.6+
+* PostgreSQL 10+
+* Node 10+ and NPM
 
 ### First time install
 
