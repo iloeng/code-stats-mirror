@@ -26,7 +26,7 @@ defmodule CodeStats.LegalTerms do
   ]
 
   # Date when the current legal terms came into effect
-  @current_terms_date ~D[2018-05-25]
+  @current_terms_date ~D[2018-06-30]
 
   for {terms_hash, terms_date, terms_file} <- @terms do
     terms_date = Macro.escape(terms_date)
