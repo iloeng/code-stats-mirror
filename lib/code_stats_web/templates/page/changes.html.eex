@@ -114,11 +114,23 @@
 <div class="stripe">
   <h2>Changelog</h2>
 
-  <h3>2.0.0 – ????-??-?? – Brand spanking new</h3>
+  <h3>2.0.0 – 2018-07-01 – Brand spanking new</h3>
 
   <ul>
-    <li>Totally new UI written with CSS Grid.</li>
-    <li>New graphs written with RE:DOM.</li>
+    <li>Totally new UI written with CSS grid layout.</li>
+    <li>New graphs on profile pages and front page written with <a href="https://redom.js.org/" target="_blank">RE:DOM</a>.</li>
+    <li>Major upgrades to code base in order to make it more maintainable and smaller releases easier.</li>
+    <li><a href="https://github.com/bitwalker/distillery" target="_blank">Distillery</a> releases for great good.</li>
+    <li>Data export feature for XP and private data.</li>
+    <li>Crashers and other bugs fixed.</li>
+    <li>Terms of service acceptance dialog with diffs to old terms of services.</li>
+    <li>New GraphQL API for fetching XP data, token auth support coming later.</li>
+    <li>Shiny contributors list on this page.</li>
+    <li>Added all implemented plugins to plugins page.</li>
+    <li>Added mass mailing system for mailing about big future updates.</li>
+    <li>Removed Google Analytics in favor of Tilastokeskus.</li>
+    <li>Dropped Internet Explorer support.</li>
+    <li>And lots more.</li>
   </ul>
 
   <h3>1.8.6 – 2017-10-02 – AppSignal filtering</h3>
