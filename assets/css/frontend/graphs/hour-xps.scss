@@ -1,6 +1,10 @@
 .hour-xps {
   grid-area: hour-x;
 
+  h4 {
+    text-align: center;
+  }
+
   .graph-container {
     position: relative;
   }
