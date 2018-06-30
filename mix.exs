@@ -60,7 +60,7 @@ defmodule CodeStats.Mixfile do
       {:earmark, "~> 1.2.3", only: :dev},
       {:ex_doc, "~> 0.18", only: :dev},
       {:calendar, "~> 0.17.4"},
-      {:bamboo, "1.0.0-rc.1"},
+      {:bamboo, "~> 1.0.0"},
       {:corsica, "~> 1.1.0"},
       {:appsignal, "~> 1.4"},
       {:mbu, "~> 3.0.0", runtime: false},
