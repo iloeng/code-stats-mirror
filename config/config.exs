@@ -73,10 +73,11 @@ config :number,
   ]
 
 config :geolix,
-  databases: [
-    %{id: :city, init: {CodeStatsWeb.Geolix, :init_cities}},
-    %{id: :country, init: {CodeStatsWeb.Geolix, :init_countries}}
-  ]
+  init: {CodeStatsWeb.Geolix, :init}
+
+config :geolite2data,
+  geolix_updater: true,
+  logger: Mix.env() != :prod
 
 # Appsignal configuration
 

@@ -3,23 +3,23 @@ defmodule CodeStatsWeb.Geolix do
   Module for initialising Geolix databases at runtime instead of config time.
   """
 
-  def init_cities(_) do
-    priv_dir = Application.app_dir(:code_stats, "priv")
+  @spec init() :: :ok
+  def init() do
+    db_dir = Application.app_dir(:code_stats, "priv")
 
-    %{
-      id: :city,
-      adapter: Geolix.Adapter.MMDB2,
-      source: Path.join([priv_dir, "geoip-cities.gz"])
-    }
-  end
+    databases = [
+      %{
+        id: :city,
+        adapter: Geolix.Adapter.MMDB2,
+        source: Path.join([db_dir, "geoip-cities.gz"])
+      },
+      %{
+        id: :country,
+        adapter: Geolix.Adapter.MMDB2,
+        source: Path.join([db_dir, "geoip-countries.gz"])
+      }
+    ]
 
-  def init_countries(_) do
-    priv_dir = Application.app_dir(:code_stats, "priv")
-
-    %{
-      id: :country,
-      adapter: Geolix.Adapter.MMDB2,
-      source: Path.join([priv_dir, "geoip-countries.gz"])
-    }
+    Application.put_env(:geolix, :databases, databases)
   end
 end

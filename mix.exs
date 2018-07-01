@@ -65,6 +65,7 @@ defmodule CodeStats.Mixfile do
       {:appsignal, "~> 1.4"},
       {:mbu, "~> 3.0.0", runtime: false},
       {:geolix, "~> 0.16.0"},
+      {:geolite2data, "~> 0.0.3"},
       {:remote_ip, "~> 0.1.3"},
       {:distillery, "~> 1.5.2", runtime: false},
       {:absinthe, "~> 1.4.9"},
