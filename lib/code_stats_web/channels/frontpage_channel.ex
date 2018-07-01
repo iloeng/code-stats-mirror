@@ -6,7 +6,6 @@ defmodule CodeStatsWeb.FrontpageChannel do
   XP numbers on the front page.
   """
 
-  alias CodeStats.User
   alias CodeStats.User.Pulse
 
   def join("frontpage", _params, socket) do
@@ -26,7 +25,8 @@ defmodule CodeStatsWeb.FrontpageChannel do
 
   The given pulse must have xps preloaded, xps must have language preloaded.
   """
-  def send_pulse(%User{private_profile: false} = user, coords, %Pulse{xps: xps})
+  @spec send_pulse(map, %Pulse{}) :: :ok
+  def send_pulse(coords, %Pulse{xps: xps})
       when not is_nil(xps) do
     formatted_xps =
       for xp <- xps do
@@ -38,7 +38,6 @@ defmodule CodeStatsWeb.FrontpageChannel do
 
     CodeStatsWeb.Endpoint.broadcast("frontpage", "new_pulse", %{
       xps: formatted_xps,
-      username: user.username,
       coords: coords
     })
   end

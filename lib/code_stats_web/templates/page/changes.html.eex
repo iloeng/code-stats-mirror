@@ -114,6 +114,13 @@
 <div class="stripe">
   <h2>Changelog</h2>
 
+  <h3>2.0.1 – 2018-07-01 – Email fix</h3>
+
+  <ul>
+    <li>Fixed crash when trying to send password reset for a user with no email.</li>
+    <li>Removed unnecessary data from front page channel push.</li>
+  </ul>
+
   <h3>2.0.0 – 2018-07-01 – Brand spanking new</h3>
 
   <ul>

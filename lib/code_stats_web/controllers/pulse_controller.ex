@@ -52,7 +52,7 @@ defmodule CodeStatsWeb.PulseController do
       # Broadcast XP data to possible viewers on profile page and frontpage
       coords = GeoIPPlug.get_coords(conn)
       ProfileChannel.send_pulse(user, %{pulse | xps: inserted_xps})
-      FrontpageChannel.send_pulse(user, coords, %{pulse | xps: inserted_xps})
+      FrontpageChannel.send_pulse(coords, %{pulse | xps: inserted_xps})
 
       conn |> put_status(201) |> json(%{ok: "Great success!"})
     else

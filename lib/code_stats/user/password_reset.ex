@@ -57,7 +57,7 @@ defmodule CodeStats.User.PasswordReset do
       true ->
         username = get_change(cset, :username)
 
-        q = from(u in User, where: u.username == ^username)
+        q = from(u in User, where: u.username == ^username and not is_nil(u.email))
 
         case Repo.one(q) do
           # Invalidate changeset, error message is not shown so it is not needed
