@@ -38,6 +38,7 @@ environment :prod do
   set(include_src: false)
 
   set(cookie: System.get_env("COOKIE") |> String.to_atom())
+  set(vm_args: "rel/vm.args.eex")
 
   plugin(CodeStats.ReleasePlugins.BuildStatics)
 end

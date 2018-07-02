@@ -46,6 +46,7 @@ deploy_beta:
   variables:
     MIX_ENV: prod
     COOKIE: thisisbeta
+    NODENAME: code_stats_beta
   only:
     - master@code-stats/code-stats
   tags:
