@@ -10,15 +10,15 @@ class LanguagesDataSource {
     this._languages = [];
   }
 
-  setInitData({total_langs, recent_langs}) {
-    for (const {name, xp} of total_langs) {
+  setInitData({ total_langs, recent_langs }) {
+    for (const { name, xp } of total_langs) {
       this._updateLang(name, l => {
         l.xp = xp;
         return l;
       });
     }
 
-    for (const {name, xp} of recent_langs) {
+    for (const { name, xp } of recent_langs) {
       this._updateLang(name, l => {
         l.recent_xp = xp;
         return l;
@@ -28,8 +28,8 @@ class LanguagesDataSource {
     this._sortLangs();
   }
 
-  update({xps}) {
-    for (const {language, amount} of xps) {
+  update({ xps }) {
+    for (const { language, amount } of xps) {
       this._updateLang(language, l => {
         l.xp += amount;
         l.recent_xp += amount;
@@ -45,7 +45,7 @@ class LanguagesDataSource {
   }
 
   getOtherLangs() {
-    return this._languages.slice(MAX_TOP_LANGS + 1);
+    return this._languages.slice(MAX_TOP_LANGS);
   }
 
   // Update a single language with the given operation
@@ -53,7 +53,7 @@ class LanguagesDataSource {
     const idx = this._languages.findIndex(l => l.name === name);
 
     if (idx === -1) {
-      const lang = update_fun({name, xp: 0, recent_xp: 0});
+      const lang = update_fun({ name, xp: 0, recent_xp: 0 });
       this._languages.push(lang);
     }
     else {
