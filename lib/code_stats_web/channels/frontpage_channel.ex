@@ -41,6 +41,4 @@ defmodule CodeStatsWeb.FrontpageChannel do
       coords: coords
     })
   end
-
-  def send_pulse(_, _, _), do: nil
 end

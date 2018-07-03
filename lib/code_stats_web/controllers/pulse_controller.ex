@@ -50,8 +50,10 @@ defmodule CodeStatsWeb.PulseController do
          {:ok, %Pulse{} = pulse} <- create_pulse(user, machine, datetime, offset),
          {:ok, inserted_xps} <- create_xps(pulse, xps) do
       # Broadcast XP data to possible viewers on profile page and frontpage
-      coords = GeoIPPlug.get_coords(conn)
       ProfileChannel.send_pulse(user, %{pulse | xps: inserted_xps})
+
+      # Coordinates are not sent for private profiles
+      coords = if user.private_profile, do: nil, else: GeoIPPlug.get_coords(conn)
       FrontpageChannel.send_pulse(coords, %{pulse | xps: inserted_xps})
 
       conn |> put_status(201) |> json(%{ok: "Great success!"})
