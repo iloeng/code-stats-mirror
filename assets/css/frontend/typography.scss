@@ -8,10 +8,10 @@ $h6-size: 1.111rem;
 
 // Make headings smaller on smaller screen sizes
 @mixin smallinize-heading($orig-size) {
-  font-size: ($orig-size * 0.75);
+  font-size: max($orig-size * 0.65, 1rem);
 
   @media #{$sm} {
-    font-size: ($orig-size * 0.85);
+    font-size: max($orig-size * 0.85, 1rem);
   }
 
   @media #{$md} {
