@@ -114,6 +114,14 @@
 <div class="stripe">
   <h2>Changelog</h2>
 
+  <h3>2.0.2 – 2018-07-03 – More fixes</h3>
+
+  <ul>
+    <li>Fixed off-by-one error hiding one language in languages list.</li>
+    <li>Don't send geoip coordinates to frontpage for private profiles.</li>
+    <li>Fix frontpage heading sizes not to clip on mobile.</li>
+  </ul>
+
   <h3>2.0.1 – 2018-07-01 – Email fix</h3>
 
   <ul>
