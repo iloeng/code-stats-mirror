@@ -23,6 +23,12 @@ const MONTHS = [
   'Dec',
 ];
 
+// Today's date, calculated every n seconds to show user which day it is
+let today = null;
+
+// Timer seconds for the aforementioned
+const TODAY_UPDATE_SECONDS = 60;
+
 class YearXpsTableHeadingComponent {
   constructor() {
     this.el = el('th');
@@ -57,6 +63,7 @@ class YearXpsTableCellComponent {
       const { date, xp } = data;
       this.el.textContent = this._formatValue(xp);
       this._setSmallClass();
+      this._setTodayClass(date);
 
       const max_scale = xp / max_val;
 
@@ -94,6 +101,19 @@ class YearXpsTableCellComponent {
     if (this.el.textContent.length >= 4) {
       this.el.classList.add('small');
     }
+    else {
+      this.el.classList.remove('small');
+    }
+  }
+
+  // Set .today class if cell date is today
+  _setTodayClass(date) {
+    if (date.month === today.month && date.day === today.day) {
+      this.el.classList.add('today');
+    }
+    else {
+      this.el.classList.remove('today');
+    }
   }
 }
 
@@ -120,6 +140,8 @@ class YearXpsComponent {
       return { month: i, days: [MONTHS[i]] };
     });
 
+    this.todayUpdateTimer = null;
+
     this.headerList = list('tr', YearXpsTableHeadingComponent);
     this.months = list('tbody', YearXpsTableRowComponent);
 
@@ -133,6 +155,17 @@ class YearXpsComponent {
       ),
     ]);
     this.headerList.update([null, ...(Array.from(new Array(31), (_, i) => i + 1))]);
+  }
+
+  onmount() {
+    this._updateToday(false);
+    this.todayUpdateTimer = setInterval(() => this._updateToday(), TODAY_UPDATE_SECONDS * 1000);
+  }
+
+  onunmount() {
+    if (this.todayUpdateTimer != null) {
+      clearInterval(this.todayUpdateTimer);
+    }
   }
 
   setInitData({ day_of_year_xps }) {
@@ -165,6 +198,14 @@ class YearXpsComponent {
     }
 
     return max_val;
+  }
+
+  _updateToday(run_update = true) {
+    today = DateTime.local().startOf('day');
+
+    if (run_update) {
+      this.update({ new_xp: 0, sent_at_local: DateTime.local() })
+    }
   }
 }
 

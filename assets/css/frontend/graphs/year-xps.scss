@@ -28,6 +28,11 @@
           font-size: 0.8rem;
         }
 
+        &.today {
+          font-weight: bold;
+          text-decoration: underline;
+        }
+
         &:first-child {
           font-weight: bold;
           text-align: right;
