@@ -24,6 +24,10 @@
         width: $td-width;
         text-align: center;
 
+        &.small {
+          font-size: 0.8rem;
+        }
+
         &:first-child {
           font-weight: bold;
           text-align: right;

@@ -56,6 +56,7 @@ class YearXpsTableCellComponent {
     else {
       const { date, xp } = data;
       this.el.textContent = this._formatValue(xp);
+      this._setSmallClass();
 
       const max_scale = xp / max_val;
 
@@ -85,6 +86,13 @@ class YearXpsTableCellComponent {
     }
     else {
       return CELL_FORMATTER.format(value / 1000000) + 'M';
+    }
+  }
+
+  // Set .small class if text is wide
+  _setSmallClass() {
+    if (this.el.textContent.length >= 4) {
+      this.el.classList.add('small');
     }
   }
 }
