@@ -82,7 +82,7 @@ class YearXpsTableCellComponent {
       return value.toString();
     }
     else if (value < 1000000) {
-      return CELL_FORMATTER.format(value / 1000) + 'K';
+      return CELL_FORMATTER.format(value / 1000) + 'k';
     }
     else {
       return CELL_FORMATTER.format(value / 1000000) + 'M';
