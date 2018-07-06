@@ -11,6 +11,9 @@ class LanguagesDataSource {
   }
 
   setInitData({ total_langs, recent_langs }) {
+    // Reset language data before initing to prevent leftover data
+    this._languages = [];
+
     for (const { name, xp } of total_langs) {
       this._updateLang(name, l => {
         l.xp = xp;
