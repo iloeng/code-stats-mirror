@@ -203,7 +203,7 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
       </p>
 
       <p>
-        <a target="_blank" href="https://marketplace.visualstudio.com/items?itemName=juha-ristolainen.code-stats-vscode">Link to the plugin in the Visual Studio Marketplace.</a>
+        <a target="_blank" href="https://marketplace.visualstudio.com/items?itemName=riussi.code-stats-vscode">Link to the plugin in the Visual Studio Marketplace.</a>
       </p>
 
       <p>
