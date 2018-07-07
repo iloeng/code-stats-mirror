@@ -120,6 +120,7 @@
     <li>Fix issues with year XP table and highlight current day.</li>
     <li>Fix link to VSCode extension on plugins page.</li>
     <li>Fix wrong data in languages list due to not resetting data when reinitting.</li>
+    <li>Hour of day graph improvements.</li>
   </ul>
 
   <h3>2.0.2 – 2018-07-03 – More fixes</h3>
