@@ -12,20 +12,6 @@ class HourXpsComponent {
 
     const canvas_ctx = this.canvas.getContext('2d');
 
-    /*
-    const am_gradient = canvas_ctx.createLinearGradient(0.000, 150.000, 300.000, 150.000);
-    am_gradient.addColorStop(0.000, 'rgba(0, 0, 0, 0.5)');
-    am_gradient.addColorStop(0.378, 'rgba(10, 0, 178, 0.5)');
-    am_gradient.addColorStop(0.761, 'rgba(255, 252, 0, 0.5)');
-
-    const pm_gradient = canvas_ctx.createLinearGradient(0.000, 150.000, 300.000, 150.000);
-    pm_gradient.addColorStop(0.000, 'rgba(255, 255, 0, 0.5)');
-    pm_gradient.addColorStop(0.136, 'rgba(255, 255, 170, 0.5)');
-    pm_gradient.addColorStop(0.381, 'rgba(255, 255, 0, 0.5)');
-    pm_gradient.addColorStop(0.663, 'rgba(191, 0, 0, 0.5)');
-    pm_gradient.addColorStop(0.888, 'rgba(0, 0, 0, 0.5)');
-    */
-
     this.chart = new Chart(
       canvas_ctx,
       {
@@ -45,7 +31,7 @@ class HourXpsComponent {
         },
         type: 'polarArea',
         options: {
-          startAngle: -0.5 * Math.PI - (Math.PI / 12),
+          startAngle: -0.5 * Math.PI,
           legend: {
             display: false
           },
@@ -54,8 +40,9 @@ class HourXpsComponent {
             callbacks: {
               // Format tooltip labels as XP
               label: (tooltip_item, data) => {
-                const label = data.datasets[tooltip_item.datasetIndex].labels[tooltip_item.index] || '';
-                return `${label}: ${XP_FORMATTER.format(tooltip_item.yLabel)}`;
+                const label_str = data.datasets[tooltip_item.datasetIndex].labels[tooltip_item.index];
+                const label = parseInt(label_str);
+                return `${label}–${label + 1}: ${XP_FORMATTER.format(tooltip_item.yLabel)}`;
               }
             }
           },
@@ -79,14 +66,29 @@ class HourXpsComponent {
     hod_items.sort(([hour1], [hour2]) => hour1 - hour2);
 
     for (const [hour, xps] of hod_items) {
-      const dataset = (hour < 12) ? this.amData : this.pmData;
-      dataset[hour % 12] = xps;
+      this._insertIntoHour(hour, xps);
     }
 
     this.chart.update();
   }
 
-  update() { }
+  update({ new_xp, sent_at_local }) {
+    const hour = sent_at_local.hour;
+    this._insertIntoHour(hour, new_xp, true);
+    this.chart.update();
+  }
+
+  // Insert XP into given hour (0-11 integer), adding instead of replacing if specified
+  _insertIntoHour(hour, xps, add = false) {
+    const dataset = (hour < 12) ? this.amData : this.pmData;
+
+    if (add) {
+      dataset[hour % 12] += xps;
+    }
+    else {
+      dataset[hour % 12] = xps;
+    }
+  }
 }
 
 export default HourXpsComponent;
