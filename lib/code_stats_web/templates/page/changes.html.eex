@@ -114,6 +114,13 @@
 <div class="stripe">
   <h2>Changelog</h2>
 
+  <h3>2.0.4 – 2018-07-11 – GeoIP fix</h3>
+
+  <ul>
+    <li>Fix corrupted GeoIP databases, thereby fixing frontpage world map graph.</li>
+    <li>Fix Phoenix cache manifest issue.</li>
+  </ul>
+
   <h3>2.0.3 – 2018-07-07 – Even more fixes</h3>
 
   <ul>
