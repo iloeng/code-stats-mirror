@@ -2,14 +2,22 @@
 #
 #     mix run priv/repo/seeds.exs
 #
-# Inside the script, you can read and write to any of your
-# repositories directly
+# If you wish to setup the database from scratch including everything, you can use
 #
-#     CodeStats.Repo.insert!(%CodeStats.SomeModel{})
+#     mix ecto.setup
 #
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
- user = %{
+# This script creates a given user from the "user" map. 
+# You can change credentials as you wish below.
+#
+# In the "languages" list you can append/remove names of languages to populate.
+# Every language will be populated for every day with the given range
+#
+# In the "dates_xp" map self explainatory settings can be tweaked
+
+# ------------
+
+# Default user account for testing is test:test
+user = %{
    email: "test@test.test",
    username: "test",
    password: "test",
@@ -25,37 +33,37 @@ dates_and_xp = %{
   "max" => 1000,
   "random_time" => true
 }
-
+# ------------
 
 defmodule Seeds do
 
 	@day_seconds 86400
 
-	def create_date_list(%{"from" => in_from, "to" => in_to}) do
+	def create_date_list(%{"from" => in_from, "to" => in_to, "random_time" => random_time}) do
+
 		from = Calendar.DateTime.from_erl!({in_from, {16, 00, 00}}, "Etc/UTC")
 		to   = Calendar.DateTime.from_erl!({in_to, {16, 00, 00}}, "Etc/UTC")
 		{:ok, diff, _, _} = Calendar.DateTime.diff(to, from)
 		diff_days = div(diff, @day_seconds)
 
-		dates = 0..diff_days
-		  |> Enum.map(&advance_by_day(&1, from))
+    case random_time do
+      true ->	0..diff_days |> Enum.map(&advance_by_day(&1, from, true))
+      
+      _    -> 0..diff_days |> Enum.map(&advance_by_day(&1, from))
+    end
 	end
 
 	def create_date_xp_list(dates, %{"min" => min, "max" => max}) do
 		random_xp = (1..Enum.count(dates))
 		|> Enum.map(fn x -> Enum.random(min..max) end)
-		IO.inspect Enum.count(random_xp)
-		IO.inspect Enum.count(dates)
 		date_xp = Enum.zip(dates, random_xp)
 	end
 
 	def create_data_for({:ok, language}, user, machine,dates_and_xp ) do
-	   #{:ok, sent_at} = Calendar.DateTime.from_erl({{2018, 11, 27}, {23, 00, 00}}, "Etc/UTC")
-	   #local_datetime = Calendar.DateTime.add!(sent_at, 60*60*24) |> Calendar.DateTime.to_naive()
-
 	   dates = create_date_list(%{
 		    "from" => dates_and_xp["date_from"], 
-  			"to"   => dates_and_xp["date_to"] 
+  			"to"   => dates_and_xp["date_to"],
+       "random_time" => dates_and_xp["random_time"]
   	 })
 
 		 dates_xp = create_date_xp_list(dates, %{
@@ -86,16 +94,18 @@ defmodule Seeds do
 	      |> CodeStats.Repo.insert()
 	end
 
-	def create_user(email, username) do
-	    {:ok, fetched_user} = 
-	    
-	    CodeStats.User.changeset(%CodeStats.User{}, 
+	def create_user(email, username, password) do
+	    {:ok, fetched_user} = case CodeStats.User.changeset(%CodeStats.User{}, 
 	    	%{email: email,
 		      username: username,
-		      password: "test",
+		      password: password,
 		      terms_version: CodeStats.LegalTerms.get_latest_version()
 	    	}) 
-	    |> CodeStats.Repo.insert()
+        |> CodeStats.Repo.insert() do
+        
+          {:ok, fetched_user} = {:ok, fetched_user}
+        end
+
 
 	    {:ok, machine} =
 	      %CodeStats.User.Machine{name: "test_machine"}
@@ -108,13 +118,24 @@ defmodule Seeds do
 
 	defp advance_by_day(additional_day, from) do
 		Calendar.DateTime.add!(from, additional_day * @day_seconds)
-	end
+  end
+  
+  defp advance_by_day(additional_day, from, _) do 
+    random_time = Enum.random(0..@day_seconds) 
+    Calendar.DateTime.add!(from, additional_day * @day_seconds + random_time)
+  end
+  
 end
 
-{:ok, new_user, machine} = Seeds.create_user(user.email, user.username)
+{:ok, new_user, machine} = Seeds.create_user(user.email, user.username, user.password)
 
 languages
   |> Enum.map(fn language -> language
 		  |> CodeStats.Language.get_or_create
 		  |> Seeds.create_data_for(new_user, machine, dates_and_xp) 
 	end)
+
+IO.puts("Test user account with username: #{user.username} and password #{user.password} has been created")
+IO.puts("Machine with name #{machine.name} has been created")
+IO.puts("Populated with languages: ")
+IO.inspect(languages)
