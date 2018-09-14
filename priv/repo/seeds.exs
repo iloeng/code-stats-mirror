@@ -95,17 +95,14 @@ defmodule Seeds do
 	end
 
 	def create_user(email, username, password) do
-	    {:ok, fetched_user} = case CodeStats.User.changeset(%CodeStats.User{}, 
+	    {:ok, fetched_user} =
+	    CodeStats.User.changeset(%CodeStats.User{}, 
 	    	%{email: email,
 		      username: username,
 		      password: password,
 		      terms_version: CodeStats.LegalTerms.get_latest_version()
 	    	}) 
-        |> CodeStats.Repo.insert() do
-        
-          {:ok, fetched_user} = {:ok, fetched_user}
-        end
-
+	    |> CodeStats.Repo.insert()
 
 	    {:ok, machine} =
 	      %CodeStats.User.Machine{name: "test_machine"}
