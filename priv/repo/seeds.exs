@@ -9,10 +9,16 @@
 # This script creates a given user from the "user" map. 
 # You can change credentials as you wish below.
 #
-# In the "languages" list you can append/remove names of languages to populate.
-# Every language will be populated for every day with the given range
+# This script can be run multiple times without overwriting existing date, just adding new.
+# This means seeded data for multiple machines and multiple languages is easily done.
+# Resetting the database can be done with
+# 
+#     mix ecto.reset
 #
-# In the "dates_xp" map self explainatory settings can be tweaked
+# In the "languages" list you can append/remove names of languages to populate.
+# Every language will be populated for every day with the given range.
+#
+# In the "dates_xp" map self explainatory settings can be tweaked.
 
 # ------------
 
@@ -24,13 +30,13 @@ initial_user = %{
   terms_version: CodeStats.LegalTerms.get_latest_version()
 }
 
-initial_machine = "test_machine2"
+initial_machine = "test_machine"
 
 languages = ["elixir", "javascript"]
 
 dates_and_xp = %{
-  "date_from" => {2018, 04, 01},
-  "date_to" => {2018, 06, 01},
+  "date_from" => {2018, 07, 01},
+  "date_to" => {2018, 08, 01},
   "min" => 500,
   "max" => 700,
   "random_time" => true
@@ -61,6 +67,20 @@ defmodule Seeds do
     {:ok, fetched_user, machine}
   end
 
+  defp create_new_user(user_map) do
+    {:ok, fetched_user} =
+      CodeStats.User.changeset(%CodeStats.User{}, user_map)
+      |> CodeStats.Repo.insert()
+
+    {:ok, machine} =
+      %CodeStats.User.Machine{name: "test_machine"}
+      |> CodeStats.User.Machine.changeset(%{})
+      |> Ecto.Changeset.put_change(:user_id, fetched_user.id)
+      |> CodeStats.Repo.insert()
+
+    {:ok, fetched_user, machine}
+  end
+
   defp get_or_create_machine(user, machine_name) do
     case CodeStats.Repo.get_by(CodeStats.User.Machine, user_id: user.id, name: machine_name) do
       nil ->
@@ -75,20 +95,6 @@ defmodule Seeds do
       machine ->
         machine
     end
-  end
-
-  defp create_new_user(user_map) do
-    {:ok, fetched_user} =
-      CodeStats.User.changeset(%CodeStats.User{}, user_map)
-      |> CodeStats.Repo.insert()
-
-    {:ok, machine} =
-      %CodeStats.User.Machine{name: "test_machine"}
-      |> CodeStats.User.Machine.changeset(%{})
-      |> Ecto.Changeset.put_change(:user_id, fetched_user.id)
-      |> CodeStats.Repo.insert()
-
-    {:ok, fetched_user, machine}
   end
 
   defp create_date_list(%{"from" => in_from, "to" => in_to, "random_time" => random_time}) do
