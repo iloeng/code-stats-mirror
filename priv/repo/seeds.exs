@@ -18,6 +18,15 @@
 
 languages = ["elixir", "javascript"]
 
+dates_and_xp = %{
+  "date_from" => {2018,01,01}, 
+  "date_to"   => {2018,02,01},
+  "min" => 500,
+  "max" => 1000,
+  "random_time" => true
+}
+
+
 defmodule Seeds do
 
 	@day_seconds 86400
@@ -40,19 +49,19 @@ defmodule Seeds do
 		date_xp = Enum.zip(dates, random_xp)
 	end
 
-	def create_data_for({:ok, language}, user, machine) do
-	    #{:ok, sent_at} = Calendar.DateTime.from_erl({{2018, 11, 27}, {23, 00, 00}}, "Etc/UTC")
-	    #local_datetime = Calendar.DateTime.add!(sent_at, 60*60*24) |> Calendar.DateTime.to_naive()
+	def create_data_for({:ok, language}, user, machine,dates_and_xp ) do
+	   #{:ok, sent_at} = Calendar.DateTime.from_erl({{2018, 11, 27}, {23, 00, 00}}, "Etc/UTC")
+	   #local_datetime = Calendar.DateTime.add!(sent_at, 60*60*24) |> Calendar.DateTime.to_naive()
 
-	    dates = create_date_list(%{
-			"from" => {2018,01,01}, 
-  			"to"   => {2018,02,01}
-  		})
+	   dates = create_date_list(%{
+		    "from" => dates_and_xp["date_from"], 
+  			"to"   => dates_and_xp["date_to"] 
+  	 })
 
-		dates_xp = create_date_xp_list(dates, %{
-			"min" => 500,
-			"max" => 1000
-		})
+		 dates_xp = create_date_xp_list(dates, %{
+		 	  "min" => dates_and_xp["min"],
+		    "max" => dates_and_xp["max"]
+		 })
 
 		Enum.map(dates_xp, fn {sent_at, xp} ->
 			create_seed_data(sent_at, xp, user, machine, language)
@@ -79,6 +88,7 @@ defmodule Seeds do
 
 	def create_user(email, username) do
 	    {:ok, fetched_user} = 
+	    
 	    CodeStats.User.changeset(%CodeStats.User{}, 
 	    	%{email: email,
 		      username: username,
@@ -106,5 +116,5 @@ end
 languages
   |> Enum.map(fn language -> language
 		  |> CodeStats.Language.get_or_create
-		  |> Seeds.create_data_for(new_user, machine) 
+		  |> Seeds.create_data_for(new_user, machine, dates_and_xp) 
 	end)
