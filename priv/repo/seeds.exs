@@ -17,20 +17,22 @@
 # ------------
 
 # Default user account for testing is test:test
-user = %{
+initial_user = %{
   email: "test@test.test",
   username: "test",
   password: "test",
   terms_version: CodeStats.LegalTerms.get_latest_version()
 }
 
+initial_machine = "test_machine2"
+
 languages = ["elixir", "javascript"]
 
 dates_and_xp = %{
-  "date_from" => {2018, 01, 01},
-  "date_to" => {2018, 02, 01},
+  "date_from" => {2018, 04, 01},
+  "date_to" => {2018, 06, 01},
   "min" => 500,
-  "max" => 1000,
+  "max" => 700,
   "random_time" => true
 }
 
@@ -39,7 +41,57 @@ dates_and_xp = %{
 defmodule Seeds do
   @day_seconds 86400
 
-  def create_date_list(%{"from" => in_from, "to" => in_to, "random_time" => random_time}) do
+  def get_or_create_user(email, username, password, machine_name) do
+    {:ok, fetched_user, machine} =
+      case CodeStats.User.get_by_username(username, true) do
+        nil ->
+          create_new_user(%{
+            email: email,
+            username: username,
+            password: password,
+            terms_version: CodeStats.LegalTerms.get_latest_version()
+          })
+
+        user ->
+          machine = get_or_create_machine(user, machine_name)
+
+          {:ok, user, machine}
+      end
+
+    {:ok, fetched_user, machine}
+  end
+
+  defp get_or_create_machine(user, machine_name) do
+    case CodeStats.Repo.get_by(CodeStats.User.Machine, user_id: user.id, name: machine_name) do
+      nil ->
+        {:ok, machine} =
+          %CodeStats.User.Machine{name: machine_name}
+          |> CodeStats.User.Machine.changeset(%{})
+          |> Ecto.Changeset.put_change(:user_id, user.id)
+          |> CodeStats.Repo.insert()
+
+        machine
+
+      machine ->
+        machine
+    end
+  end
+
+  defp create_new_user(user_map) do
+    {:ok, fetched_user} =
+      CodeStats.User.changeset(%CodeStats.User{}, user_map)
+      |> CodeStats.Repo.insert()
+
+    {:ok, machine} =
+      %CodeStats.User.Machine{name: "test_machine"}
+      |> CodeStats.User.Machine.changeset(%{})
+      |> Ecto.Changeset.put_change(:user_id, fetched_user.id)
+      |> CodeStats.Repo.insert()
+
+    {:ok, fetched_user, machine}
+  end
+
+  defp create_date_list(%{"from" => in_from, "to" => in_to, "random_time" => random_time}) do
     from = Calendar.DateTime.from_erl!({in_from, {16, 00, 00}}, "Etc/UTC")
     to = Calendar.DateTime.from_erl!({in_to, {16, 00, 00}}, "Etc/UTC")
     {:ok, diff, _, _} = Calendar.DateTime.diff(to, from)
@@ -49,14 +101,6 @@ defmodule Seeds do
       true -> 0..diff_days |> Enum.map(&advance_by_day(&1, from, true))
       _ -> 0..diff_days |> Enum.map(&advance_by_day(&1, from))
     end
-  end
-
-  def create_date_xp_list(dates, %{"min" => min, "max" => max}) do
-    random_xp =
-      1..Enum.count(dates)
-      |> Enum.map(fn x -> Enum.random(min..max) end)
-
-    date_xp = Enum.zip(dates, random_xp)
   end
 
   def create_data_for({:ok, language}, user, machine, dates_and_xp) do
@@ -74,11 +118,19 @@ defmodule Seeds do
       })
 
     Enum.map(dates_xp, fn {sent_at, xp} ->
-      create_seed_data(sent_at, xp, user, machine, language)
+      create_pulse_and_xp(sent_at, xp, user, machine, language)
     end)
   end
 
-  def create_seed_data(sent_at, xp, user, machine, language) do
+  defp create_date_xp_list(dates, %{"min" => min, "max" => max}) do
+    random_xp =
+      1..Enum.count(dates)
+      |> Enum.map(fn x -> Enum.random(min..max) end)
+
+    date_xp = Enum.zip(dates, random_xp)
+  end
+
+  def create_pulse_and_xp(sent_at, xp, user, machine, language) do
     local_datetime = Calendar.DateTime.add!(sent_at, 60 * 60 * 24) |> Calendar.DateTime.to_naive()
 
     {:ok, pulse} =
@@ -98,40 +150,6 @@ defmodule Seeds do
       |> CodeStats.Repo.insert()
   end
 
-  def create_user(email, username, password) do
-    {:ok, fetched_user, machine} =
-      case CodeStats.User.get_by_username(username, true) do
-        nil ->
-          create_new_user(%{
-            email: email,
-            username: username,
-            password: password,
-            terms_version: CodeStats.LegalTerms.get_latest_version()
-          })
-
-        user ->
-          machine = CodeStats.Repo.get_by!(CodeStats.User.Machine, user_id: user.id)
-
-          {:ok, user, machine}
-      end
-
-    {:ok, fetched_user, machine}
-  end
-
-  defp create_new_user(user_map) do
-    {:ok, fetched_user} =
-      CodeStats.User.changeset(%CodeStats.User{}, user_map)
-      |> CodeStats.Repo.insert()
-
-    {:ok, machine} =
-      %CodeStats.User.Machine{name: "test_machine"}
-      |> CodeStats.User.Machine.changeset(%{})
-      |> Ecto.Changeset.put_change(:user_id, fetched_user.id)
-      |> CodeStats.Repo.insert()
-
-    {:ok, fetched_user, machine}
-  end
-
   defp advance_by_day(additional_day, from) do
     Calendar.DateTime.add!(from, additional_day * @day_seconds)
   end
@@ -142,19 +160,25 @@ defmodule Seeds do
   end
 end
 
-{:ok, new_user, machine} = Seeds.create_user(user.email, user.username, user.password)
+{:ok, user, machine} =
+  Seeds.get_or_create_user(
+    initial_user.email,
+    initial_user.username,
+    initial_user.password,
+    initial_machine
+  )
 
 languages
 |> Enum.map(fn language ->
   language
   |> CodeStats.Language.get_or_create()
-  |> Seeds.create_data_for(new_user, machine, dates_and_xp)
+  |> Seeds.create_data_for(user, machine, dates_and_xp)
 end)
 
 IO.puts(
-  "Test user account with username: #{user.username}, password #{user.password} has been created"
+  "Test user account with username: #{initial_user.username}, password #{initial_user.password} has been created"
 )
 
-IO.puts("Machine with name #{machine.name} has been updated")
+IO.puts("Machine with name #{initial_machine} has been created/updated")
 IO.puts("Populated with languages: ")
 IO.inspect(languages)
