@@ -30,9 +30,9 @@ default_machine = "test_machine"
 
 default_languages = ["elixir", "javascript"]
 
-dates_and_xp = %{
-  date_from: {2018, 07, 01},
-  date_to: {2018, 08, 01},
+default_dates_and_xp = %{
+  date_from: {DateTime.utc_now.year, DateTime.utc_now.month-1, 01},
+  date_to:   {DateTime.utc_now.year, DateTime.utc_now.month, 01},
   min: 500,
   max: 700,
   random_time: true
@@ -52,7 +52,7 @@ defmodule Seeds do
             username: username,
             password: password,
             terms_version: CodeStats.LegalTerms.get_latest_version()
-          })
+          }, machine_name)
 
         user ->
           machine = get_or_create_machine(user, machine_name)
@@ -63,13 +63,13 @@ defmodule Seeds do
     {:ok, fetched_user, machine}
   end
 
-  defp create_new_user(user_map) do
+  defp create_new_user(user_map, machine_name) do
     {:ok, fetched_user} =
       CodeStats.User.changeset(%CodeStats.User{}, user_map)
       |> CodeStats.Repo.insert()
 
     {:ok, machine} =
-      %CodeStats.User.Machine{name: "test_machine"}
+      %CodeStats.User.Machine{name: machine_name}
       |> CodeStats.User.Machine.changeset(%{})
       |> Ecto.Changeset.put_change(:user_id, fetched_user.id)
       |> CodeStats.Repo.insert()
@@ -93,18 +93,6 @@ defmodule Seeds do
     end
   end
 
-  defp create_date_list(%{from: in_from, to: in_to, random_time: random_time}) do
-    from = Calendar.DateTime.from_erl!({in_from, {16, 00, 00}}, "Etc/UTC")
-    to = Calendar.DateTime.from_erl!({in_to, {16, 00, 00}}, "Etc/UTC")
-    {:ok, diff, _, _} = Calendar.DateTime.diff(to, from)
-    diff_days = div(diff, @day_seconds)
-
-    case random_time do
-      true -> 0..diff_days |> Enum.map(&advance_by_day(&1, from, true))
-      _ -> 0..diff_days |> Enum.map(&advance_by_day(&1, from))
-    end
-  end
-
   def create_data_for({:ok, language}, user, machine, dates_and_xp) do
     dates =
       create_date_list(%{
@@ -124,6 +112,18 @@ defmodule Seeds do
     end)
   end
 
+  defp create_date_list(%{from: in_from, to: in_to, random_time: random_time}) do
+    from = Calendar.DateTime.from_erl!({in_from, {16, 00, 00}}, "Etc/UTC")
+    to = Calendar.DateTime.from_erl!({in_to, {16, 00, 00}}, "Etc/UTC")
+    {:ok, diff, _, _} = Calendar.DateTime.diff(to, from)
+    diff_days = div(diff, @day_seconds) -1
+
+    case random_time do
+      true -> -1..diff_days |> Enum.map(&advance_by_day(&1, from, true))
+      _ -> -1..diff_days |> Enum.map(&advance_by_day(&1, from))
+    end
+  end
+
   defp create_date_xp_list(dates, %{min: min, max: max}) do
     random_xp =
       1..Enum.count(dates)
@@ -133,7 +133,7 @@ defmodule Seeds do
   end
 
   def create_pulse_and_xp(sent_at, xp, user, machine, language) do
-    local_datetime = Calendar.DateTime.add!(sent_at, 60 * 60 * 24) |> Calendar.DateTime.to_naive()
+    local_datetime = sent_at |> Calendar.DateTime.to_naive()
 
     {:ok, pulse} =
       CodeStats.User.Pulse.changeset(
@@ -157,7 +157,7 @@ defmodule Seeds do
   end
 
   defp advance_by_day(additional_day, from, _) do
-    random_time = Enum.random(0..@day_seconds)
+    random_time = Enum.random(0..@day_seconds-300)
     Calendar.DateTime.add!(from, additional_day * @day_seconds + random_time)
   end
 
@@ -166,6 +166,36 @@ defmodule Seeds do
   def env_get_lang(env_var), do: Enum.filter(env_var, &string_not_empty?&1)
 
   defp string_not_empty?(string) when is_binary(string), do: string != ""
+
+  def env_get_date(env_var, default_var) do
+    # Date should be in format yyyy,mm,dd
+    case System.get_env(env_var) do
+      nil -> default_var
+
+      x -> x
+     |> String.trim
+     |> String.split(",")
+     |> Enum.filter(&string_not_empty?/1)
+     |> Enum.map(&String.to_integer/1)
+     |> List.to_tuple
+    end
+  
+  end
+
+  def env_to_bool(env_var, default_var) do
+    case System.get_env(env_var) do
+      nil -> default_var 
+      x -> x |> String.trim
+             |> String.to_existing_atom
+    end
+  end
+
+  def env_xp(env_var, default_var) do
+    case System.get_env(env_var) do
+      nil -> default_var
+      x   -> String.to_integer(x)
+    end
+  end
 end
 
 {env_username, env_password} = Seeds.env_get_user(System.get_env("seed_user") || default_user)
@@ -181,6 +211,16 @@ initial_user = %{
   password: env_password,
   terms_version: CodeStats.LegalTerms.get_latest_version()
 }
+
+dates_and_xp = %{
+  date_from: Seeds.env_get_date("seed_date_from", default_dates_and_xp.date_from),
+    date_to: Seeds.env_get_date("seed_date_to", default_dates_and_xp.date_to),
+        min: Seeds.env_xp("seed_min", default_dates_and_xp.min),
+        max: Seeds.env_xp("seed_max", default_dates_and_xp.max),
+random_time: Seeds.env_to_bool("seed_random", default_dates_and_xp.random_time) 
+}
+
+IO.inspect dates_and_xp
 
 {:ok, user, machine} =
   Seeds.get_or_create_user(
@@ -201,7 +241,7 @@ IO.puts(
   "Test user account with username: #{initial_user.username}, password #{initial_user.password} has been created"
 )
 
-IO.puts("Machine with name #{default_machine} has been created/updated")
+IO.puts("Machine with name #{env_machine} has been created/updated")
 IO.puts("Populated with languages: ")
 IO.inspect(env_languages)
 
