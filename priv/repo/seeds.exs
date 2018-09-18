@@ -59,9 +59,12 @@ default_machine = "test_machine"
 
 default_languages = ["Elixir", "JavaScript"]
 
+date_from_month = if DateTime.utc_now().month - 1 == 0, do: 1, else: DateTime.utc_now().month - 1
+date_to_month = if DateTime.utc_now().month == 1, do: 2, else: DateTime.utc_now().month
+
 default_dates_and_xp = %{
-  date_from: {DateTime.utc_now().year, DateTime.utc_now().month - 1, 01},
-  date_to: {DateTime.utc_now().year, DateTime.utc_now().month, 01},
+  date_from: {DateTime.utc_now().year, date_from_month, 01},
+  date_to: {DateTime.utc_now().year, date_to_month, 01},
   min: 500,
   max: 700,
   random_time: true
