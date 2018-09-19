@@ -108,6 +108,18 @@
         <a target="_blank" href="https://github.com/joebew42">GitHub</a>
       </p>
     </div>
+
+    <div>
+      <%= profile_pic.("thehabbos007.jpg", "Ahmad Sattar") %>
+
+      <h3>Ahmad Sattar</h3>
+      <p class="subtitle">Site developer</p>
+
+      <p>
+        <a target="_blank" href="https://github.com/thehabbos007">GitHub</a>
+        / <a target="_blank" href="https://gitlab.com/thehabbos007">GitLab</a>
+      </p>
+    </div>
   </div>
 </div>
 

@@ -35,6 +35,8 @@ mix deps.get                # Get Hex dependencies, answer yes to installing Hex
 mix compile                 # Compile application
 mix ecto.create             # Create database using default credentials
 mix ecto.migrate            # Migrate database to latest state
+mix run priv/repo/seeds.exs # To initialize a test:test user for testing, inspect file 
+                            # for further tweaking (optional)
 cd assets && npm install    # Install frontend dependencies and tools
 nano config/dev.secret.exs  # Set up dev config with at least the line "use Mix.Config"
                             # at the top
@@ -45,6 +47,7 @@ nano config/dev.secret.exs  # Set up dev config with at least the line "use Mix.
 * `mix test`: Run all tests suite
 * `mix phx.server`: Run development server on port 5000 (default, you can configure this in
   `dev.secret.exs`)
+* `mix ecto.reset`: Shorthand for dropping, creating, migrating and running seed script
 * `mix frontend.build`: Build the JS/CSS frontend
 * `mix frontend.watch`: Build the frontend and watch for changes (also run when using `phx.server`)
 * `mix frontend.clean`: Clean frontend output and build artifacts
