@@ -10,27 +10,27 @@
 # You can change credentials as you wish below.
 # Or supply environment variables:
 #
-#     seed_user,      format user:password
-#     seed_email,     format email@email.email
-#     seed_machine,   format machine_name
+#     SEED_USER,      format user:password
+#     SEED_EMAIL,     format email@email.email
+#     SEED_MACHINE,   format machine_name
 #
-#     seed_date_from, format YYYY,MM,DD
-#     seed_date_to,   format YYYY,MM,DD
+#     SEED_DATE_FROM, format YYYY,MM,DD
+#     SEED_DATE_TO,   format YYYY,MM,DD
 #
-#     seed_min,       format number
-#     seed_max,       format number
+#     SEED_MIN,       format number
+#     SEED_MAX,       format number
 #
-#     seed_lang,      format Language1,Language2,Language3,...
-#     seed_random,    format true/false
+#     SEED_LANG,      format Language1,Language2,Language3,...
+#     SEED_RANDOM,    format true/false
 #
-#     seed_random decides whether or not to spread out experience randomly throughout the day(s)
+#     SEED_RANDOM decides whether or not to spread out experience randomly throughout the day(s)
 #
 #     Example run of the seed script:
 """
-     seed_user=test2:test2 seed_email=test2@test2.test \
-     seed_machine=machine2 seed_date_from=2018,07,01 \
-     seed_date_to=2018,08,01 seed_min=1000 seed_max=2000 \
-     seed_lang=Java,Scala seed_random=false mix run priv/repo/seeds.exs
+     SEED_USER=test2:test2 SEED_EMAIL=test2@test2.test \
+     SEED_MACHINE=machine2 SEED_DATE_FROM=2018,07,01 \
+     SEED_DATE_TO=2018,08,01 SEED_MIN=1000 SEED_MAX=2000 \
+     SEED_LANG=Java,Scala SEED_RANDOM=false mix run priv/repo/seeds.exs
 """
 
 #    The above data uses values different from default.
@@ -241,12 +241,12 @@ defmodule Seeds do
   end
 end
 
-{env_username, env_password} = Seeds.env_get_user(System.get_env("seed_user") || default_user)
-env_email = System.get_env("seed_email") || default_email
+{env_username, env_password} = Seeds.env_get_user(System.get_env("SEED_USER") || default_user)
+env_email = System.get_env("SEED_EMAIL") || default_email
 
-env_machine = System.get_env("seed_machine") || default_machine
+env_machine = System.get_env("SEED_MACHINE") || default_machine
 
-env_languages = Seeds.env_get_lang(System.get_env("seed_lang") || default_languages)
+env_languages = Seeds.env_get_lang(System.get_env("SEED_LANG") || default_languages)
 
 initial_user = %{
   email: env_email,
@@ -256,11 +256,11 @@ initial_user = %{
 }
 
 dates_and_xp = %{
-  date_from: Seeds.env_get_date("seed_date_from", default_dates_and_xp.date_from),
-  date_to: Seeds.env_get_date("seed_date_to", default_dates_and_xp.date_to),
-  min: Seeds.env_xp("seed_min", default_dates_and_xp.min),
-  max: Seeds.env_xp("seed_max", default_dates_and_xp.max),
-  random_time: Seeds.env_to_bool("seed_random", default_dates_and_xp.random_time)
+  date_from: Seeds.env_get_date("SEED_DATE_FROM", default_dates_and_xp.date_from),
+  date_to: Seeds.env_get_date("SEED_DATE_TO", default_dates_and_xp.date_to),
+  min: Seeds.env_xp("SEED_MIN", default_dates_and_xp.min),
+  max: Seeds.env_xp("SEED_MAX", default_dates_and_xp.max),
+  random_time: Seeds.env_to_bool("SEED_RANDOM", default_dates_and_xp.random_time)
 }
 
 {:ok, user, machine} =
@@ -285,3 +285,4 @@ IO.puts(
 IO.puts("Machine with name #{env_machine} has been created/updated")
 IO.puts("Populated with languages: ")
 IO.inspect(env_languages)
+IO.puts("With experience ranging from #{dates_and_xp.min} to #{dates_and_xp.max}")
