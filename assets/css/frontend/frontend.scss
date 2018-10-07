@@ -2,12 +2,12 @@
 
 @import '../common/normalize';
 
-@import './settings';
-@import './fonts';
-@import './typography';
+@import '../common/settings';
+@import '../common/fonts';
+@import '../common/typography';
+@import '../common/ie-warning';
 @import './forms';
 @import './flashes';
-@import './ie-warning';
 @import './tabs';
 @import './cookie-notice';
 
