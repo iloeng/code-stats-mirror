@@ -68,8 +68,8 @@ defmodule CodeStats.Mixfile do
       {:geolite2data, "~> 0.0.3"},
       {:remote_ip, "~> 0.1.3"},
       {:distillery, "~> 1.5.2", runtime: false},
-      {:absinthe, "~> 1.4.9"},
-      {:absinthe_plug, "~> 1.4.2"},
+      {:absinthe, "~> 1.4.13"},
+      {:absinthe_plug, "~> 1.4.5"},
       {:ex2ms, "~> 1.5"},
       {:csv, "~> 2.1.1"}
     ]
