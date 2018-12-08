@@ -8,7 +8,7 @@
     <meta name="author" content="Mikko Ahlroth">
 
     <title><%= get_conf(:site_name) %> Battle Mode</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/battle/css/battle.css") %>">
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/battle/css/battle.css") %>">
 
     <link rel="apple-touch-icon" sizes="57x57" href="/frontend/assets/apple-touch-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/frontend/assets/apple-touch-icon-60x60.png">
@@ -37,7 +37,7 @@
   <body>
     <%= render @view_module, @view_template, assigns %>
 
-    <script type="text/javascript" src="<%= static_path(@conn, "/battle/js/battle.js") %>"></script>
+    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/battle/js/battle.js") %>"></script>
     <%= raw get_conf(:analytics_code) %>
   </body>
 </html>

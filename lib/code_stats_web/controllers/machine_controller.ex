@@ -28,7 +28,7 @@ defmodule CodeStatsWeb.MachineController do
       %Machine{} ->
         conn
         |> put_flash(:success, "Machine added successfully.")
-        |> redirect(to: machine_path(conn, :list))
+        |> redirect(to: Routes.machine_path(conn, :list))
 
       %Changeset{} = changeset ->
         conn
@@ -57,7 +57,7 @@ defmodule CodeStatsWeb.MachineController do
         conn
         |> single_machine_assigns(machine)
         |> put_flash(:success, "Machine edited successfully.")
-        |> redirect(to: machine_path(conn, :view_single, machine.id))
+        |> redirect(to: Routes.machine_path(conn, :view_single, machine.id))
       else
         {:error, changeset} ->
           conn
@@ -77,7 +77,7 @@ defmodule CodeStatsWeb.MachineController do
          %Machine{} = machine <- edit_api_key_or_flash(conn, changeset) do
       conn
       |> put_flash(:success, "API key regenerated for machine #{machine.name}.")
-      |> redirect(to: machine_path(conn, :list))
+      |> redirect(to: Routes.machine_path(conn, :list))
     end
   end
 
@@ -101,12 +101,12 @@ defmodule CodeStatsWeb.MachineController do
             :success,
             "The machine has been deactivated and will be deleted in a few moments."
           )
-          |> redirect(to: machine_path(conn, :list))
+          |> redirect(to: Routes.machine_path(conn, :list))
 
         {:error, _} ->
           conn
           |> put_flash(:error, "Machine could not be deleted.")
-          |> redirect(to: machine_path(conn, :list))
+          |> redirect(to: Routes.machine_path(conn, :list))
       end
     end
   end
@@ -127,7 +127,7 @@ defmodule CodeStatsWeb.MachineController do
       with {:ok, machine} <- do_activate(machine, active) do
         conn
         |> put_flash(:success, "Machine #{machine.name} #{verb}.")
-        |> redirect(to: machine_path(conn, :list))
+        |> redirect(to: Routes.machine_path(conn, :list))
       else
         {:error, changeset} ->
           conn
@@ -183,7 +183,7 @@ defmodule CodeStatsWeb.MachineController do
       {:error, _} ->
         conn
         |> put_flash(:error, "Error regenerating API key.")
-        |> redirect(to: machine_path(conn, :list))
+        |> redirect(to: Routes.machine_path(conn, :list))
     end
   end
 

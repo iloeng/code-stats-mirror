@@ -1,7 +1,7 @@
 <div class="stripe">
   <h1>Reset your password</h1>
 
-  <%= form_for(@changeset, auth_path(@conn, :reset, @token), fn f -> %>
+  <%= form_for(@changeset, Routes.auth_path(@conn, :reset, @token), fn f -> %>
     <label for="password" class="<%= if f.errors[:password], do: "has-error" %>">Password (required)</label>
     <div class="input">
       <%= password_input(f, :password, required: true) %>

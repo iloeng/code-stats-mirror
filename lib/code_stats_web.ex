@@ -24,7 +24,7 @@ defmodule CodeStatsWeb do
       import Ecto
       import Ecto.Query, only: [from: 1, from: 2]
 
-      import CodeStatsWeb.Router.Helpers
+      alias CodeStatsWeb.Router.Helpers, as: Routes
       import CodeStatsWeb.Gettext
     end
   end
@@ -47,7 +47,7 @@ defmodule CodeStatsWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import CodeStatsWeb.Router.Helpers
+      alias CodeStatsWeb.Router.Helpers, as: Routes
       import CodeStatsWeb.ErrorHelpers
       import CodeStatsWeb.Gettext
     end

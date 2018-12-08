@@ -1,7 +1,7 @@
 <div class="stripe">
   <h1>Machine: <%= @machine.name %></h1>
 
-  <%= form_for(@changeset, machine_path(@conn, :edit, @machine.id), fn f -> %>
+  <%= form_for(@changeset, Routes.machine_path(@conn, :edit, @machine.id), fn f -> %>
   <label for="machine_name" class="<%= if f.errors[:name], do: "has-error" %>">Name (required)</label>
 
     <div class="input">
@@ -15,6 +15,6 @@
   <% end) %>
 
   <p>
-    <a class="btn btn-default" href="<%= machine_path(@conn, :list) %>">&laquo; Back to machine list</a>
+    <a class="btn btn-default" href="<%= Routes.machine_path(@conn, :list) %>">&laquo; Back to machine list</a>
   </p>
 </div>

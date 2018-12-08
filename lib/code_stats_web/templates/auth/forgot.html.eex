@@ -1,7 +1,7 @@
 <div class="stripe">
   <h1>Request a password reset token</h1>
 
-  <%= form_for(@changeset, auth_path(@conn, :render_forgot), fn f -> %>
+  <%= form_for(@changeset, Routes.auth_path(@conn, :render_forgot), fn f -> %>
     <label for="username" class="<%= if f.errors[:username], do: "has-error" %>">Username (required)</label>
     <div class="input">
       <%= text_input(f, :username, required: true) %>

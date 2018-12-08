@@ -35,10 +35,10 @@
  <%= if assigns[:id], do: raw(~s(id="#{@id}")), else: "" %>
  <%= if assigns[:class], do: raw(~s(class="#{@class}")), else: "" %>
 >
-  <source srcset="<%= static_path(@conn, no_ext <> ".webp") %>" type="image/webp" />
-  <source srcset="<%= static_path(@conn, @src) %>" type="<%= type %>" />
+  <source srcset="<%= Routes.static_path(@conn, no_ext <> ".webp") %>" type="image/webp" />
+  <source srcset="<%= Routes.static_path(@conn, @src) %>" type="<%= type %>" />
   <img
-   src=<%= static_path(@conn, @src) %>
+   src=<%= Routes.static_path(@conn, @src) %>
    alt="<%= @alt %>"
    title="<%= @title %>"
    <%= if assigns[:img_id], do: raw(~s(id="#{@img_id}")), else: "" %>

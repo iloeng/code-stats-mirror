@@ -30,7 +30,7 @@ defmodule CodeStatsWeb.TermsController do
       :ok ->
         conn
         |> put_flash(:success, "You have accepted the new legal terms.")
-        |> redirect(to: profile_path(conn, :my_profile))
+        |> redirect(to: Routes.profile_path(conn, :my_profile))
 
       val ->
         Logger.error("Error storing consent: #{inspect(val)}")
@@ -57,6 +57,6 @@ defmodule CodeStatsWeb.TermsController do
   """
   @spec delete_account(Plug.Conn.t(), map) :: Plug.Conn.t()
   def delete_account(conn, params) do
-    AuthUtils.delete_user_action(conn, params, {&terms_path/2, :ask_consent})
+    AuthUtils.delete_user_action(conn, params, {&Routes.terms_path/2, :ask_consent})
   end
 end

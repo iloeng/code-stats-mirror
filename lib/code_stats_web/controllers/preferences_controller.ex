@@ -21,7 +21,7 @@ defmodule CodeStatsWeb.PreferencesController do
       %User{} ->
         conn
         |> put_flash(:success, "Preferences updated!")
-        |> redirect(to: preferences_path(conn, :edit))
+        |> redirect(to: Routes.preferences_path(conn, :edit))
 
       %Ecto.Changeset{} = error_changeset ->
         conn
@@ -41,17 +41,17 @@ defmodule CodeStatsWeb.PreferencesController do
         %User{} ->
           conn
           |> put_flash(:success, "Password changed.")
-          |> redirect(to: preferences_path(conn, :edit))
+          |> redirect(to: Routes.preferences_path(conn, :edit))
 
         %Ecto.Changeset{} ->
           conn
           |> put_flash(:error, "Error changing password.")
-          |> redirect(to: preferences_path(conn, :edit))
+          |> redirect(to: Routes.preferences_path(conn, :edit))
       end
     else
       conn
       |> put_flash(:error, "Old password was wrong!")
-      |> redirect(to: preferences_path(conn, :edit))
+      |> redirect(to: Routes.preferences_path(conn, :edit))
     end
   end
 
@@ -60,7 +60,7 @@ defmodule CodeStatsWeb.PreferencesController do
   """
   @spec delete(Plug.Conn.t(), map) :: Plug.Conn.t()
   def delete(conn, params) do
-    AuthUtils.delete_user_action(conn, params, {&preferences_path/2, :edit})
+    AuthUtils.delete_user_action(conn, params, {&Routes.preferences_path/2, :edit})
   end
 
   defp common_edit_assigns(conn) do

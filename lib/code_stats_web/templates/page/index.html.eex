@@ -19,7 +19,7 @@
     </p>
 
     <p>
-      <a href="<%= page_path(@conn, :plugins) %>">See available plugins →</a>
+      <a href="<%= Routes.page_path(@conn, :plugins) %>">See available plugins →</a>
     </p>
   </section>
   <section class="frontpage-ad">
@@ -39,7 +39,7 @@
     </p>
 
     <p>
-      <a href="<%= profile_path(@conn, :profile, "Nicd") %>">
+      <a href="<%= Routes.profile_path(@conn, :profile, "Nicd") %>">
         See example profile →
       </a>
     </p>

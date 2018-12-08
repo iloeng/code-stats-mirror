@@ -16,6 +16,6 @@
   <h2>Forgot your password?</h2>
 
   <p>
-    If you forgot your password, <a href="<%= auth_path(@conn, :render_forgot) %>">proceed to the password reset form</a>. If you have not added an email address to your account, it cannot be recovered.
+    If you forgot your password, <a href="<%= Routes.auth_path(@conn, :render_forgot) %>">proceed to the password reset form</a>. If you have not added an email address to your account, it cannot be recovered.
   </p>
 </div>

@@ -21,7 +21,7 @@
     <a href="#atom">
       <img
        class="plugin-image"
-       src="<%= static_path(@conn, "/assets/frontend/images/atom-logo.svg") %>"
+       src="<%= Routes.static_path(@conn, "/assets/frontend/images/atom-logo.svg") %>"
        title="Atom editor"
        alt="Atom editor logo"
       />
@@ -29,7 +29,7 @@
     <a href="#jetbrains">
       <img
        class="plugin-image"
-       src="<%= static_path(@conn, "/assets/frontend/images/jetbrains-logo.svg") %>"
+       src="<%= Routes.static_path(@conn, "/assets/frontend/images/jetbrains-logo.svg") %>"
        title="JetBrains"
        alt="JetBrains logo"
       />
@@ -46,7 +46,7 @@
     <a href="#vs">
       <img
        class="plugin-image"
-       src="<%= static_path(@conn, "/assets/frontend/images/vs-logo.svg") %>"
+       src="<%= Routes.static_path(@conn, "/assets/frontend/images/vs-logo.svg") %>"
        title="Visual Studio"
        alt="Visual Studio logo"
       />
@@ -66,7 +66,7 @@
   </p>
 
   <p>
-    Note that <em>at no point is any of your code sent to <%= get_conf(:site_name) %></em>. Only the amounts of XP (roughly the amount of keystrokes) are sent. For further information, check the <a href="<%= page_path(@conn, :api_docs) %>">API documentation</a> and the source code of the plugins.
+    Note that <em>at no point is any of your code sent to <%= get_conf(:site_name) %></em>. Only the amounts of XP (roughly the amount of keystrokes) are sent. For further information, check the <a href="<%= Routes.page_path(@conn, :api_docs) %>">API documentation</a> and the source code of the plugins.
   </p>
 
   <hr />
@@ -86,7 +86,7 @@
 
     <img
      class="plugin-image"
-     src="<%= static_path(@conn, "/assets/frontend/images/atom-logo.svg") %>"
+     src="<%= Routes.static_path(@conn, "/assets/frontend/images/atom-logo.svg") %>"
      title="Atom editor"
      alt="Atom editor logo"
     />
@@ -115,7 +115,7 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
 
     <img
      class="plugin-image"
-     src="<%= static_path(@conn, "/assets/frontend/images/jetbrains-logo.svg") %>"
+     src="<%= Routes.static_path(@conn, "/assets/frontend/images/jetbrains-logo.svg") %>"
      title="JetBrains"
      alt="JetBrains logo"
     />
@@ -188,7 +188,7 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
 
     <img
      class="plugin-image"
-     src="<%= static_path(@conn, "/assets/frontend/images/vs-logo.svg") %>"
+     src="<%= Routes.static_path(@conn, "/assets/frontend/images/vs-logo.svg") %>"
      title="Visual Studio"
      alt="Visual Studio logo"
     />
@@ -235,7 +235,7 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
       <h2 class="media-heading">Other editors</h2>
 
       <p>
-        If there is no plugin for your favourite editor, you can check out the <a href="<%= page_path(@conn, :api_docs) %>">API docs</a> and implement one yourself. If you do, please let us know so we can add a link to it here!
+        If there is no plugin for your favourite editor, you can check out the <a href="<%= Routes.page_path(@conn, :api_docs) %>">API docs</a> and implement one yourself. If you do, please let us know so we can add a link to it here!
       </p>
     </div>
 

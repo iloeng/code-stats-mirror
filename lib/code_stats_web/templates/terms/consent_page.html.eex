@@ -30,7 +30,7 @@
   <div id="consent-form">
     <h2>Accept terms</h2>
 
-    <%= form_tag(terms_path(@conn, :set_consent)) %>
+    <%= form_tag(Routes.terms_path(@conn, :set_consent)) %>
       <label for="not-underage">
         I am 16 years of age or older and able to consent to the terms above
       </label>
@@ -54,7 +54,7 @@
       account, type "DELETE" into the text input below, and press the button.
     </p>
 
-    <%= form_tag(terms_path(@conn, :delete_account), method: :delete) %>
+    <%= form_tag(Routes.terms_path(@conn, :delete_account), method: :delete) %>
       <label><strong>This cannot be undone!</strong></label>
       <input type="text" class="form-control" name="delete_confirmation" maxlength="6" required />
 

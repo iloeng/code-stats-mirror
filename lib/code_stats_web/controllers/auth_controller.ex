@@ -28,7 +28,7 @@ defmodule CodeStatsWeb.AuthController do
     with %User{} = user <- User.get_by_username(username, true),
          %Plug.Conn{} = conn <- AuthUtils.auth_user(conn, user, password),
          %Plug.Conn{} = conn <- maybe_remember_me(conn, user, params) do
-      redirect(conn, to: profile_path(conn, :my_profile))
+      redirect(conn, to: Routes.profile_path(conn, :my_profile))
     else
       ret ->
         # If ret is nil, user was not found -> run dummy auth to prevent user enumeration
@@ -68,7 +68,7 @@ defmodule CodeStatsWeb.AuthController do
           :success,
           "Great success! Your account was created and you can now log in with the details you provided."
         )
-        |> redirect(to: auth_path(conn, :render_login))
+        |> redirect(to: Routes.auth_path(conn, :render_login))
     end
   end
 
@@ -76,7 +76,7 @@ defmodule CodeStatsWeb.AuthController do
     conn
     |> AuthUtils.unauth_user()
     |> RememberMePlug.kill_cookie()
-    |> redirect(to: page_path(conn, :index))
+    |> redirect(to: Routes.page_path(conn, :index))
   end
 
   def render_forgot(conn, _params) do
@@ -104,7 +104,7 @@ defmodule CodeStatsWeb.AuthController do
       :info,
       "A password reset email will be sent shortly to the email address linked to the account, if the account had one. If you do not receive an email, please check that you typed the account name correctly."
     )
-    |> redirect(to: auth_path(conn, :render_forgot))
+    |> redirect(to: Routes.auth_path(conn, :render_forgot))
   end
 
   def render_reset(conn, %{"token" => token}) do
@@ -135,7 +135,7 @@ defmodule CodeStatsWeb.AuthController do
         :success,
         "Password reset successfully. You can now log in with the new password."
       )
-      |> redirect(to: auth_path(conn, :render_login))
+      |> redirect(to: Routes.auth_path(conn, :render_login))
     else
       _ ->
         conn
@@ -143,7 +143,7 @@ defmodule CodeStatsWeb.AuthController do
           :error,
           "Unable to reset password. The password reset token may have expired. Please try requesting a new token."
         )
-        |> redirect(to: auth_path(conn, :render_login))
+        |> redirect(to: Routes.auth_path(conn, :render_login))
     end
   end
 

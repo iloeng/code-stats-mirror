@@ -17,7 +17,7 @@
 <div class="stripe">
   <h2 id="signup-form">Sign up</h2>
 
-  <%= form_for(@changeset, auth_path(@conn, :signup) <> "#signup-form", fn f -> %>
+  <%= form_for(@changeset, Routes.auth_path(@conn, :signup) <> "#signup-form", fn f -> %>
     <label for="user_username" class="<%= if f.errors[:username], do: "has-error" %>">Username (required)</label>
     <div class="input">
       <%= text_input(f, :username, required: true) %>

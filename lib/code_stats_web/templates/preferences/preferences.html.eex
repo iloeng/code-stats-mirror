@@ -7,7 +7,7 @@
     <div id="user-details">
       <h2>User details</h2>
 
-      <%= form_for(@changeset, preferences_path(@conn, :do_edit), fn f -> %>
+      <%= form_for(@changeset, Routes.preferences_path(@conn, :do_edit), fn f -> %>
         <label for="user_email" class="<%= if f.errors[:email], do: "has-error" %>">Email address</label>
         <div class="input">
           <%= email_input(f, :email) %>
@@ -35,7 +35,7 @@
     <div id="change-password" class="stripe">
       <h2>Change password</h2>
 
-      <%= form_tag(preferences_path(@conn, :change_password)) %>
+      <%= form_tag(Routes.preferences_path(@conn, :change_password)) %>
         <label for="old_password" class="<%= if assigns[:old_password_error], do: "has-error" %>">Old password (required)</label>
         <div class="input">
           <input type="password" id="old_password" name="old_password" required />
@@ -63,7 +63,7 @@
         <p>
           Press the button below to download your XP data in CSV format. You can also include all
           private data contained in the service about your account. See the
-          <a href="<%= page_path(@conn, :terms) %>">privacy policy</a> for more information.
+          <a href="<%= Routes.page_path(@conn, :terms) %>">privacy policy</a> for more information.
         </p>
 
         <form>
@@ -87,7 +87,7 @@
         the delete button. If you do this, all your data will be removed and cannot be recovered.
       </p>
 
-      <%= form_tag(preferences_path(@conn, :delete)) %>
+      <%= form_tag(Routes.preferences_path(@conn, :delete)) %>
         <label><strong>This cannot be undone!</strong></label>
         <input type="text" class="form-control" name="delete_confirmation" maxlength="6" required />
 

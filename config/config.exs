@@ -87,8 +87,6 @@ config :phoenix, :template_engines,
   eex: Appsignal.Phoenix.Template.EExEngine,
   exs: Appsignal.Phoenix.Template.ExsEngine
 
-config :code_stats, CodeStats.Repo, loggers: [Appsignal.Ecto, Ecto.LogEntry]
-
 config :appsignal, :config,
   filter_parameters: [
     "password",
@@ -114,6 +112,9 @@ config :mbu,
   tmp_path: Path.expand(".tmp")
 
 import_config "appsignal.exs"
+
+# Use Jason for JSON parsing in Phoenix
+config :phoenix, :json_library, Jason
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

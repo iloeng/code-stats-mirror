@@ -35,7 +35,7 @@ config :phoenix, :stacktrace_depth, 20
 
 # Configure your database
 config :code_stats, CodeStats.Repo,
-  adapter: Ecto.Adapters.Postgres,
+  log: :debug,
   username: "postgres",
   password: "postgres",
   database: "code_stats_dev",

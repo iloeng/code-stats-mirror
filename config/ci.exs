@@ -11,7 +11,6 @@ config :logger, level: :warn
 
 # Configure your database
 config :code_stats, CodeStats.Repo,
-  adapter: Ecto.Adapters.Postgres,
   username: "postgres",
   password: "postgres",
   database: "code_stats_ci",

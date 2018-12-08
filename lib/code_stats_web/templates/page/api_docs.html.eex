@@ -115,7 +115,7 @@ int get_level(float xp) {
   </h2>
 
   <p>
-    Code::Stats uses simple token authentication. A single token authenticates both a user and the machine they are using. It is signed to prevent tampering and unauthorized creation of tokens matching other users' information. To generate a token, you need to create a new machine from the <a href="<%= machine_path(@conn, :list) %>">Machine control panel</a>. A token looks like this:
+    Code::Stats uses simple token authentication. A single token authenticates both a user and the machine they are using. It is signed to prevent tampering and unauthorized creation of tokens matching other users' information. To generate a token, you need to create a new machine from the <a href="<%= Routes.machine_path(@conn, :list) %>">Machine control panel</a>. A token looks like this:
   </p>
 
   <pre><code>SFMyNTY.OEotWWdnPT0jI01qaz0.X0wVEZquh8Ogau1iTtBihYqqL71FD8N6p5ChQiIpaxQ</code></pre>
@@ -141,7 +141,7 @@ int get_level(float xp) {
   </h3>
 
   <p>
-    <code>GET <%= profile_path(@conn, :profile_api, "username") %></code>
+    <code>GET <%= Routes.profile_path(@conn, :profile_api, "username") %></code>
   </p>
 
   <p>
@@ -197,7 +197,7 @@ int get_level(float xp) {
   </h3>
 
   <p>
-    <code>POST <%= pulse_path(@conn, :add) %></code>
+    <code>POST <%= Routes.pulse_path(@conn, :add) %></code>
   </p>
 
   <p>

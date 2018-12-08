@@ -8,7 +8,7 @@ defmodule CodeStatsWeb.ProfileController do
 
   def my_profile(conn, _params) do
     user = AuthUtils.get_current_user(conn)
-    redirect(conn, to: profile_path(conn, :profile, user.username))
+    redirect(conn, to: Routes.profile_path(conn, :profile, user.username))
   end
 
   def profile(conn, %{"username" => username}) do
@@ -165,7 +165,7 @@ defmodule CodeStatsWeb.ProfileController do
   end
 
   defp render_or_redirect(conn, user, _, _, redirect_action) do
-    redirect(conn, to: profile_path(conn, redirect_action, user.username))
+    redirect(conn, to: Routes.profile_path(conn, redirect_action, user.username))
   end
 
   # Fix the username specified in the URL by converting plus characters to spaces.

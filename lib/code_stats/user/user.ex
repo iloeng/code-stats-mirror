@@ -45,7 +45,7 @@ defmodule CodeStats.User do
     |> validate_length(:password, min: 1, max: 255)
     |> validate_format(:username, ~r/^[^\/#%?&=+]+$/)
     |> validate_latest_terms()
-    |> validations()
+    |> common_validations()
     |> unique_constraint(:username)
     |> unique_constraint(:lower_username)
   end
@@ -56,7 +56,7 @@ defmodule CodeStats.User do
   def updating_changeset(data, params \\ %{}) do
     data
     |> cast(params, [:email, :private_profile])
-    |> validations()
+    |> common_validations()
   end
 
   @doc """
@@ -317,7 +317,7 @@ defmodule CodeStats.User do
   end
 
   # Common validations for creating and editing users
-  defp validations(changeset) do
+  defp common_validations(changeset) do
     changeset
     |> validate_format(:email, ~r/^$|@/)
   end
