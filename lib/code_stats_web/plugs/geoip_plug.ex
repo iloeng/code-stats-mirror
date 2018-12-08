@@ -5,6 +5,8 @@ defmodule CodeStatsWeb.GeoIPPlug do
   Contains also utility functions for dealing with the GeoIP information.
   """
 
+  alias Geolix.Adapter.MMDB2
+
   @geoip_key :_codestats_geoip_data
 
   # Round to this many decimal places to prevent being too accurate and preserve privacy
@@ -26,8 +28,8 @@ defmodule CodeStatsWeb.GeoIPPlug do
   def get_coords(conn) do
     case conn.private[@geoip_key] do
       %{
-        city: %Geolix.Result.City{
-          location: %Geolix.Record.Location{
+        city: %MMDB2.Result.City{
+          location: %MMDB2.Record.Location{
             latitude: lat,
             longitude: lon
           }
