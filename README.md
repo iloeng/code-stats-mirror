@@ -53,6 +53,14 @@ nano config/dev.secret.exs  # Set up dev config with at least the line "use Mix.
 * `mix frontend.clean`: Clean frontend output and build artifacts
 * `MINIFY=true mix frontend.build`: Build frontend with minification.
 
+### Env vars for development
+
+```
+RUN_CACHES=true   # If set to any value, will generate user caches even in dev mode, otherwise user
+                  # caches will not be generated
+MINIFY=true       # If set to true, generated frontend assets will be minified.
+```
+
 ## Production
 
 Generate [Distillery](https://hex.pm/packages/distillery) release:

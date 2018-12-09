@@ -20,10 +20,10 @@ defmodule CodeStats do
       worker(CodeStats.User.Terminator, [])
     ]
 
-    # Start XPCacheRefresher if in prod
+    # Start XPCacheRefresher if in prod or if told to
     children =
-      case CodeStats.Utils.get_conf(:compile_env) do
-        :dev -> children
+      case {CodeStats.Utils.get_conf(:compile_env), System.get_env("RUN_CACHES")} do
+        {:dev, nil} -> children
         _ -> children ++ [worker(CodeStats.XP.XPCacheRefresher, [])]
       end
 

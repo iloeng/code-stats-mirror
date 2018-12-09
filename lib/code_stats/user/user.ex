@@ -134,21 +134,15 @@ defmodule CodeStats.User do
   @doc """
   Calculate and store cached XP values for user.
 
-  If `update_all` is set, all XP is gathered and the whole cache is replaced, not
-  just added to. This results in a total recalculation of all the user's XP.
+  If `update_all` is set, XP is gathered since the given datetime. If the value is `:all`, then
+  all of the users XP is processed.
   """
-  def update_cached_xps(user, update_all \\ false) do
+  @spec update_cached_xps(%__MODULE__{}, nil | :all | DateTime.t()) :: map
+  def update_cached_xps(user, since \\ nil) do
     update_start_time = DateTime.utc_now()
 
-    last_cached =
-      if not update_all and user.last_cached != nil do
-        user.last_cached
-      else
-        DateTime.from_naive!(~N[1970-01-01T00:00:00], "Etc/UTC")
-      end
-
     # If update_all is given or user cache is empty, don't use any previous cache data
-    cached_data = %{
+    empty_cache = %{
       languages: %{},
       machines: %{},
       dates: %{},
@@ -159,11 +153,18 @@ defmodule CodeStats.User do
       total_caching_duration: 0
     }
 
-    cached_data =
-      case {update_all, user.cache} do
-        {true, _} -> cached_data
-        {_, nil} -> cached_data
-        _ -> unformat_cache_from_db(user.cache)
+    all_since = DateTime.from_naive!(~N[1970-01-01T00:00:00], "Etc/UTC")
+
+    {xp_since, cached_data} =
+      cond do
+        match?(%DateTime{}, since) ->
+          {since, empty_cache}
+
+        since == :all or is_nil(user.last_cached) ->
+          {all_since, unformat_cache_from_db(user.cache)}
+
+        true ->
+          {user.last_cached, unformat_cache_from_db(user.cache)}
       end
 
     # Load all of user's new XP plus required associations
@@ -172,7 +173,7 @@ defmodule CodeStats.User do
         x in XP,
         join: p in Pulse,
         on: p.id == x.pulse_id,
-        where: p.user_id == ^user.id and p.inserted_at >= ^last_cached,
+        where: p.user_id == ^user.id and p.inserted_at >= ^xp_since,
         select: {p, x}
       )
 
@@ -195,7 +196,7 @@ defmodule CodeStats.User do
     }
 
     # Correct key for storing caching duration
-    duration_key = if update_all, do: :total_caching_duration, else: :caching_duration
+    duration_key = if since == :all, do: :total_caching_duration, else: :caching_duration
 
     # Store cache that is formatted for DB and add caching duration
     stored_cache =
@@ -208,7 +209,7 @@ defmodule CodeStats.User do
     # Persist cache changes and update user's last cached timestamp
     user
     |> cast(%{cache: stored_cache}, [:cache])
-    |> put_change(:last_cached, DateTime.utc_now())
+    |> put_change(:last_cached, DateTime.utc_now() |> DateTime.truncate(:second))
     |> Repo.update!()
 
     # Return the cache data for the caller
