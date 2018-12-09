@@ -76,7 +76,7 @@ defmodule CodeStats.ReleaseMigrator do
 
     case Application.load(me) do
       :ok -> :ok
-      {:error, {:already_loaded, :code_stats}} -> :ok
+      {:error, {:already_loaded, ^me}} -> :ok
       err -> raise "Unknown state for application load: #{inspect(err)}"
     end
 
