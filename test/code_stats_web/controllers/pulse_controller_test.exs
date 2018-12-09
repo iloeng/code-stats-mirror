@@ -45,10 +45,8 @@ defmodule CodeStatsWeb.PulseControllerTest do
       assert conn.resp_headers
              |> contains?("content-disposition", "attachment; filename=\"pulses.csv\"")
 
-      assert conn.resp_body =~ "sent_at;sent_at_local;tz_offset;language;machine;amount\n"
-
-      assert conn.resp_body =~
-               "2017-11-27 23:00:00.000000Z;2017-11-28 00:00:00.000000;60;elixir;test_machine;1\n"
+      assert conn.resp_body ==
+               "sent_at;sent_at_local;tz_offset;language;machine;amount\n2017-11-27 23:00:00Z;2017-11-28 00:00:00;60;elixir;test_machine;1\n"
     end
   end
 
