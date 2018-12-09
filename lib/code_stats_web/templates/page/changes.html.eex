@@ -126,6 +126,14 @@
 <div class="stripe">
   <h2>Changelog</h2>
 
+  <h3>2.0.5 – 2018-12-09 – Cache generation fix</h3>
+
+  <ul>
+    <li>Generate user caches throughout the day instead of all in one block. This lessens the server load.</li>
+    <li>Bump versions: Elixir to 1.7,  Phoenix to 1.4, Ecto to 3, Distillery to 2, and many others.</li>
+    <li>Added Discord and Matrix links to footer.</li>
+  </ul>
+
   <h3>2.0.4 – 2018-07-11 – GeoIP fix</h3>
 
   <ul>
