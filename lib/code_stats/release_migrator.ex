@@ -68,9 +68,17 @@ defmodule CodeStats.ReleaseMigrator do
   defp prepare() do
     me = myapp()
 
+    # Force start Ecto SQL apps
+    {:ok, _} = Application.ensure_all_started(:ecto_sql)
+
     # Load the code for myapp, but don't start it
     IO.puts("Loading #{me}...")
-    :ok = Application.load(me)
+
+    case Application.load(me) do
+      :ok -> :ok
+      {:error, {:already_loaded, :code_stats}} -> :ok
+      err -> raise "Unknown state for application load: #{inspect(err)}"
+    end
 
     # Start apps necessary for executing migrations
     IO.puts("Starting dependencies...")
@@ -78,6 +86,6 @@ defmodule CodeStats.ReleaseMigrator do
 
     # Start the Repo(s) for myapp
     IO.puts("Starting repos...")
-    Enum.each(repos(), & &1.start_link(pool_size: 1))
+    Enum.each(repos(), & &1.start_link(pool_size: 2))
   end
 end
