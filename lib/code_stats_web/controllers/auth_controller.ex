@@ -34,7 +34,7 @@ defmodule CodeStatsWeb.AuthController do
         # If ret is nil, user was not found -> run dummy auth to prevent user enumeration
         # But they can enumerate with the signin form anyway lol
         # TODO: Add CAPTCHA to signup form
-        if ret == nil, do: AuthUtils.dummy_auth_user()
+        if is_nil(ret), do: AuthUtils.dummy_auth_user()
 
         conn
         |> assign(:title, "Login")

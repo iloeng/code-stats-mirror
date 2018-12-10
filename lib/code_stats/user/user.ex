@@ -103,7 +103,7 @@ defmodule CodeStats.User do
 
     case Repo.update(cset) do
       {:ok, _} -> :ok
-      {:error, %Ecto.Changeset{} = err_cset} -> err_cset.errors
+      {:error, %Ecto.Changeset{} = err_cset} -> {:error, err_cset.errors}
     end
   end
 
@@ -134,11 +134,11 @@ defmodule CodeStats.User do
   @doc """
   Calculate and store cached XP values for user.
 
-  If `update_all` is set, XP is gathered since the given datetime. If the value is `:all`, then
-  all of the users XP is processed.
+  If `update_all` is set, all of the user's cache is regenerated. Otherwise the cache is added to
+  with the data after the last caching time.
   """
-  @spec update_cached_xps(%__MODULE__{}, nil | :all | DateTime.t()) :: map
-  def update_cached_xps(user, since \\ nil) do
+  @spec update_cached_xps(%__MODULE__{}, boolean) :: map
+  def update_cached_xps(user, update_all \\ false) do
     update_start_time = DateTime.utc_now()
 
     # If update_all is given or user cache is empty, don't use any previous cache data
@@ -156,15 +156,10 @@ defmodule CodeStats.User do
     all_since = DateTime.from_naive!(~N[1970-01-01T00:00:00], "Etc/UTC")
 
     {xp_since, cached_data} =
-      cond do
-        match?(%DateTime{}, since) ->
-          {since, empty_cache}
-
-        since == :all or is_nil(user.last_cached) ->
-          {all_since, unformat_cache_from_db(user.cache)}
-
-        true ->
-          {user.last_cached, unformat_cache_from_db(user.cache)}
+      if update_all or is_nil(user.last_cached) do
+        {all_since, empty_cache}
+      else
+        {user.last_cached, unformat_cache_from_db(user.cache)}
       end
 
     # Load all of user's new XP plus required associations
@@ -196,7 +191,7 @@ defmodule CodeStats.User do
     }
 
     # Correct key for storing caching duration
-    duration_key = if since == :all, do: :total_caching_duration, else: :caching_duration
+    duration_key = if update_all, do: :total_caching_duration, else: :caching_duration
 
     # Store cache that is formatted for DB and add caching duration
     stored_cache =
