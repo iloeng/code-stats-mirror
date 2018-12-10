@@ -59,9 +59,11 @@ defmodule CodeStatsWeb.Endpoint do
       host = get_env("HOST", :str)
       host_port = get_env("HOST_PORT", :int)
 
+      url_scheme = if host_port == 443, do: "https", else: "http"
+
       config =
         Keyword.put(config, :http, port: port)
-        |> Keyword.put(:url, host: host, port: host_port)
+        |> Keyword.put(:url, host: host, port: host_port, scheme: url_scheme)
 
       {:ok, config}
     else
