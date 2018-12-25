@@ -126,6 +126,12 @@
 <div class="stripe">
   <h2>Changelog</h2>
 
+  <h3>2.0.6 – 2018-12-25 – 🐛💥</h3>
+
+  <ul>
+    <li>Fixed a bug in profile GraphQL queries.</li>
+  </ul>
+
   <h3>2.0.5 – 2018-12-09 – Cache generation fix</h3>
 
   <ul>

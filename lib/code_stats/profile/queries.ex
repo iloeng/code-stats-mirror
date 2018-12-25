@@ -66,7 +66,6 @@ defmodule CodeStats.Profile.Queries do
       }
     )
     |> Repo.all()
-    |> Enum.map(fn %{date: dt} = val -> %{val | date: Date.from_erl!(dt)} end)
   end
 
   #################
