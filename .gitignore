@@ -4,6 +4,7 @@
 /deps
 /*.ez
 /.elixir_ls
+/cover
 
 # Generate on crash by the VM
 erl_crash.dump
