@@ -22,6 +22,28 @@ defmodule CodeStats.Mixfile do
         main: "readme",
         logo: "Logo.png",
         extras: ["README.md"]
+      ],
+      test_coverage: [
+        tool: Coverex.Task,
+        ignore_modules: [
+          Mix.Tasks.Frontend.Build,
+          Mix.Tasks.Frontend.Clean,
+          Mix.Tasks.Frontend.Watch,
+          Mix.Tasks.Frontend.Build.Assets,
+          Mix.Tasks.Frontend.Build.Css,
+          Mix.Tasks.Frontend.Build.Css.Compile,
+          Mix.Tasks.Frontend.Build.Css.Copy,
+          Mix.Tasks.Frontend.Build.Css.Minify,
+          Mix.Tasks.Frontend.Build.Js,
+          Mix.Tasks.Frontend.Build.Js.Bundle,
+          Mix.Tasks.Frontend.Build.Js.Copy,
+          Mix.Tasks.Frontend.Build.Js.Exthelp,
+          Mix.Tasks.Frontend.Build.Js.Minify,
+          CodeStats.BuildTasks.BundleJS,
+          CodeStats.BuildTasks.CompileCSS,
+          CodeStats.BuildTasks.MinifyCSS,
+          CodeStats.BuildTasks.MinifyJS
+        ]
       ]
     ]
   end
@@ -74,7 +96,8 @@ defmodule CodeStats.Mixfile do
       {:absinthe, "~> 1.4.13"},
       {:absinthe_plug, "~> 1.4.5"},
       {:ex2ms, "~> 1.5"},
-      {:csv, "~> 2.1.1"}
+      {:csv, "~> 2.1.1"},
+      {:coverex, "~> 1.4", only: :test}
     ]
   end
 
