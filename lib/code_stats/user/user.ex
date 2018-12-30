@@ -38,16 +38,16 @@ defmodule CodeStats.User do
     data
     |> cast(params, [:username, :password, :email, :terms_version])
     |> validate_required([:username, :password, :terms_version])
-    |> update_change(:password, &hash_password/1)
     |> put_change(:private_profile, false)
     |> validate_length(:username, min: 1, max: 64)
     |> validate_length(:email, min: 1, max: 255)
-    |> validate_length(:password, min: 1, max: 255)
+    |> validate_length(:password, min: 6, max: 255)
     |> validate_format(:username, ~r/^[^\/#%?&=+]+$/)
     |> validate_latest_terms()
     |> common_validations()
     |> unique_constraint(:username)
     |> unique_constraint(:lower_username)
+    |> update_change(:password, &hash_password/1)
   end
 
   @doc """
