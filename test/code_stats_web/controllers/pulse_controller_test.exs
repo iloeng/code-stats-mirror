@@ -1,12 +1,12 @@
 defmodule CodeStatsWeb.PulseControllerTest do
   use CodeStatsWeb.ConnCase
 
-  alias CodeStats.User
   alias CodeStats.User.Machine
   alias CodeStats.User.Pulse
   alias CodeStats.XP
   alias CodeStats.Language
   alias CodeStatsWeb.AuthUtils
+  alias CodeStats.UserHelpers
 
   describe "as a not authenticated user" do
     test "GET /my/pulses should return 403 forbidden", %{conn: conn} do
@@ -23,8 +23,8 @@ defmodule CodeStatsWeb.PulseControllerTest do
     setup do
       {:ok, language} = Language.get_or_create("elixir")
 
-      {:ok, user} = create_user("user@somewhere", "test_user")
-      {:ok, another_user} = create_user("another_user@somewhere", "another_test_user")
+      {:ok, user} = UserHelpers.create_user("user@somewhere", "test_user")
+      {:ok, another_user} = UserHelpers.create_user("another_user@somewhere", "another_test_user")
 
       create_data_for(user, language)
       create_data_for(another_user, language)
@@ -52,7 +52,7 @@ defmodule CodeStatsWeb.PulseControllerTest do
 
   describe "as an authenticated user with no pulses" do
     setup do
-      {:ok, user} = create_user("user@somewhere", "test_user")
+      {:ok, user} = UserHelpers.create_user("user@somewhere", "test_user")
 
       %{user: user}
     end
@@ -91,17 +91,6 @@ defmodule CodeStatsWeb.PulseControllerTest do
   end
 
   defp contains?(headers, key, value), do: Enum.member?(headers, {key, value})
-
-  defp create_user(email, username) do
-    %User{
-      email: email,
-      username: username,
-      password: "test_password",
-      terms_version: CodeStats.LegalTerms.get_latest_version()
-    }
-    |> User.changeset(%{})
-    |> Repo.insert()
-  end
 
   defp create_data_for(user, language) do
     {:ok, machine} =
