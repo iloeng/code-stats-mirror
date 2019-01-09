@@ -8,18 +8,18 @@
       <h2>User details</h2>
 
       <%= form_for(@changeset, Routes.preferences_path(@conn, :do_edit), fn f -> %>
-        <label for="user_email" class="<%= if f.errors[:email], do: "has-error" %>">Email address</label>
+        <%= hidden_input(f, :type, value: "edit", id: "edit-type") %>
+
+        <%= label(f, :email, "Email address") %>
         <div class="input">
-          <%= email_input(f, :email) %>
-          <%= if message = f.errors[:email] do %>
-            <p class="help-block has-error"><%= message %></p>
-          <% end %>
+          <%= email_input(f, :email, minlength: 3, maxlength: 255) %>
+          <%= error_tag(f, :email) %>
           <p class="help-block">
             Email is only used for important notifications about the service, not for promotions or spam.
           </p>
         </div>
 
-        <label for="user_private_profile">Private profile</label>
+        <%= label(f, :private_profile, "Private profile") %>
         <div class="input">
           <%= checkbox(f, :private_profile) %>
 
@@ -35,25 +35,26 @@
     <div id="change-password" class="stripe">
       <h2>Change password</h2>
 
-      <%= form_tag(Routes.preferences_path(@conn, :change_password)) %>
-        <label for="old_password" class="<%= if assigns[:old_password_error], do: "has-error" %>">Old password (required)</label>
+      <%= form_for(@pass_changeset, Routes.preferences_path(@conn, :do_edit), fn f -> %>
+        <%= hidden_input(f, :type, value: "password", id: "password-type") %>
+
+        <%= label(f, :old_password, "Current password (required)") %>
         <div class="input">
-          <input type="password" id="old_password" name="old_password" required />
-          <%= if assigns[:old_password_error] do %>
-            <p class="help-block has-error"><%= assigns[:old_password_error] %></p>
-          <% end %>
+          <%= password_input(f, :old_password, autocomplete: "current-password", required: true) %>
+          <%= error_tag(f, :old_password) %>
+          <p class="help-block">
+            For security, to change your password, you need to also give your current password.
+          </p>
         </div>
 
-          <label for="new_password" class="<%= if assigns[:new_password_error], do: "has-error" %>">New password (required)</label>
-          <div class="input">
-            <input type="password" id="new_password" name="new_password" class="form-control" required />
-            <%= if assigns[:new_password_error] do %>
-              <p class="help-block has-error"><%= assigns[:new_password_error] %></p>
-            <% end %>
-          </div>
+        <%= label(f, :password, "New password (required)") %>
+        <div class="input">
+          <%= password_input(f, :password, autocomplete: "new-password", required: true, minlength: 6) %>
+          <%= error_tag(f, :password) %>
+        </div>
 
         <div class="submit"><button type="submit">Change password</button></div>
-      </form>
+      <% end) %>
     </div>
 
     <div id="export-data">
@@ -87,7 +88,7 @@
         the delete button. If you do this, all your data will be removed and cannot be recovered.
       </p>
 
-      <%= form_tag(Routes.preferences_path(@conn, :delete)) %>
+      <%= form_tag(Routes.preferences_path(@conn, :do_edit), method: :delete) %>
         <label><strong>This cannot be undone!</strong></label>
         <input type="text" class="form-control" name="delete_confirmation" maxlength="6" required />
 

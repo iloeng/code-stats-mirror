@@ -15,4 +15,8 @@ defmodule CodeStats.UserHelpers do
     })
     |> Repo.insert()
   end
+
+  def force_login(conn, user) do
+    Plug.Test.init_test_session(conn, %{CodeStatsWeb.AuthUtils.auth_key() => user.id})
+  end
 end

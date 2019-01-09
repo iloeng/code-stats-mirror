@@ -40,10 +40,9 @@ defmodule CodeStats.User do
     |> validate_required([:username, :password, :terms_version])
     |> put_change(:private_profile, false)
     |> validate_length(:username, min: 1, max: 64)
-    |> validate_length(:email, min: 1, max: 255)
-    |> validate_length(:password, min: 6, max: 255)
     |> validate_format(:username, ~r/^[^\/#%?&=+]+$/)
     |> validate_latest_terms()
+    |> password_validations()
     |> common_validations()
     |> unique_constraint(:username)
     |> unique_constraint(:lower_username)
@@ -66,6 +65,7 @@ defmodule CodeStats.User do
     data
     |> cast(params, [:password])
     |> validate_required([:password])
+    |> password_validations()
     |> update_change(:password, &hash_password/1)
   end
 
@@ -315,7 +315,13 @@ defmodule CodeStats.User do
   # Common validations for creating and editing users
   defp common_validations(changeset) do
     changeset
-    |> validate_format(:email, ~r/^$|@/)
+    |> validate_length(:email, min: 3, max: 255)
+    |> validate_format(:email, ~r/^$|^.+@.+$/)
+  end
+
+  defp password_validations(changeset) do
+    changeset
+    |> validate_length(:password, min: 6, max: 255)
   end
 
   # Validate that the accepted terms version is the latest one, user cannot accept older

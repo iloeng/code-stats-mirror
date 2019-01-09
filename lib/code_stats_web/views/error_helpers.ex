@@ -8,9 +8,10 @@ defmodule CodeStatsWeb.ErrorHelpers do
   @doc """
   Generates tag for inlined form input errors.
   """
+  @spec error_tag(Phoenix.HTML.FormData.t(), atom()) :: Phoenix.HTML.Safe.t()
   def error_tag(form, field) do
     if error = form.errors[field] do
-      content_tag(:span, translate_error(error), class: "help-block")
+      content_tag(:p, translate_error(error), class: "help-block has-error")
     end
   end
 

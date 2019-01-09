@@ -14,7 +14,7 @@ import terms_page from './terms_page';
 const ROUTES = [
   [/^\/users\/[^/]+\/?$/, profile_page],
   [/^\/my\/machines\/?$/, machine_page],
-  [/^\/my\/preferences\/?$/, preferences_page],
+  [/^\/my\/preferences\/?/, preferences_page],
   [/^\/my\/consent\/?$/, terms_page],
   [/^\/?$/, index_page]
 ];

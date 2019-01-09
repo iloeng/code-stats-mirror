@@ -81,9 +81,7 @@ defmodule CodeStatsWeb.Router do
 
       get("/preferences", PreferencesController, :edit)
       put("/preferences", PreferencesController, :do_edit)
-
-      post("/password", PreferencesController, :change_password)
-      post("/sound_of_inevitability", PreferencesController, :delete)
+      delete("/preferences", PreferencesController, :delete)
 
       get("/machines", MachineController, :list)
       post("/machines", MachineController, :add)
