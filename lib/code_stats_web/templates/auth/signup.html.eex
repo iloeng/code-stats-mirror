@@ -18,33 +18,25 @@
   <h2 id="signup-form">Sign up</h2>
 
   <%= form_for(@changeset, Routes.auth_path(@conn, :signup) <> "#signup-form", fn f -> %>
-    <label for="user_username" class="<%= if f.errors[:username], do: "has-error" %>">Username (required)</label>
+    <%= label(f, :username, "Username (required)") %>
     <div class="input">
-      <%= text_input(f, :username, required: true) %>
-      <%= if message = f.errors[:username] do %>
-        <p class="help-block has-error"><%= translate_error(message) %></p>
-      <% end %>
-      <%= if message = f.errors[:lower_username] do %>
-        <p class="help-block has-error"><%= translate_error(message) %></p>
-      <% end %>
+      <%= text_input(f, :username, required: true, maxlength: 64) %>
+      <%= error_tag(f, :username) %>
+      <%= error_tag(f, :lower_username) %>
 
       <p class="help-block">Must not contain the following characters: <code>/#%?&amp;=+</code>. You're free to use Unicode characters but complex character sequences may make the profile unreachable.</p>
     </div>
 
-    <label for="user_password" class="<%= if f.errors[:password], do: "has-error" %>">Password (required)</label>
+    <%= label(f, :password, "Password (required)") %>
     <div class="input">
-      <%= password_input(f, :password, required: true) %>
-      <%= if message = f.errors[:password] do %>
-        <p class="help-block has-error"><%= translate_error(message) %></p>
-      <% end %>
+      <%= password_input(f, :password, required: true, minlength: 6, maxlength: 255) %>
+      <%= error_tag(f, :password) %>
     </div>
 
-    <label for="user_email" class="<%= if f.errors[:email], do: "has-error" %>">Email address (optional)</label>
+    <%= label(f, :email, "Email address") %>
     <div class="input">
-      <%= email_input(f, :email) %>
-      <%= if message = f.errors[:email] do %>
-        <p class="help-block has-error"><%= translate_error(message) %></p>
-      <% end %>
+      <%= email_input(f, :email, minlength: 3, maxlength: 255) %>
+      <%= error_tag(f, :email) %>
       <p class="help-block">
         Email is only used for important notifications about the service, not for promotions or spam.
       </p>
@@ -54,15 +46,10 @@
       </p>
     </div>
 
-    <label for="user_not-underage">
-      I am 16 years of age or older and able to consent to the terms above
-    </label>
+    <%= label(f, :"not-underage", "I am 16 years of age or older and able to consent to the terms above") %>
     <%= checkbox(f, :"not-underage", required: true) %>
 
-    <label for="user_accept-terms">
-      I have read and understood the privacy policy and terms of service above, and I accept
-      them
-    </label>
+    <%= label(f, :"accept-terms", "I have read and understood the privacy policy and terms of service above, and I accept them") %>
     <%= checkbox(f, :"accept-terms", required: true) %>
 
     <div class="submit">
