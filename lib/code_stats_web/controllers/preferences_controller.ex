@@ -62,6 +62,9 @@ defmodule CodeStatsWeb.PreferencesController do
       |> redirect(to: Routes.preferences_path(conn, :edit))
     else
       err ->
+        # In the case below, the compiler and dialyzer will warn about the clauses. That is an
+        # Elixir bug related to the with construct, so the warnings are bogus.
+        # See: https://github.com/elixir-lang/elixir/issues/6738
         error_changeset =
           case err do
             {:old_pass, false} ->
