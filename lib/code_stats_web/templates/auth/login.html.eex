@@ -4,6 +4,7 @@
     <label for="username">Username</label>
     <input type="text" class="form-control" id="username" name="username" value="<%= assigns[:username_input] %>" required />
 
+    <%# Note that there is no min length here due to earlier unenforced password min lengths. %>
     <label for="password">Password</label>
     <input type="password" class="form-control" id="password" name="password" required />
 
