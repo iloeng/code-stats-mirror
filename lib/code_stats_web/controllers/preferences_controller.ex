@@ -62,21 +62,7 @@ defmodule CodeStatsWeb.PreferencesController do
       |> redirect(to: Routes.preferences_path(conn, :edit))
     else
       err ->
-        # In the case below, the compiler and dialyzer will warn about the clauses. That is an
-        # Elixir bug related to the with construct, so the warnings are bogus.
-        # See: https://github.com/elixir-lang/elixir/issues/6738
-        error_changeset =
-          case err do
-            {:old_pass, false} ->
-              # We need to add an action to the changeset so that Phoenix will display the error,
-              # otherwise it will think the changeset was not processed (as it has not been passed
-              # to any Repo call) and will not show the errors
-              %{password_changeset | action: :update}
-              |> Ecto.Changeset.add_error(:old_password, "does not match your current password")
-
-            {:updated, cset} ->
-              cset
-          end
+        error_changeset = get_password_error_cset(err, password_changeset)
 
         conn
         |> common_edit_assigns()
@@ -100,6 +86,16 @@ defmodule CodeStatsWeb.PreferencesController do
   def delete(conn, params) do
     AuthUtils.delete_user_action(conn, params, {&Routes.preferences_path/2, :edit})
   end
+
+  defp get_password_error_cset({:old_pass, false}, orig_changeset) do
+    # We need to add an action to the changeset so that Phoenix will display the error,
+    # otherwise it will think the changeset was not processed (as it has not been passed
+    # to any Repo call) and will not show the errors
+    %{orig_changeset | action: :update}
+    |> Ecto.Changeset.add_error(:old_password, "does not match your current password")
+  end
+
+  defp get_password_error_cset({:updated, cset}, _), do: cset
 
   # Common edit assigns, including empty changesets that will be overridden in specific clauses
   defp common_edit_assigns(conn) do
