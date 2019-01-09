@@ -37,8 +37,16 @@ form {
     >input,
     >textarea,
     >.input {
-      align-self: center;
+      align-self: start;
       justify-self: start;
+
+      &[type=checkbox] {
+        margin-top: 5px;
+      }
+    }
+
+    >.input {
+      width: 100%;
     }
 
     >label {
