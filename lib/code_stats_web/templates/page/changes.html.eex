@@ -120,6 +120,22 @@
         / <a target="_blank" href="https://gitlab.com/thehabbos007">GitLab</a>
       </p>
     </div>
+
+    <div>
+      <%= profile_pic.("jonathan.jpg", "Jonathan Böcker") %>
+
+      <h3>Jonathan Böcker</h3>
+      <p class="subtitle">
+        <a target="_blank" href="https://github.com/Schwusch/codestats_flutter">
+          Code::Stats Viewer
+        </a>
+        developer
+      </p>
+
+      <p>
+        <a target="_blank" href="https://github.com/Schwusch/">GitHub</a>
+      </p>
+    </div>
   </div>
 </div>
 
