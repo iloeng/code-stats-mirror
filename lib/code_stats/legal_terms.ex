@@ -9,8 +9,8 @@ defmodule CodeStats.LegalTerms do
   These terms live in the file `lib/code_stats_web/templates/page/terms.html.eex`.
   """
 
-  # Force recompilation
-  @external_resource ".git"
+  # NOTE that this file is only recompiled and thus the diffs are only calculated when the
+  # @current_terms_date or some other attribute is changed, or a compilation is forced.
 
   # Default path of the terms file if not specified
   @default_path "lib/code_stats_web/templates/page/terms.html.eex"
