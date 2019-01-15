@@ -78,7 +78,7 @@
       <%= profile_pic.("riussi.jpg", "Juha Ristolainen") %>
 
       <h3>Juha Ristolainen</h3>
-      <p class="subtitle"><a target="_blank" href="https://marketplace.visualstudio.com/items?itemName=juha-ristolainen.code-stats-vscode">code-stats-vscode</a> developer</p>
+      <p class="subtitle"><a target="_blank" href="https://marketplace.visualstudio.com/items?itemName=riussi.code-stats-vscode">code-stats-vscode</a> developer</p>
 
       <p>
         <a target="_blank" href="https://github.com/riussi">GitHub</a>
