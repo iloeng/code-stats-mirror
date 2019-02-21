@@ -52,7 +52,7 @@ defmodule CodeStats.Language do
     get_query =
       from(
         l in __MODULE__,
-        where: fragment("LOWER(?)", l.name) == fragment("LOWER(?)", ^language_name),
+        where: fragment("lower(?)", l.name) == fragment("lower(?)", ^language_name),
         preload: :alias_of
       )
 
