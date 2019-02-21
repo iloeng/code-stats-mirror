@@ -28,6 +28,7 @@ defmodule CodeStats.User.Machine do
   def changeset(data, params \\ %{}) do
     data
     |> cast(params, [:name])
+    |> validate_required([:name])
     |> name_validations()
     |> put_change(:api_salt, generate_api_salt())
     |> validate_length(:api_salt, min: 1, max: 255)
@@ -37,6 +38,7 @@ defmodule CodeStats.User.Machine do
   def update_changeset(data, params \\ %{}) do
     data
     |> cast(params, [:name])
+    |> validate_required([:name])
     |> name_validations()
   end
 
