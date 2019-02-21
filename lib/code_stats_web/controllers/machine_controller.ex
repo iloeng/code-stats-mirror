@@ -18,11 +18,16 @@ defmodule CodeStatsWeb.MachineController do
     |> render("machines.html", changeset: changeset)
   end
 
-  def add(conn, %{"machine" => params}) do
+  @doc """
+  Action for creating a new machine.
+  """
+  @spec add(Plug.Conn.t(), map()) :: Plug.Conn.t()
+  def add(conn, params)
+
+  def add(conn, %{"machine" => %{"name" => name}}) do
     {conn, user} = common_assigns(conn)
 
-    Machine.changeset(%Machine{}, params)
-    |> Changeset.put_change(:user_id, user.id)
+    Machine.changeset(%Machine{user_id: user}, %{name: name})
     |> create_machine()
     |> case do
       %Machine{} ->
@@ -35,6 +40,12 @@ defmodule CodeStatsWeb.MachineController do
         |> put_flash(:error, "Error adding machine.")
         |> render("machines.html", changeset: changeset)
     end
+  end
+
+  def add(conn, _params) do
+    conn
+    |> put_flash(:error, "Error adding machine.")
+    |> list(%{})
   end
 
   def view_single(conn, %{"id" => id}) do
