@@ -4,6 +4,7 @@ defmodule CodeStats.UserHelpers do
   """
 
   alias CodeStats.{User, Repo}
+  alias CodeStats.User.Machine
 
   def create_user(email, username, password \\ "test_password") do
     %User{}
@@ -13,6 +14,12 @@ defmodule CodeStats.UserHelpers do
       password: password,
       terms_version: CodeStats.LegalTerms.get_latest_version()
     })
+    |> Repo.insert()
+  end
+
+  def create_machine(user, name) do
+    %Machine{user_id: user.id}
+    |> Machine.changeset(%{name: name})
     |> Repo.insert()
   end
 

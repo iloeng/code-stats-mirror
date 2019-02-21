@@ -94,9 +94,8 @@ defmodule CodeStatsWeb.PulseControllerTest do
 
   defp create_data_for(user, language) do
     {:ok, machine} =
-      %Machine{name: "test_machine"}
-      |> Machine.changeset(%{})
-      |> Ecto.Changeset.put_change(:user_id, user.id)
+      %Machine{user_id: user.id}
+      |> Machine.changeset(%{name: "test_machine"})
       |> Repo.insert()
 
     {:ok, sent_at} = Calendar.DateTime.from_erl({{2017, 11, 27}, {23, 00, 00}}, "Etc/UTC")
