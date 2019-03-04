@@ -7,8 +7,7 @@ defmodule CodeStatsWeb.ProfileUtils do
 
   alias CodeStats.Repo
   alias CodeStats.User
-  alias CodeStats.User.Machine
-  alias CodeStats.User.Pulse
+  alias CodeStats.User.{Machine, Pulse, Cache}
   alias CodeStats.Language
   alias CodeStats.XP
 
@@ -22,7 +21,14 @@ defmodule CodeStatsWeb.ProfileUtils do
   Preload language and machine data to user's cache data, transforming language and machine
   data from maps to lists of tuples.
   """
-  @spec preload_cache_data(%{}, %User{}) :: %{}
+  @spec preload_cache_data(
+          Cache.t(),
+          User.t()
+        ) :: %{
+          languages: [{Language.t(), integer}],
+          machines: [{Machine.t(), integer}],
+          dates: %{optional(Date.t()) => integer}
+        }
   def preload_cache_data(
         %{
           languages: language_xps,
@@ -114,6 +120,7 @@ defmodule CodeStatsWeb.ProfileUtils do
     end
   end
 
+  @spec process_language_xps(%{optional(integer) => integer}) :: [{Language.t(), integer}]
   defp process_language_xps(language_xps) do
     language_xps = Map.to_list(language_xps)
 
@@ -133,6 +140,7 @@ defmodule CodeStatsWeb.ProfileUtils do
     end)
   end
 
+  @spec process_machine_xps(%{optional(integer) => integer}, User.t()) :: [{Machine.t(), integer}]
   defp process_machine_xps(machine_xps, user) do
     machine_xps = Map.to_list(machine_xps)
 

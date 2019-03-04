@@ -2,7 +2,7 @@ defmodule CodeStatsWeb.ProfileChannel do
   use Phoenix.Channel
 
   alias CodeStats.User
-  alias CodeStats.User.Pulse
+  alias CodeStats.User.{Pulse, Machine}
 
   @moduledoc """
   The profile channel is used to broadcast information about a certain user's
@@ -22,39 +22,32 @@ defmodule CodeStatsWeb.ProfileChannel do
     end
   end
 
-  #  def handle_out("new_pulse", payload, socket) do
-  #    push(socket, "new_pulse", payload)
-  #    {:noreply, socket}
-  #  end
-
   @doc """
   API to send new pulse to channel.
 
-  Chooses the correct user channel based on the user. The given pulse must have
-  xps and machine preloaded, xps themselves must have language preloaded.
+  Chooses the correct user channel based on the user.
   """
-  def send_pulse(%User{} = user, %Pulse{
-        xps: xps,
-        machine: machine,
-        sent_at_local: sent_at_local,
-        tz_offset: tz_offset,
-        sent_at: sent_at
-      })
-      when not is_nil(xps) and not is_nil(machine) do
-    formatted_xps =
-      for xp <- xps do
-        %{
-          amount: xp.amount,
-          language: xp.language.name
-        }
-      end
-
+  @spec send_pulse(User.t(), Pulse.t(), Machine.t(), [%{language: String.t(), amount: integer}]) ::
+          :ok
+  def send_pulse(
+        %User{} = user,
+        %Pulse{
+          sent_at_local: sent_at_local,
+          tz_offset: tz_offset,
+          sent_at: sent_at
+        },
+        machine,
+        xps
+      )
+      when is_list(xps) and not is_nil(machine) do
     CodeStatsWeb.Endpoint.broadcast("users:#{user.username}", "new_pulse", %{
-      xps: formatted_xps,
+      xps: xps,
       sent_at_local: recreate_iso8601_with_offset(sent_at_local, tz_offset),
       sent_at: DateTime.to_iso8601(sent_at),
       machine: machine.name
     })
+
+    :ok
   end
 
   # Return ISO 8601 formatted timestamp with offset recreated from the data stored in the DB.

@@ -10,6 +10,7 @@ defmodule CodeStats.Language.AdminCommands do
   alias CodeStats.Language
   alias CodeStats.User
   alias CodeStats.XP
+  alias CodeStats.User.CacheUtils
 
   import Ecto.Query, only: [from: 2]
 
@@ -102,6 +103,6 @@ defmodule CodeStats.Language.AdminCommands do
     # Update caches for all users (since there's no easy way to separate language points)
     from(u in User, select: u)
     |> Repo.all()
-    |> Enum.each(fn user -> User.update_cached_xps(user, true) end)
+    |> Enum.each(fn user -> CacheUtils.update_all!(user) end)
   end
 end

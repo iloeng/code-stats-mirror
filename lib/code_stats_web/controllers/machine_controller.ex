@@ -7,8 +7,8 @@ defmodule CodeStatsWeb.MachineController do
   alias CodeStatsWeb.AuthUtils
   alias CodeStatsWeb.ControllerUtils
   alias CodeStats.Repo
-  alias CodeStats.User
   alias CodeStats.User.Machine
+  alias CodeStats.User.CacheUtils
 
   def list(conn, _params) do
     {conn, _} = common_assigns(conn)
@@ -104,7 +104,7 @@ defmodule CodeStatsWeb.MachineController do
             Repo.delete(machine)
 
             # Regenerate user's cache to remove references to machine in it
-            User.update_cached_xps(user, true)
+            CacheUtils.update_all!(user)
           end)
 
           conn

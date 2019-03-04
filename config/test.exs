@@ -4,7 +4,8 @@ use Mix.Config
 # you can enable the server option below.
 config :code_stats, CodeStatsWeb.Endpoint,
   http: [port: 4001],
-  server: false
+  server: false,
+  secret_key_base: "fowgaszhasehasehawey34634u34h34js34hejues4ues4use4ys4eue4su4suy4o"
 
 # Print only warnings and errors during test
 config :logger, level: :warn

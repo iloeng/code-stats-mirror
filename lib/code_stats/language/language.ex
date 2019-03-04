@@ -2,9 +2,7 @@ defmodule CodeStats.Language do
   use Ecto.Schema
 
   import Ecto.Changeset
-  import Ecto.Query
-
-  alias CodeStats.Repo
+  import Ecto.Query, only: [from: 2]
 
   # Default language name if given language name is invalid
   @default_name "Plain text"
@@ -40,12 +38,11 @@ defmodule CodeStats.Language do
   end
 
   @doc """
-  Get or create language with the given name.
-
-  Returns ok and the language struct if successful.
+  Get or create language with the given name using the given repo.
   """
-  @spec get_or_create(String.t()) :: {:ok, %__MODULE__{}} | {:error, :unknown}
-  def get_or_create(language_name) do
+  @spec get_or_create(Ecto.Repo.t() | nil, String.t()) ::
+          {:ok, Language.t()} | {:error, :unknown}
+  def get_or_create(repo \\ CodeStats.Repo, language_name) do
     language_name = sanitize_language(language_name)
 
     # Get-create-get to handle race conditions
@@ -56,24 +53,17 @@ defmodule CodeStats.Language do
         preload: :alias_of
       )
 
-    case Repo.one(get_query) do
-      %__MODULE__{} = language ->
-        {:ok, language}
+    create_cset =
+      changeset(%__MODULE__{}, %{"name" => language_name})
+      |> put_assoc(:alias_of, nil)
 
-      nil ->
-        changeset(%__MODULE__{}, %{"name" => language_name})
-        |> put_assoc(:alias_of, nil)
-        |> Repo.insert()
-        |> case do
-          {:ok, language} ->
-            {:ok, language}
-
-          {:error, _} ->
-            case Repo.one(get_query) do
-              %__MODULE__{} = language -> {:ok, language}
-              nil -> {:error, :unknown}
-            end
-        end
+    with nil <- repo.one(get_query),
+         {:error, _} <- repo.insert(create_cset),
+         nil <- repo.one(get_query) do
+      {:error, :unknown}
+    else
+      %__MODULE__{} = language -> {:ok, language}
+      {:ok, language} -> {:ok, language}
     end
   end
 

@@ -39,6 +39,13 @@ defmodule CodeStatsWeb.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(CodeStats.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    conn =
+      Phoenix.ConnTest.build_conn()
+      |> Map.put(
+        :secret_key_base,
+        Application.get_env(:code_stats, CodeStatsWeb.Endpoint) |> Keyword.get(:secret_key_base)
+      )
+
+    {:ok, conn: conn}
   end
 end

@@ -36,6 +36,7 @@ defmodule CodeStatsWeb.ProfileController do
     end
   end
 
+  @spec render_profile(Plug.Conn.t(), User.t()) :: Plug.Conn.t()
   def render_profile(conn, user) do
     {
       total_xp,
@@ -62,6 +63,7 @@ defmodule CodeStatsWeb.ProfileController do
     |> render("profile.html")
   end
 
+  @spec render_profile_api(Plug.Conn.t(), User.t()) :: Plug.Conn.t()
   def render_profile_api(conn, user) do
     {
       total_xp,
@@ -121,7 +123,7 @@ defmodule CodeStatsWeb.ProfileController do
   end
 
   defp get_profile_data(%User{} = user) do
-    %{dates: date_xps} = User.update_cached_xps(user)
+    date_xps = User.CacheUtils.unformat_cache_from_db(user.cache).dates
 
     total_xp = Enum.reduce(date_xps, 0, fn {_, amount}, acc -> acc + amount end)
     latest_xp_since = get_since_datetime()
@@ -131,12 +133,14 @@ defmodule CodeStatsWeb.ProfileController do
   end
 
   defp get_api_profile_data(%User{} = user) do
-    # Update and get user's cache data
     %{
       languages: language_xps,
       machines: machine_xps,
       dates: date_xps
-    } = User.update_cached_xps(user) |> ProfileUtils.preload_cache_data(user)
+    } =
+      user.cache
+      |> User.CacheUtils.unformat_cache_from_db()
+      |> ProfileUtils.preload_cache_data(user)
 
     # Calculate total XP
     total_xp = Enum.reduce(language_xps, 0, fn {_, amount}, acc -> acc + amount end)

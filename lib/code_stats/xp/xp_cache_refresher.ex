@@ -8,6 +8,7 @@ defmodule CodeStats.XP.XPCacheRefresher do
   import Ecto.Query, only: [from: 2]
 
   alias CodeStats.{Repo, User}
+  alias CodeStats.User.CacheUtils
 
   # Run about every second minute (120 seconds after last run)
   @how_often 2 * 60 * 1000
@@ -43,6 +44,6 @@ defmodule CodeStats.XP.XPCacheRefresher do
   def do_refresh() do
     from(u in User, order_by: [asc: u.last_cached], limit: @sync_total_count)
     |> Repo.all()
-    |> Enum.each(&User.update_cached_xps(&1, true))
+    |> Enum.each(&CacheUtils.update_all!(&1))
   end
 end
