@@ -43,6 +43,9 @@
     <a href="#vim">
       <%= plugin_icon.("vim-logo.gif", "Vim") %>
     </a>
+    <a href="#vb6">
+      <%= plugin_icon.("vb6icon_cropped_transparent.png", "Visual Basic 6.0") %>
+    </a>
     <a href="#vs">
       <img
        class="plugin-image"
@@ -167,6 +170,22 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
     </div>
 
     <%= plugin_icon.("vim-logo.gif", "Vim") %>
+  </div>
+
+  <div class="plugin">
+    <h2 id="vb6">Visual Basic 6.0</h2>
+
+    <div class="plugin-description">
+      <p>
+        To install, see instructions on plugin's webpage. <a target="_blank" href="https://bitbucket.org/Koohiisan/code-stats-vb6-add-in">Link to the plugin on Bitbucket.</a>
+      </p>
+
+      <p>
+        <em>Thanks to <a target="_blank" href="https://www.lukegerhardt.com/">Luke Gerhardt</a> for the VB6 extension.</em>
+      </p>
+    </div>
+
+    <%= plugin_icon.("vb6icon_cropped_transparent.png", "Visual Basic 6.0") %>
   </div>
 
   <div class="plugin">

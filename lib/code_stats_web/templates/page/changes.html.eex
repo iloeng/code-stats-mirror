@@ -136,6 +136,23 @@
         <a target="_blank" href="https://github.com/Schwusch/">GitHub</a>
       </p>
     </div>
+
+    <div>
+      <%= profile_pic.("luke.jpg", "Luke Gerhardt") %>
+
+      <h3>Luke Gerhardt</h3>
+      <p class="subtitle">
+        <a target="_blank" href="https://bitbucket.org/Koohiisan/code-stats-vb6-add-in">
+          Code::Stats VB6 Add-in
+        </a>
+        developer
+      </p>
+
+      <p>
+        <a target="_blank" href="https://bitbucket.org/Koohiisan/">Bitbucket</a>
+        / <a target="_blank" href="https://www.lukegerhardt.com/">Site</a>
+      </p>
+    </div>
   </div>
 </div>
 
