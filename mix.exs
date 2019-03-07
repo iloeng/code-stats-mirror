@@ -4,7 +4,7 @@ defmodule CodeStats.Mixfile do
   def project do
     [
       app: :code_stats,
-      version: "2.0.5",
+      version: "2.0.7",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -20,7 +20,7 @@ defmodule CodeStats.Mixfile do
       docs: [
         # The main page in the docs
         main: "readme",
-        logo: "Logo.png",
+        logo: "assets/logos/Logo-crushed.png",
         extras: ["README.md"]
       ]
     ]
