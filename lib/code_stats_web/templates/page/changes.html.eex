@@ -159,9 +159,18 @@
 <div class="stripe">
   <h2>Changelog</h2>
 
-  <h3>2.0.7</h3>
+  <h3>2.0.8</h3>
 
   <ul>
+    <li>Fixed bugs in machine editing.</li>
+    <li>Fixed frontpage graphs not updating.</li>
+    <li>Made XP history cache update less often due to server load.</li>
+  </ul>
+
+  <h3>2.0.7 – 2019-03-21 – Transactionality</h3>
+
+  <ul>
+    <li>Made pulse adding work inside a transaction to prevent dangling DB rows in case of problems.</li>
     <li>Added many tests and data quality checks.</li>
     <li>Refactored code in several forms.</li>
     <li>Added contributors and VB6 plugin information.</li>
