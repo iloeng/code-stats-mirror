@@ -1,4 +1,4 @@
-import {mount} from 'redom';
+import { mount } from 'redom';
 import WorldMapGraphComponent from './frontpage/world-map.component';
 import HistoryGraphComponent from './frontpage/history-graph.component';
 
@@ -34,19 +34,20 @@ class IndexPageUpdater {
       })
       .receive('error', (resp) => { console.error('Connection failed:', resp); });
 
-      this.channel.on('new_pulse', (msg) => { this.newPulse(msg); });
+    this.channel.on('new_pulse', (msg) => { this.newPulse(msg); });
   }
 
   initialize(init_data) {
     this.historyGraph.init(init_data);
   }
 
-  newPulse({xps, coords}) {
-    for (const {language, xp} of xps) {
-      this.historyGraph.addPulse(xp);
+  newPulse({ xps, coords }) {
+    console.log(xps, coords);
+    for (const { language, amount } of xps) {
+      this.historyGraph.addPulse(amount);
 
       if (coords != null) {
-        this.worldMap.addPulse(coords, xp);
+        this.worldMap.addPulse(coords, amount);
       }
     }
   }
