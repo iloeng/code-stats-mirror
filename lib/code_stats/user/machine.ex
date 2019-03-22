@@ -25,16 +25,20 @@ defmodule CodeStats.User.Machine do
   If no params are provided, an invalid changeset is returned
   with no validation performed.
   """
+  @spec changeset(Machine.t(), map()) :: Ecto.Changeset.t()
   def changeset(data, params \\ %{}) do
     data
     |> cast(params, [:name])
     |> validate_required([:name])
     |> name_validations()
+    |> put_assoc(:user, Map.get(params, :user))
+    |> foreign_key_constraint(:user_id)
     |> put_change(:api_salt, generate_api_salt())
     |> validate_length(:api_salt, min: 1, max: 255)
     |> put_change(:active, true)
   end
 
+  @spec update_changeset(Machine.t(), map()) :: Ecto.Changeset.t()
   def update_changeset(data, params \\ %{}) do
     data
     |> cast(params, [:name])
@@ -42,6 +46,7 @@ defmodule CodeStats.User.Machine do
     |> name_validations()
   end
 
+  @spec activation_changeset(Machine.t(), map()) :: Ecto.Changeset.t()
   def activation_changeset(data, params \\ %{}) do
     data
     |> cast(params, [:active])
@@ -52,6 +57,7 @@ defmodule CodeStats.User.Machine do
 
   Takes no input.
   """
+  @spec activation_changeset(Machine.t()) :: Ecto.Changeset.t()
   def api_changeset(data) do
     data
     |> change(%{api_salt: generate_api_salt()})

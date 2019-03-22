@@ -18,8 +18,8 @@ defmodule CodeStats.UserHelpers do
   end
 
   def create_machine(user, name) do
-    %Machine{user_id: user.id}
-    |> Machine.changeset(%{name: name})
+    %Machine{}
+    |> Machine.changeset(%{name: name, user: user})
     |> Repo.insert()
   end
 

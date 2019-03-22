@@ -80,10 +80,10 @@ defmodule CodeStats.User.CacheUtils do
   @doc """
   Update user's cache with the given details and list of XPs. Returns the updated cache.
   """
-  @spec update_cache_from_xps(Cache.t(), NaiveDateTime.t(), integer, [
+  @spec update_cache_from_xps(Cache.t(), NaiveDateTime.t() | DateTime.t(), integer, [
           %{language_id: integer, amount: integer}
         ]) :: Cache.t()
-  def update_cache_from_xps(%Cache{} = cache, %NaiveDateTime{} = datetime, machine_id, xps)
+  def update_cache_from_xps(%Cache{} = cache, datetime, machine_id, xps)
       when is_integer(machine_id) and is_list(xps) do
     Enum.reduce(
       xps,
@@ -95,18 +95,31 @@ defmodule CodeStats.User.CacheUtils do
   @doc """
   Update user's cache with the given details. Returns the updated cache.
   """
-  @spec update_cache_from_xp(Cache.t(), NaiveDateTime.t(), integer, integer, integer) :: Cache.t()
+  @spec update_cache_from_xp(
+          Cache.t(),
+          NaiveDateTime.t() | DateTime.t(),
+          integer,
+          integer,
+          integer
+        ) :: Cache.t()
   def update_cache_from_xp(
         %Cache{} = cache,
-        %NaiveDateTime{} = datetime,
+        datetime,
         language_id,
         machine_id,
         amount
       )
       when is_integer(language_id) and is_integer(machine_id) and is_integer(amount) do
+    # Date could be a DateTime for old XPs
+    date =
+      case datetime do
+        %NaiveDateTime{} -> NaiveDateTime.to_date(datetime)
+        %DateTime{} -> DateTime.to_date(datetime)
+      end
+
     languages = Map.update(cache.languages, language_id, amount, &(&1 + amount))
     machines = Map.update(cache.machines, machine_id, amount, &(&1 + amount))
-    dates = Map.update(cache.dates, NaiveDateTime.to_date(datetime), amount, &(&1 + amount))
+    dates = Map.update(cache.dates, date, amount, &(&1 + amount))
     hours = Map.update(cache.hours, datetime.hour, amount, &(&1 + amount))
 
     %{cache | languages: languages, machines: machines, dates: dates, hours: hours}

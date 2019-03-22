@@ -10,6 +10,7 @@ defmodule CodeStatsWeb.MachineController do
   alias CodeStats.User.Machine
   alias CodeStats.User.CacheUtils
 
+  @spec list(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def list(conn, _params) do
     {conn, _} = common_assigns(conn)
     changeset = Machine.changeset(%Machine{})
@@ -27,7 +28,7 @@ defmodule CodeStatsWeb.MachineController do
   def add(conn, %{"machine" => %{"name" => name}}) do
     {conn, user} = common_assigns(conn)
 
-    Machine.changeset(%Machine{user_id: user}, %{name: name})
+    Machine.changeset(%Machine{}, %{name: name, user: user})
     |> create_machine()
     |> case do
       %Machine{} ->
@@ -48,17 +49,19 @@ defmodule CodeStatsWeb.MachineController do
     |> list(%{})
   end
 
+  @spec view_single(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def view_single(conn, %{"id" => id}) do
     user = AuthUtils.get_current_user(conn)
 
     with %Machine{} = machine <- get_machine_or_404(conn, user, id),
-         changeset = Machine.changeset(machine) do
+         changeset = Machine.update_changeset(machine) do
       conn
       |> single_machine_assigns(machine)
       |> render("single_machine.html", changeset: changeset)
     end
   end
 
+  @spec edit(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def edit(conn, %{"id" => id, "machine" => params}) do
     user = AuthUtils.get_current_user(conn)
 
@@ -80,6 +83,7 @@ defmodule CodeStatsWeb.MachineController do
     end
   end
 
+  @spec regen_machine_key(Plug.Conn.t(), map()) :: any()
   def regen_machine_key(conn, %{"id" => id}) do
     user = AuthUtils.get_current_user(conn)
 
@@ -92,6 +96,7 @@ defmodule CodeStatsWeb.MachineController do
     end
   end
 
+  @spec delete(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def delete(conn, %{"id" => id}) do
     user = AuthUtils.get_current_user(conn)
 
@@ -122,10 +127,12 @@ defmodule CodeStatsWeb.MachineController do
     end
   end
 
+  @spec deactivate(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def deactivate(conn, %{"id" => id}) do
     activate_or_deactivate(conn, id, false)
   end
 
+  @spec activate(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def activate(conn, %{"id" => id}) do
     activate_or_deactivate(conn, id, true)
   end
