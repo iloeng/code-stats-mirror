@@ -27,7 +27,7 @@ defmodule CodeStats.XPHistoryCache do
 
   # How often to refresh data, in seconds. This will be run often enough to not need live updates from
   # controllers, which simplifies the code.
-  @refresh_after 10
+  @refresh_after 30
 
   def start_link() do
     GenServer.start_link(__MODULE__, nil)
