@@ -126,10 +126,39 @@ defmodule CodeStats.User.CacheUtils do
   end
 
   @doc """
-  Unformat data from DB to native datatypes
+  Unformat data from DB to native datatypes. If cache is nil, treat it as empty.
+
+  ## Examples
+
+      iex> CodeStats.User.CacheUtils.unformat_cache_from_db(%{
+      ...>   "languages" => %{"1" => 2, "15" => 3},
+      ...>   "machines" => %{"2" => 5},
+      ...>   "dates" => %{"2019-05-05" => 5},
+      ...>   "caching_duration" => 5.4
+      ...> })
+      %CodeStats.User.Cache{
+        languages: %{1 => 2, 15 => 3},
+        machines: %{2 => 5},
+        dates: %{~D[2019-05-05] => 5},
+        hours: %{},
+        caching_duration: 5.4,
+        total_caching_duration: 0.0
+      }
+
+      iex> CodeStats.User.CacheUtils.unformat_cache_from_db(nil)
+      %CodeStats.User.Cache{
+        languages: %{},
+        machines: %{},
+        dates: %{},
+        hours: %{},
+        caching_duration: 0.0,
+        total_caching_duration: 0.0
+      }
   """
-  @spec unformat_cache_from_db(Cache.db_t()) :: Cache.t()
-  def unformat_cache_from_db(cache) do
+  @spec unformat_cache_from_db(Cache.db_t() | nil) :: Cache.t()
+  def unformat_cache_from_db(cache)
+
+  def unformat_cache_from_db(cache) when is_map(cache) do
     languages =
       Map.get(cache, "languages", %{})
       |> str_keys_to_int()
@@ -157,6 +186,18 @@ defmodule CodeStats.User.CacheUtils do
       hours: hours,
       caching_duration: Map.get(cache, "caching_duration", 0.0),
       total_caching_duration: Map.get(cache, "total_caching_duration", 0.0)
+    }
+  end
+
+  # The cache may be nil, for a new user for example
+  def unformat_cache_from_db(nil) do
+    %Cache{
+      languages: %{},
+      machines: %{},
+      dates: %{},
+      hours: %{},
+      caching_duration: 0.0,
+      total_caching_duration: 0.0
     }
   end
 
