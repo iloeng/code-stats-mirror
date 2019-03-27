@@ -124,11 +124,12 @@ defmodule CodeStatsWeb.AuthController do
     end
   end
 
+  @spec reset(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def reset(conn, %{"user" => params, "token" => token}) do
-    with %PasswordReset{} = token <- check_reset_token(token),
-         changeset = User.password_changeset(token.user, params),
-         %User{} <- Repo.update!(changeset) do
-      Repo.delete(token)
+    with %PasswordReset{} = persisted_token <- check_reset_token(token),
+         changeset = User.password_changeset(persisted_token.user, params),
+         %User{} <- Repo.update(changeset) do
+      Repo.delete(persisted_token)
 
       conn
       |> put_flash(
@@ -137,13 +138,19 @@ defmodule CodeStatsWeb.AuthController do
       )
       |> redirect(to: Routes.auth_path(conn, :render_login))
     else
+      {:error, %Ecto.Changeset{} = cset} ->
+        conn
+        |> assign(:title, "Password reset")
+        |> assign(:token, token)
+        |> render("reset.html", changeset: cset)
+
       _ ->
         conn
         |> put_flash(
           :error,
           "Unable to reset password. The password reset token may have expired. Please try requesting a new token."
         )
-        |> redirect(to: Routes.auth_path(conn, :render_login))
+        |> redirect(to: Routes.auth_path(conn, :render_reset, token))
     end
   end
 
