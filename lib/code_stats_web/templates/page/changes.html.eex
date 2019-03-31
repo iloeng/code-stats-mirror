@@ -159,7 +159,13 @@
 <div class="stripe">
   <h2>Changelog</h2>
 
-  <h3>2.0.9</h3>
+  <h3>2.0.10 – 2019-03-31 – Cache update fix</h3>
+
+  <ul>
+    <li>Fix cache update not setting last updated date and stalling on same users.</li>
+  </ul>
+
+  <h3>2.0.9 – 2019-03-28 – More fixes</h3>
 
   <ul>
     <li>Fix password reset not rendering errors properly.</li>
