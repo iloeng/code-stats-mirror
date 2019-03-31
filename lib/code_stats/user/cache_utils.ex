@@ -51,8 +51,11 @@ defmodule CodeStats.User.CacheUtils do
     cache = update(empty_cache, operation, true)
 
     # Persist cache changes and update user's last cached timestamp
-    cset = Changeset.cast(user, %{cache: cache}, [:cache])
-    {:ok, _} = Repo.update(cset)
+    {:ok, _} =
+      Changeset.cast(user, %{cache: cache}, [:cache])
+      |> Changeset.put_change(:last_cached, DateTime.utc_now() |> DateTime.truncate(:second))
+      |> Repo.update()
+
     :ok
   end
 
