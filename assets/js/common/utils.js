@@ -10,7 +10,7 @@ import { Socket } from 'phoenix';
  * @returns {number} Milliseconds to wait for reconnect
  */
 function reconnect_backoff(i) {
-  const rand = Math.random() * 90 * 1000;  // Wait for 0-60 seconds per iteration
+  const rand = Math.random() * 90 * 1000;  // Wait for 0-90 seconds per iteration
   return rand * i;
 }
 
