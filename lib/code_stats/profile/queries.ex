@@ -10,6 +10,7 @@ defmodule CodeStats.Profile.Queries do
   alias CodeStats.Language
   alias CodeStats.User.Pulse
   alias CodeStats.User.Machine
+  alias CodeStats.User.Cache
 
   @doc """
   Get total XPs per machine since given datetime.
@@ -76,13 +77,21 @@ defmodule CodeStats.Profile.Queries do
   @doc """
   Get profile's total amount of XP from their cache.
   """
+  @spec cached_total(Cache.db_t()) :: integer
+  def cached_total(cache)
+
   def cached_total(%{"languages" => languages}) when is_map(languages) do
     languages |> Map.values() |> Enum.reduce(0, fn acc, xp -> acc + xp end)
   end
 
+  def cached_total(_), do: 0
+
   @doc """
   Get profile's total languages and their XPs from cache.
   """
+  @spec cached_languages(Cache.db_t()) :: [%{optional(atom) => String.t() | integer}]
+  def cached_languages(cache)
+
   def cached_languages(%{"languages" => languages}) when is_map(languages) do
     intkeys =
       languages
@@ -100,9 +109,14 @@ defmodule CodeStats.Profile.Queries do
     Enum.map(ids, fn id -> %{name: structs[id], xp: intkeys[id]} end)
   end
 
+  def cached_languages(_), do: []
+
   @doc """
   Get profile's total machines and their XPs from cache.
   """
+  @spec cached_machines(Cache.db_t()) :: [%{optional(atom) => String.t() | integer}]
+  def cached_machines(cache)
+
   def cached_machines(%{"machines" => machines}) when is_map(machines) do
     intkeys =
       machines
@@ -126,26 +140,41 @@ defmodule CodeStats.Profile.Queries do
     end)
   end
 
+  def cached_machines(_), do: []
+
   @doc """
   Get profile's all active dates and their XPs from cache.
   """
+  @spec cached_dates(Cache.db_t()) :: [%{optional(atom) => String.t() | integer}]
+  def cached_dates(cache)
+
   def cached_dates(%{"dates" => dates}) when is_map(dates) do
     Map.to_list(dates)
     |> Enum.map(fn {date, xp} -> %{date: date, xp: xp} end)
   end
 
+  def cached_dates(_), do: []
+
   @doc """
   Get profile's active dates and their XPs since given datetime from cache.
   """
+  @spec cached_dates(Cache.db_t(), Date.t()) :: [%{optional(atom) => Date.t() | integer}]
+  def cached_dates(cache, since)
+
   def cached_dates(cache, %Date{} = since) when is_map(cache) do
     cached_dates(cache)
     |> Enum.map(fn data -> %{data | date: Date.from_iso8601!(data.date)} end)
     |> Enum.filter(fn %{date: date} -> Date.compare(date, since) != :lt end)
   end
 
+  def cached_dates(_, _), do: []
+
   @doc """
   Get days of week when profile has been active and their total XPs.
   """
+  @spec cached_days_of_week(Cache.db_t()) :: %{optional(Calendar.day()) => integer}
+  def cached_days_of_week(cache)
+
   def cached_days_of_week(%{"dates" => dates}) when is_map(dates) do
     cached_dates(%{"dates" => dates})
     |> Enum.reduce(%{}, fn %{date: date, xp: xp}, acc ->
@@ -153,9 +182,14 @@ defmodule CodeStats.Profile.Queries do
     end)
   end
 
+  def cached_days_of_week(_), do: []
+
   @doc """
   Get days of week when profile has been active and their total XPs since given date.
   """
+  @spec cached_days_of_week(Cache.db_t(), Date.t()) :: %{optional(Calendar.day()) => integer}
+  def cached_days_of_week(cache, since)
+
   def cached_days_of_week(%{"dates" => dates}, %Date{} = since) when is_map(dates) do
     cached_dates(%{"dates" => dates}, since)
     |> Enum.reduce(%{}, fn %{date: date, xp: xp}, acc ->
@@ -163,12 +197,19 @@ defmodule CodeStats.Profile.Queries do
     end)
   end
 
+  def cached_days_of_week(_, _), do: []
+
   @doc """
   Get hours of day when profile has been active and their total XPs.
   """
+  @spec cached_hours(Cache.db_t()) :: %{optional(String.t()) => integer}
+  def cached_hours(cache)
+
   def cached_hours(cache) when is_map(cache) do
     Map.get(cache, "hours", %{})
   end
+
+  def cached_hours(_), do: []
 
   defp dow_reducer(acc, date, xp) when is_map(acc) and is_binary(date) and is_integer(xp) do
     case Date.from_iso8601(date) do

@@ -41,7 +41,8 @@ defmodule CodeStats.Profile.PublicSchema do
   # Resolve user data if the given authed user has permission to view their data
   defp resolve_if_permission(user, authed_user) do
     if CodeStats.Profile.PermissionUtils.can_access_profile?(authed_user, user) do
-      {:ok, %{id: user.id, cache: user.cache, registered: user.inserted_at}}
+      cache = user.cache || %{}
+      {:ok, %{id: user.id, cache: cache, registered: user.inserted_at}}
     else
       {:error, @generic_error}
     end
