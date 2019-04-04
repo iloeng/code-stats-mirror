@@ -5,6 +5,16 @@
 import { Socket } from 'phoenix';
 
 /**
+ * Return an exponential backoff based on the given iteration.
+ * @param {number} i Number of reconnect attempt (0-indexed)
+ * @returns {number} Milliseconds to wait for reconnect
+ */
+function reconnect_backoff(i) {
+  const rand = Math.random() * 90 * 1000;  // Wait for 0-60 seconds per iteration
+  return rand * i;
+}
+
+/**
  * Get live update socket for the correct backend socket path.
  *
  * Authenticates with token if available.
@@ -12,7 +22,10 @@ import { Socket } from 'phoenix';
 function get_live_update_socket() {
   const meta_tag = document.getElementsByName('channel_token');
 
-  let data = { params: {} };
+  let data = {
+    params: {},
+    reconnectAfterMs: reconnect_backoff
+  };
   if (meta_tag.length === 1) {
     data.params.token = meta_tag[0].content;
     console.log('Authentication exists, generating socket with token', data.params.token);
