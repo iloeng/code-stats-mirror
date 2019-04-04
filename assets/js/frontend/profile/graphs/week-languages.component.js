@@ -132,6 +132,8 @@ class WeekLanguagesComponent {
         dataset.data[idx] = xp;
       }
     }
+
+    this.chart.update();
   }
 
   update({ sent_at_local, xps }) {
