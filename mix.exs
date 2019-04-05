@@ -74,7 +74,8 @@ defmodule CodeStats.Mixfile do
       {:absinthe, "~> 1.4.13"},
       {:absinthe_plug, "~> 1.4.5"},
       {:ex2ms, "~> 1.5"},
-      {:csv, "~> 2.1.1"}
+      {:csv, "~> 2.1.1"},
+      {:tzdata, "~> 0.5.20"}
     ]
   end
 

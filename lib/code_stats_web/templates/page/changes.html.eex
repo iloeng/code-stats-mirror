@@ -165,6 +165,7 @@
     <li>Fix crash in GraphQL when new user doesn't have cache.</li>
     <li>Fix crash in week languages graph due to missing update.</li>
     <li>Add longer reconnect timeout to Phoenix channel connections.</li>
+    <li>Update tzdata version to fix crash with new tzinfo.</li>
   </ul>
 
   <h3>2.0.10 – 2019-03-31 – Cache update fix</h3>
