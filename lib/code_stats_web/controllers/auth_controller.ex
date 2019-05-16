@@ -128,7 +128,7 @@ defmodule CodeStatsWeb.AuthController do
   def reset(conn, %{"user" => params, "token" => token}) do
     with %PasswordReset{} = persisted_token <- check_reset_token(token),
          changeset = User.password_changeset(persisted_token.user, params),
-         %User{} <- Repo.update(changeset) do
+         {:ok, %User{}} <- Repo.update(changeset) do
       Repo.delete(persisted_token)
 
       conn
