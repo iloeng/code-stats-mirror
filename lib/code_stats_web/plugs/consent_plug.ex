@@ -18,7 +18,8 @@ defmodule CodeStatsWeb.ConsentPlug do
     # Paths that should not be redirected from
     no_redirect_paths = [
       consent_page_path,
-      CodeStatsWeb.Router.Helpers.auth_path(conn, :logout)
+      CodeStatsWeb.Router.Helpers.auth_path(conn, :logout),
+      CodeStatsWeb.Router.Helpers.terms_path(conn, :delete_account)
     ]
 
     with true <- CodeStatsWeb.AuthUtils.is_authed?(conn),
