@@ -218,7 +218,7 @@ $ bin/keytool -import -alias 'DST Root CA X3' -keystore lib/security/cacerts -tr
 
     <div class="plugin-description">
       <p>
-        To install, use the editor's extension manager and search for <code>Code::Stats</code>. After installating the extension and reloading the editor, set the <code>codestats.apikey</code> setting to your API key.
+        To install, use the editor's extension manager and search for <code>CodeStats</code>. After installating the extension and reloading the editor, set the <code>codestats.apikey</code> setting to your API key.
       </p>
 
       <p>
