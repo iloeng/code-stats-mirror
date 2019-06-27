@@ -52,7 +52,7 @@
 
 # Default values. Change as env_vars or from here
 # ------------
-default_user = "test:test"
+default_user = "test:testtest"
 default_email = "test@test.test"
 
 default_machine = "test_machine"
@@ -105,8 +105,7 @@ defmodule Seeds do
 
     {:ok, machine} =
       %CodeStats.User.Machine{name: machine_name}
-      |> CodeStats.User.Machine.changeset(%{})
-      |> Ecto.Changeset.put_change(:user_id, fetched_user.id)
+      |> CodeStats.User.Machine.changeset(%{user: fetched_user})
       |> CodeStats.Repo.insert()
 
     {:ok, fetched_user, machine}
