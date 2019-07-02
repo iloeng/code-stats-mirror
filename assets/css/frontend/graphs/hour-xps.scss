@@ -8,4 +8,25 @@
   .graph-container {
     position: relative;
   }
+
+  button {
+    background-color: antiquewhite;
+    padding: 0;
+    color: red;
+    margin-left: 5px;
+    line-height: 0;
+  }
+
+  .button-pressed {
+    box-shadow: inset 1px 1px 1px #000;
+  }
+
+  button:focus {
+    outline:0;
+  }
+
+  button svg {
+    width: 32px;
+    height: 32px;
+  }
 }
