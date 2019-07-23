@@ -64,7 +64,7 @@ deploy_beta:
     - cd assets
     - npm install
     - cd ../
-    - mix release --env=prod
+    - mix distillery.release --env=prod
     - sudo systemctl stop beta.codestats.net
     - sudo rm -rf /var/codestats/beta/_build
     - _build/prod/rel/code_stats/bin/code_stats migrate
