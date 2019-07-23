@@ -66,7 +66,7 @@ MINIFY=true       # If set to true, generated frontend assets will be minified.
 Generate [Distillery](https://hex.pm/packages/distillery) release:
 
 ```
-MIX_ENV=prod COOKIE=somesecretcookie mix release --env=prod
+MIX_ENV=prod COOKIE=somesecretcookie mix distillery.release --env=prod
 ```
 
 Note that the release must be generated on the same architecture and OS type as the target system.

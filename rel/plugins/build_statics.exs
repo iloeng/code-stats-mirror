@@ -1,5 +1,5 @@
 defmodule CodeStats.ReleasePlugins.BuildStatics do
-  use Mix.Releases.Plugin
+  use Distillery.Releases.Plugin
 
   @moduledoc """
   Distillery plugin for generating static files (i.e. the frontend) before building the release.
