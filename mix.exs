@@ -62,7 +62,7 @@ defmodule CodeStats.Mixfile do
       {:number, "~> 1.0.0"},
       {:earmark, "~> 1.3", only: :dev},
       {:ex_doc, "~> 0.18", only: :dev},
-      {:calendar, "~> 0.17.4"},
+      {:calendar, "~> 0.18.0"},
       {:bamboo, "~> 1.0"},
       {:corsica, "~> 1.1.0"},
       {:appsignal, "~> 1.4"},
@@ -75,7 +75,7 @@ defmodule CodeStats.Mixfile do
       {:absinthe_plug, "~> 1.4.5"},
       {:ex2ms, "~> 1.5"},
       {:csv, "~> 2.1.1"},
-      {:tzdata, "~> 0.5.20"}
+      {:tzdata, "~> 1.0.1"}
     ]
   end
 
