@@ -3,8 +3,11 @@ import Chart from 'chart.js';
 import { XP_FORMATTER } from '../../../common/xp_utils';
 
 
-class HourXpsComponent {
+const AM_COLOR = 'rgba(10, 0, 178, 0.5)';
+const PM_COLOR = 'rgba(255, 200, 64, 0.5)';
 
+
+class HourXpsComponent {
   constructor() {
     this.canvas = el('canvas');
 
@@ -25,49 +28,53 @@ class HourXpsComponent {
       svg('use', { xlink: { href: '#bar' } })
     );
 
-    this.clockButton = el('button' + (this.chartStyle == 'clock' ? '.button-pressed' : ''), clockDrawing);
-    this.barButton = el('button' + (this.chartStyle == 'bar' ? '.button-pressed' : ''), barDrawing);
+    this.clockButton = el(
+      'button' + (this.chartStyle === 'clock' ? '.button-pressed' : ''),
+      { title: 'View as clock' },
+      clockDrawing
+    );
+    this.barButton = el(
+      'button' + (this.chartStyle === 'bar' ? '.button-pressed' : ''),
+      { title: 'View as bar graph' },
+      barDrawing
+    );
 
-    var that = this;
-    this.clockButton.onclick = function () {
-      that.changeChartStyle('clock');
-      that.chart.update();
+    this.clockButton.onclick = () => {
+      this.changeChartStyle('clock');
+      this.chart.update();
     }
 
-    this.barButton.onclick = function () {
-      that.changeChartStyle('bar');
-      that.chart.update();
+    this.barButton.onclick = () => {
+      this.changeChartStyle('bar');
+      this.chart.update();
     }
 
-    this.title = el('h4', [
-      'Total XP per hour of days',
-      this.clockButton,
-      this.barButton,
-    ]);
+    this.title = el('h4', 'Total XP per hour of days');
 
     this.el = el('div.hour-xps', [
       this.title,
-      el('div.graph-container', [this.canvas])
+      el('div.graph-container', [this.canvas]),
+      el('div.mode-switcher', [this.clockButton, this.barButton])
     ]);
 
     this.initializeData();
-    
   }
 
 
   changeChartStyle(style) {
-    if (this.chartStyle == style) return;
+    if (this.chartStyle === style) return;
+
     this.chartStyle = style;
     localStorage.setItem('HourXpsChartStyle', style);
-    if (this.chartStyle == 'clock') {
+    this.chart.destroy();
+
+    if (this.chartStyle === 'clock') {
       setAttr(this.clockButton, { className: 'button-pressed' })
       setAttr(this.barButton, { className: '' })
-      this.chart.destroy();
       this.createClockChart();
     } else {
       setAttr(this.clockButton, { className: '' })
       setAttr(this.barButton, { className: 'button-pressed' })
-      this.chart.destroy();
       this.createBarChart();
     }
   }
@@ -83,10 +90,10 @@ class HourXpsComponent {
       canvas_ctx,
       {
         data: {
-          labels: [...Array(24).keys()], //.map(function(z) { return z+":00"}),
+          labels: [...Array(24).keys()],
           datasets: [{
             data: [...this.amData, ...this.pmData],
-            backgroundColor: [...Array(24)].map((_, i) => ['rgba(255, 200, 64, 0.5)', 'rgba(10, 0, 178, 0.5)']).flat(),
+            backgroundColor: Array(12).fill(AM_COLOR).concat(Array(12).fill(PM_COLOR)),
             borderWidth: 1
           }]
         },
@@ -100,7 +107,7 @@ class HourXpsComponent {
             callbacks: {
               label: (tooltip_item, data) => {
                 const label = parseInt(tooltip_item['xLabel']);
-                return `${label}:00–${label + 1}:00: ${XP_FORMATTER.format(tooltip_item.yLabel)}`;
+                return `${label}–${label + 1}: ${XP_FORMATTER.format(tooltip_item.yLabel)}`;
               }
             }
           },
@@ -114,7 +121,7 @@ class HourXpsComponent {
                 },
                 scaleLabel: {
                   display: true,
-                  labelString: '1k = 1000'
+                  labelString: 'XP'
                 }
               }
             ]
@@ -134,12 +141,12 @@ class HourXpsComponent {
             {
               labels: [...Array(12).keys()].map(i => (i + 12).toString()),
               data: this.pmData,
-              backgroundColor: 'rgba(255, 200, 64, 0.5)'
+              backgroundColor: PM_COLOR
             },
             {
               labels: [...Array(12).keys()].map(i => i.toString()),
               data: this.amData,
-              backgroundColor: 'rgba(10, 0, 178, 0.5)'
+              backgroundColor: AM_COLOR
             }
           ]
         },
@@ -173,15 +180,14 @@ class HourXpsComponent {
   }
 
   setInitData({ hour_of_day_xps }) {
-    console.log("SET INIT DATA")
     const hod_items = Object.entries(hour_of_day_xps).map(([hour, xps]) => [parseInt(hour), xps]);
     hod_items.sort(([hour1], [hour2]) => hour1 - hour2);
 
     for (const [hour, xps] of hod_items) {
       this._insertIntoHour(hour, xps);
     }
-    
-    if (this.chartStyle == 'clock') {
+
+    if (this.chartStyle === 'clock') {
       this.createClockChart();
     } else {
       this.createBarChart();
@@ -190,7 +196,6 @@ class HourXpsComponent {
   }
 
   update({ new_xp, sent_at_local }) {
-    console.log("UPDATE")
     const hour = sent_at_local.hour;
     this._insertIntoHour(hour, new_xp, true);
     this.chart.update();
@@ -206,6 +211,10 @@ class HourXpsComponent {
     else {
       dataset[hour % 12] = xps;
     }
+  }
+
+  _getBarChartColor() {
+
   }
 }
 

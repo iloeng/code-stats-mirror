@@ -115,4 +115,8 @@ button {
   &.button-danger {
     @include button-color($danger-color);
   }
+
+  &.button-pressed {
+    box-shadow: inset $button-shadow;
+  }
 }

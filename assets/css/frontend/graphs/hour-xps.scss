@@ -9,20 +9,20 @@
     position: relative;
   }
 
+  .mode-switcher {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    margin-top: 10px;
+  }
+
   button {
-    background-color: antiquewhite;
+    background-color: $background-color;
     padding: 0;
-    color: red;
+    color: $base-text;
     margin-left: 5px;
     line-height: 0;
-  }
-
-  .button-pressed {
-    box-shadow: inset 1px 1px 1px #000;
-  }
-
-  button:focus {
-    outline:0;
   }
 
   button svg {
