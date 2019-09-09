@@ -159,6 +159,13 @@
 <div class="stripe">
   <h2>Changelog</h2>
 
+  <h3>2.1.0 – 2019-09-09 – New server</h3>
+
+  <ul>
+    <li>Migrated service to a new server, so legal terms were updated.</li>
+    <li>Added hourly bar chart. Thanks for the implementation, Serafeim Papastefanos!</li>
+  </ul>
+
   <h3>2.0.12 – 2019-05-16 – I want to get off Mr. Fixes' wild ride</h3>
 
   <ul>
