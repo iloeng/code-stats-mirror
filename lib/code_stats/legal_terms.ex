@@ -19,6 +19,7 @@ defmodule CodeStats.LegalTerms do
   # it was put into effect. The third element, if not nil, specifies the location of the terms
   # file in that commit. List in descending date order.
   @terms [
+    {"1150de42f0ee00c213e8901b6098735eb0cefd41", ~D[2018-07-01], nil},
     {"dbd2d59f34ab8bd8538029f081f908e2a17b50a2", ~D[2016-08-02],
      "web/templates/page/terms.html.eex"},
     {"a2a5f122546ef2391b441b61199643dd3b2d52e5", ~D[2016-05-30],
@@ -26,7 +27,7 @@ defmodule CodeStats.LegalTerms do
   ]
 
   # Date when the current legal terms came into effect
-  @current_terms_date ~D[2018-07-01]
+  @current_terms_date ~D[2019-09-09]
 
   for {terms_hash, terms_date, terms_file} <- @terms do
     terms_date = Macro.escape(terms_date)

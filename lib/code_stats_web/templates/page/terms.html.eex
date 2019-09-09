@@ -32,7 +32,7 @@
 <h3>Location of the register</h3>
 
 <p>
-  The user database is stored on a server hosted by <a href="https://www.online.net/en" target="_blank">Online SAS</a> in France.
+  The user database is stored on a cloud server hosted by <a href="https://www.hetzner.com/rechtliches/impressum" target="_blank">Hetzner Online GmbH</a> in Finland.
 </p>
 
 <h3>The purpose of data collection</h3>
@@ -94,7 +94,7 @@
 </p>
 
 <p>
-  Physical security of the server in the datacenter is managed by Online SAS.
+  Physical security of the server in the datacenter is managed by Hetzner Online GmbH.
 </p>
 
 <h3>Register data requests</h3>
@@ -116,7 +116,7 @@
 <h3>Note about backups</h3>
 
 <p>
-  The service's database is backed up periodically. The database level backups are stored in Jottacloud, a service by <a href="https://www.jottacloud.com/en/about.html" target="_blank">Jotta AS</a>, in Norway. Backups older than 5 weeks are deleted automatically.
+  The service's filesystem is backed up daily. The backups are created and stored by Hetzner. Backups older than a week are automatically deleted.
 </p>
 
 <h3>Note about analytics</h3>
@@ -175,7 +175,7 @@
 </p>
 
 <p>
-  This privacy policy was last changed on the 1<sup>st</sup> of July 2018.
+  This privacy policy was last changed on the 9<sup>th</sup> of September 2019.
 </p>
 
 <h2>Terms of service <a id="terms" href="#terms">#</a></h2>
