@@ -8,23 +8,26 @@ defmodule CodeStats do
 
     children = [
       # Start the Ecto repository first for database access
-      supervisor(CodeStats.Repo, []),
+      {CodeStats.Repo, []},
+
+      # PubSub runs channel system
+      {Phoenix.PubSub, [name: CodeStats.PubSub]},
 
       # Get historical XP data to cache
-      supervisor(CodeStats.XPHistoryCache, []),
+      {CodeStats.XPHistoryCache, [name: CodeStats.XPHistoryCache]},
 
       # Start the endpoint when the application starts
-      supervisor(CodeStatsWeb.Endpoint, []),
+      {CodeStatsWeb.Endpoint, [name: CodeStatsWeb.Endpoint]},
 
       # Start The Terminator
-      worker(CodeStats.User.Terminator, [])
+      {CodeStats.User.Terminator, [name: CodeStats.User.Terminator]}
     ]
 
     # Start XPCacheRefresher if in prod or if told to
     children =
       case {CodeStats.Utils.get_conf(:compile_env), System.get_env("RUN_CACHES")} do
         {:dev, nil} -> children
-        _ -> children ++ [worker(CodeStats.XP.XPCacheRefresher, [])]
+        _ -> children ++ [{CodeStats.XP.XPCacheRefresher, [name: CodeStats.XP.XPCacheRefresher]}]
       end
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

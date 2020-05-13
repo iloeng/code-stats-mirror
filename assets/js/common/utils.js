@@ -2,7 +2,7 @@
  * Miscellaneous utilities
  */
 
-import { Socket } from 'phoenix';
+import { Socket } from 'phoenix/assets/js/phoenix';
 
 /**
  * Return an exponential backoff based on the given iteration.

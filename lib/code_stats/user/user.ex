@@ -6,8 +6,6 @@ defmodule CodeStats.User do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Comeonin.Bcrypt
-
   alias CodeStats.Repo
   alias CodeStats.User.Pulse
 
@@ -131,7 +129,7 @@ defmodule CodeStats.User do
   end
 
   defp hash_password(password) do
-    Bcrypt.hashpwsalt(password)
+    Bcrypt.hash_pwd_salt(password)
   end
 
   # Common validations for creating and editing users

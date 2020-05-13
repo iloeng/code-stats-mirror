@@ -4,6 +4,8 @@ defmodule CodeStats.User.Terminator do
   from the system.
   """
 
+  use GenServer
+
   import Ecto.Query, only: [from: 2]
 
   alias Calendar.DateTime, as: CDateTime
@@ -18,10 +20,11 @@ defmodule CodeStats.User.Terminator do
     {:clear_old_password_reset_tokens, 24 * 60 * 60 * 1000}
   ]
 
-  def start_link() do
-    GenServer.start_link(__MODULE__, %{})
+  def start_link(opts) do
+    GenServer.start_link(__MODULE__, %{}, opts)
   end
 
+  @impl true
   def init(state) do
     start_timers()
 
@@ -37,6 +40,7 @@ defmodule CodeStats.User.Terminator do
     end)
   end
 
+  @impl true
   def handle_info({fun, time}, state) do
     apply(__MODULE__, fun, [])
     Process.send_after(self(), {fun, time}, time)

@@ -92,7 +92,7 @@
     </section>
 
     <main>
-      <%= render @view_module, @view_template, assigns %>
+      <%= @inner_content %>
     </main>
 
     <footer id="footer-stripe" class="stripe stripe-accent">

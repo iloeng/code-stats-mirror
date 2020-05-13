@@ -10,7 +10,7 @@ config :code_stats, CodeStatsWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "gWdaZrx0+CB8iuwoC1LMNUD2Lp37PCqvv73Dgid6k+jESaQFWguzrf2hDAoIYE4U",
   render_errors: [accepts: ~w(html json)],
-  pubsub: [name: CodeStats.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub_server: CodeStats.PubSub
 
 # Email config, override in your env.secret.exs
 config :code_stats, CodeStats.Mailer,
@@ -75,13 +75,7 @@ config :number,
 config :geolix,
   init: {CodeStatsWeb.Geolix, :init}
 
-config :geolite2data,
-  geolix_updater: true,
-  logger: Mix.env() != :prod
-
 # Appsignal configuration
-
-config :code_stats, CodeStatsWeb.Endpoint, instrumenters: [Appsignal.Phoenix.Instrumenter]
 
 config :phoenix, :template_engines,
   eex: Appsignal.Phoenix.Template.EExEngine,

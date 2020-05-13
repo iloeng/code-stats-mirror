@@ -1,7 +1,7 @@
 <%= get_conf(:site_name) %>
 ===========
 
-<%= render @view_module, @view_template, assigns %>
+<%= @inner_content %>
 
 -----------
 This email was sent from <%= get_conf(:site_name) %> <<%= Routes.page_url(CodeStatsWeb.Endpoint, :index) %>>. If you do not wish to receive more emails, you can remove your email address in the preferences page of your account.

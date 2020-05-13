@@ -16,10 +16,11 @@ defmodule CodeStats.XP.XPCacheRefresher do
   # How many users to sync totally
   @sync_total_count 1
 
-  def start_link do
-    GenServer.start_link(__MODULE__, %{})
+  def start_link(opts) do
+    GenServer.start_link(__MODULE__, %{}, opts)
   end
 
+  @impl true
   def init(state) do
     do_refresh()
 
@@ -27,6 +28,7 @@ defmodule CodeStats.XP.XPCacheRefresher do
     {:ok, state}
   end
 
+  @impl true
   def handle_info(:work, state) do
     do_refresh()
 

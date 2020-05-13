@@ -3,6 +3,8 @@ defmodule CodeStats.XPHistoryCache do
   XP history cache stores the received XP amounts in the last n hours, grouped to blocks of m minutes.
   """
 
+  use GenServer
+
   import Ecto.Query, only: [from: 2]
   import Ex2ms, only: [fun: 1]
 
@@ -29,10 +31,11 @@ defmodule CodeStats.XPHistoryCache do
   # controllers, which simplifies the code.
   @refresh_after 30
 
-  def start_link() do
-    GenServer.start_link(__MODULE__, nil)
+  def start_link(opts) do
+    GenServer.start_link(__MODULE__, nil, opts)
   end
 
+  @impl true
   def init(state) do
     init_table()
     refresh_cache_and_repeat()
@@ -40,6 +43,7 @@ defmodule CodeStats.XPHistoryCache do
     {:ok, state}
   end
 
+  @impl true
   def handle_info(:refresh, state) do
     refresh_cache_and_repeat()
     {:noreply, state}

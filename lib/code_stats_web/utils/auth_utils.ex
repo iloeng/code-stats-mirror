@@ -10,7 +10,6 @@ defmodule CodeStatsWeb.AuthUtils do
   alias CodeStats.User
   alias CodeStats.User.Machine
 
-  alias Comeonin.Bcrypt
   alias Plug.Conn
   alias Plug.Crypto.MessageVerifier
 
@@ -99,7 +98,7 @@ defmodule CodeStatsWeb.AuthUtils do
   """
   @spec dummy_auth_user() :: nil
   def dummy_auth_user() do
-    Bcrypt.dummy_checkpw()
+    Bcrypt.no_user_verify()
     nil
   end
 
@@ -236,7 +235,7 @@ defmodule CodeStatsWeb.AuthUtils do
   """
   @spec check_user_password(%User{}, String.t()) :: boolean
   def check_user_password(%User{} = user, password) do
-    Bcrypt.checkpw(password, user.password)
+    Bcrypt.verify_pass(password, user.password)
   end
 
   defp form_payload(username, machine_id) do

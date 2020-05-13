@@ -18,7 +18,7 @@ module.exports = {
           options: {
             presets: [
               [
-                path.resolve(n_path, 'babel-preset-env'),
+                path.resolve(n_path, '@babel/preset-env'),
                 {
                   targets: {
                     browsers: [
@@ -31,13 +31,14 @@ module.exports = {
                       'last 2 ios_saf versions'
                     ]
                   },
-                  useBuiltIns: true,
+                  useBuiltIns: 'usage',
+                  corejs: 3,
                   modules: false
                 }
               ]
             ],
             plugins: [
-              path.resolve(n_path, 'babel-plugin-external-helpers')
+              path.resolve(n_path, '@babel/plugin-external-helpers')
             ],
             babelrc: false,
             cacheDirectory: true
@@ -45,6 +46,11 @@ module.exports = {
         }
       }
     ]
+  },
+  resolve: {
+    alias: {
+      'core-js': path.resolve(n_path, 'core-js')
+    }
   },
   devtool: 'source-map',
   optimization: {
