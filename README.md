@@ -61,6 +61,10 @@ RUN_CACHES=true   # If set to any value, will generate user caches even in dev m
 MINIFY=true       # If set to true, generated frontend assets will be minified.
 ```
 
+Please note that if `RUN_CACHES` is not set and caches have not yet been generated, no data will be
+displayed on profile pages. If you want to fill the caches manually you can also run
+`CodeStats.XP.XPCacheRefresher.do_refresh()` from an iex shell.
+
 ## Production
 
 Generate [Distillery](https://hex.pm/packages/distillery) release:
