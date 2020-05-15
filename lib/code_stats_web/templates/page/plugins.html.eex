@@ -100,7 +100,7 @@
 
     <div class="plugin-description">
       <p>
-        To install, use the IDE's builtin package manager, click on "Browse repositories…" and search for <code>Code::Stats</code>. After installation, go to Settings → Other Settings → Code::Stats and insert your API key.
+        To install, use the IDE's builtin package manager, click on "Browse repositories…" and search for <code>Code::Stats</code> or <code>CodeStats</code>. After installation, go to Settings → Other Settings → Code::Stats and insert your API key.
       </p>
 
       <p>
