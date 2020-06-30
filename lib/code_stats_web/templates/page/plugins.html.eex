@@ -26,6 +26,9 @@
        alt="Atom editor logo"
       />
     </a>
+    <a href="#browsers">
+      <%= plugin_icon.("code-stats-browser-logo.png", "Browsers") %>
+    </a>
     <a href="#jetbrains">
       <img
        class="plugin-image"
@@ -93,6 +96,33 @@
      title="Atom editor"
      alt="Atom editor logo"
     />
+  </div>
+
+  <div class="plugin">
+    <h2 id="browsers">Browsers (Chrome, Edge, Firefox)</h2>
+
+    <div class="plugin-description">
+      <p>
+        To install, find the correct extension for your browser from the list below. Then insert your API key into the extension settings, after clicking on the "C::S" extension button.
+      </p>
+
+      <p>
+        <ul>
+          <li><strong>Chrome / Edge:</strong> Install from <a target="_blank" href="https://chrome.google.com/webstore/detail/code-stats-chrome-extensi/ljecglgmlhpjalfccaojplcidlmaochd">Chrome Web Store</a>.</li>
+          <li><strong>Firefox:</strong> Install from <a target="_blank" href="https://addons.mozilla.org/en/firefox/addon/code-stats-extension/?src=search">Firefox Add-ons store</a>.</li>
+        </ul>
+      </p>
+
+      <p>
+        <a target="_blank" href="https://gitlab.com/code-stats/code-stats-browser">Link to the repository on GitLab.</a>
+      </p>
+
+      <p>
+        <em>Thanks to Finn Dohrn (bitnulleins) for the browser extensions.</em>
+      </p>
+    </div>
+
+    <%= plugin_icon.("code-stats-browser-logo.png", "Browsers") %>
   </div>
 
   <div class="plugin">
