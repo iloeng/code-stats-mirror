@@ -38,7 +38,7 @@
   <source srcset="<%= Routes.static_path(@conn, no_ext <> ".webp") %>" type="image/webp" />
   <source srcset="<%= Routes.static_path(@conn, @src) %>" type="<%= type %>" />
   <img
-   src=<%= Routes.static_path(@conn, @src) %>
+   src="<%= Routes.static_path(@conn, @src) %>"
    alt="<%= @alt %>"
    title="<%= @title %>"
    <%= if assigns[:img_id], do: raw(~s(id="#{@img_id}")), else: "" %>
