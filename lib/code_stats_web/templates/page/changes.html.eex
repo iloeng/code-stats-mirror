@@ -153,6 +153,23 @@
         / <a target="_blank" href="https://www.lukegerhardt.com/">Site</a>
       </p>
     </div>
+
+    <div>
+      <%= profile_pic.("bit01_social_logo_c.png", "Finn Dohrn (bitnulleins)") %>
+
+      <h3>Finn Dohrn (bitnulleins)</h3>
+      <p class="subtitle">
+        <a target="_blank" href="https://gitlab.com/code-stats/code-stats-browser">
+          code-stats-browser
+        </a>
+        developer
+      </p>
+
+      <p>
+        <a target="_blank" href="https://blog.bit01.de/">Blog</a>
+        / <a target="_blank" href="https://github.com/bitnulleins">GitHub</a>
+      </p>
+    </div>
   </div>
 </div>
 
