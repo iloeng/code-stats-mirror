@@ -39,6 +39,16 @@ config :code_stats,
     {"IRC", "irc://irc.freenode.net/codestats"}
   ],
 
+  # Gravatar rating to filter out explicit avatars
+  gravatar_rating: "g",
+
+  # Gravatar avatar size (note that rendered size depends on CSS layout)
+  gravatar_size: 200,
+
+  # Gravatar default avatar (see https://secure.gravatar.com/site/implement/images/ for example
+  # values; if using an URL, don't url encode it)
+  gravatar_default: "retro",
+
   # Extra HTML that is injected to every page, right before </body>. Useful for analytics scripts.
   analytics_code: """
   <script>

@@ -1,6 +1,8 @@
 defmodule CodeStats do
   use Application
 
+  alias CodeStatsWeb.Gravatar
+
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
@@ -15,6 +17,9 @@ defmodule CodeStats do
 
       # Get historical XP data to cache
       {CodeStats.XPHistoryCache, [name: CodeStats.XPHistoryCache]},
+
+      # Start Gravatar proxy
+      {Gravatar.Proxy, %Gravatar.Proxy.Options{name: Gravatar.Proxy}},
 
       # Start the endpoint when the application starts
       {CodeStatsWeb.Endpoint, [name: CodeStatsWeb.Endpoint]},

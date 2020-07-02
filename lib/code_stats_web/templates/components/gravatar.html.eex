@@ -1,0 +1,12 @@
+<%#
+  Gravatar element that shows an <img> tag to request a gravatar from the backend.
+
+  Requires:
+    @conn
+    @username Username of the user.
+%>
+
+<img
+  src="<%= Routes.profile_path(@conn, :profile_gravatar, @username) %>"
+  alt="<%= @username %>'s gravatar"
+/>

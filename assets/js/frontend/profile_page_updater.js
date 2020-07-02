@@ -28,7 +28,7 @@ class ProfilePageUpdater {
     this.muDiv = document.getElementById('main-stats-container');
 
     // Main components
-    this.tuApp = new TotalInfoComponent(this.tuDiv, this.totalXp, this.newXp, this.username);
+    this.tuApp = new TotalInfoComponent(this.tuDiv, this.totalXp, this.newXp);
     this.muApp = new MainInfoComponent(this.totalXp);
 
     setChildren(this.muDiv, [this.muApp]);

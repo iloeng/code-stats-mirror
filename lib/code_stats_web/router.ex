@@ -70,6 +70,8 @@ defmodule CodeStatsWeb.Router do
     get("/logout", CodeStatsWeb.AuthController, :logout)
 
     get("/users/:username", CodeStatsWeb.ProfileController, :profile)
+    get("/users/:username/avatar", CodeStatsWeb.ProfileController, :profile_gravatar)
+
     forward("/profile-graph", Absinthe.Plug, schema: CodeStats.Profile.PublicSchema)
     forward("/profile-graphiql", Absinthe.Plug.GraphiQL, schema: CodeStats.Profile.PublicSchema)
 

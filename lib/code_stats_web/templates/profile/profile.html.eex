@@ -3,6 +3,16 @@
     id="profile-username"
     data-name="<%= @user.username %>"
   >
+    <%=
+      if not is_nil(@user.gravatar_email) do
+        render(
+          CodeStatsWeb.ComponentsView,
+          "gravatar.html",
+          conn: @conn,
+          username: @user.username
+        )
+      end
+    %>
     <%= @user.username %>
   </h1>
   <ul id="profile-detail-list">

@@ -20,6 +20,9 @@ defmodule CodeStats.User do
     # The latest version of the legal terms that was accepted by the user
     field(:terms_version, :date)
 
+    # Email address used for Gravatar, or nil
+    field(:gravatar_email, :string)
+
     has_many(:pulses, Pulse)
 
     timestamps(type: :utc_datetime)
@@ -51,7 +54,7 @@ defmodule CodeStats.User do
   """
   def updating_changeset(data, params \\ %{}) do
     data
-    |> cast(params, [:email, :private_profile])
+    |> cast(params, [:email, :gravatar_email, :private_profile])
     |> common_validations()
   end
 
@@ -137,6 +140,8 @@ defmodule CodeStats.User do
     changeset
     |> validate_length(:email, min: 3, max: 255)
     |> validate_format(:email, ~r/^$|^.+@.+$/)
+    |> validate_length(:gravatar_email, min: 3, max: 255)
+    |> validate_format(:gravatar_email, ~r/^$|^.+@.+$/)
   end
 
   defp password_validations(changeset) do

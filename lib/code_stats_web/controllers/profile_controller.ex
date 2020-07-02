@@ -2,9 +2,8 @@ defmodule CodeStatsWeb.ProfileController do
   use CodeStatsWeb, :controller
 
   alias CodeStats.User
-  alias CodeStatsWeb.AuthUtils
   alias CodeStats.Profile.PermissionUtils
-  alias CodeStatsWeb.ProfileUtils
+  alias CodeStatsWeb.{AuthUtils, ProfileUtils, Gravatar}
 
   def my_profile(conn, _params) do
     user = AuthUtils.get_current_user(conn)
@@ -20,6 +19,23 @@ defmodule CodeStatsWeb.ProfileController do
         conn
         |> put_status(404)
         |> render(CodeStatsWeb.ErrorView, "error_404.html")
+    end
+  end
+
+  @spec profile_gravatar(Plug.Conn.t(), map()) :: Plug.Conn.t()
+  def profile_gravatar(conn, %{"username" => username}) do
+    with {:ok, user} <- get_user(username),
+         true <- PermissionUtils.can_access_profile?(AuthUtils.get_current_user(conn), user),
+         e when not is_nil(e) <- user.gravatar_email,
+         hash <- Gravatar.Utils.email_to_hash(user.gravatar_email),
+         {:ok, mime, data} = Gravatar.Proxy.get_image(Gravatar.Proxy, hash) do
+      conn
+      |> put_resp_content_type(mime)
+      |> send_resp(200, data)
+    else
+      _ ->
+        conn
+        |> send_resp(404, "")
     end
   end
 

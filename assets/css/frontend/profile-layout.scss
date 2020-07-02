@@ -16,8 +16,17 @@
   >#profile-username {
     grid-area: username;
 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
     margin-bottom: 0;
     margin-top: 5px;
+
+    >img {
+      height: $h1-size;
+      margin-right: 10px;
+    }
   }
 
   >#profile-detail-list {

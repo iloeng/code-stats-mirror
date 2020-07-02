@@ -1,4 +1,4 @@
-import { el, mount, unmount, setChildren, text } from 'redom';
+import { el, setChildren, text } from 'redom';
 import LevelCounterComponent from '../graphs/level_counter.component';
 import ProgressBarComponent from '../graphs/progress_bar.component';
 
@@ -8,10 +8,9 @@ import { DateTime } from 'luxon';
  * Renders the profile information and total XP of the user.
  */
 class TotalInfoComponent {
-  constructor(init_el, total_xp, new_xp, username) {
+  constructor(init_el, total_xp, new_xp) {
     this.totalXp = total_xp;
     this.newXp = new_xp;
-    this.username = username;
 
     this.registeredAt = DateTime.fromISO(document.getElementById('registered-at').getAttribute('datetime'));
 
@@ -22,7 +21,7 @@ class TotalInfoComponent {
       this.lastDayCoded = DateTime.fromISO(last_day_coded_el.getAttribute('datetime'));
     }
 
-    this.usernameEl = el('h1#profile-username', { 'data-name': this.username }, this.username);
+    this.usernameEl = document.getElementById("profile-username");
 
     this.lastProgrammedEl = el('li', this._getLastProgrammedElems());
 

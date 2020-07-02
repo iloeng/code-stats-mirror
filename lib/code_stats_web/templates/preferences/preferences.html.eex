@@ -28,6 +28,15 @@
           </p>
         </div>
 
+        <%= label(f, :gravatar_email, "Gravatar email") %>
+        <div class="input">
+          <%= email_input(f, :gravatar_email, minlength: 3, maxlength: 255) %>
+          <%= error_tag(f, :gravatar_email) %>
+          <p class="help-block">
+            Email to use for displaying Gravatar. Can be the same or different as your main email. Email or its hash is not revealed to viewers.
+          </p>
+        </div>
+
         <div class="submit"><%= submit("Update preferences") %></div>
       <% end) %>
     </div>
