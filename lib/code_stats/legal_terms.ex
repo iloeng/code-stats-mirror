@@ -10,15 +10,18 @@ defmodule CodeStats.LegalTerms do
   """
 
   # NOTE that this file is only recompiled and thus the diffs are only calculated when the
-  # @current_terms_date or some other attribute is changed, or a compilation is forced.
+  # @current_terms_date, or some other attribute is changed, or a compilation is forced. Or if the
+  # legal terms file is changed.
 
   # Default path of the terms file if not specified
   @default_path "lib/code_stats_web/templates/page/terms.html.eex"
+  @external_resource @default_path
 
   # List of old legal terms: the git commit hash when the policy was added and the date when
   # it was put into effect. The third element, if not nil, specifies the location of the terms
   # file in that commit. List in descending date order.
   @terms [
+    {"d61d3897306551738a74a4c0704a8c76777cd715", ~D[2019-09-09], nil},
     {"1150de42f0ee00c213e8901b6098735eb0cefd41", ~D[2018-07-01], nil},
     {"dbd2d59f34ab8bd8538029f081f908e2a17b50a2", ~D[2016-08-02],
      "web/templates/page/terms.html.eex"},
@@ -27,7 +30,7 @@ defmodule CodeStats.LegalTerms do
   ]
 
   # Date when the current legal terms came into effect
-  @current_terms_date ~D[2019-09-09]
+  @current_terms_date ~D[2020-07-03]
 
   for {terms_hash, terms_date, terms_file} <- @terms do
     terms_date = Macro.escape(terms_date)

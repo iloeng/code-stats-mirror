@@ -14,11 +14,14 @@
 <h3>Name and contact details of the personal data register holder</h3>
 
 <dl>
-  <dt>Name</dt>
-  <dd>Mikko Ahlroth</dd>
+  <dt>Organization</dt>
+  <dd>Tmi AhlCode</dd>
+
+  <dt>Finnish business ID</dt>
+  <dd>3133797-6</dd>
 
   <dt>Email address</dt>
-  <dd>mikko.ahlroth ⓐⓣ gmail.com</dd>
+  <dd>ceo ⓐⓣ ahlcode.fi</dd>
 </dl>
 
 <p>
@@ -53,6 +56,9 @@
   </li>
   <li>
     Email address (optional) for notifying the user about important announcements related to the service and for account recovery in the case of a lost password. Stored as long as user doesn't delete their account or remove the email in preferences.
+  </li>
+  <li>
+    Second email address (optional) to use for displaying Gravatar in user profile and related places. Not used for any other purpose. Stored as long as user doesn't delete their account or remove the email in preferences.
   </li>
   <li>
     IP addresses and browser user agent strings from both authenticated and unauthenticated users are stored in the server request logs for 4 weeks. They are used for statistical purposes and abuse prevention.
@@ -175,7 +181,7 @@
 </p>
 
 <p>
-  This privacy policy was last changed on the 9<sup>th</sup> of September 2019.
+  This privacy policy was last changed on the 3<sup>rd</sup> of July 2020.
 </p>
 
 <h2>Terms of service <a id="terms" href="#terms">#</a></h2>
