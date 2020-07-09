@@ -48,6 +48,7 @@
           <a href="<%= Routes.profile_path(@conn, :my_profile) %>">Profile</a>
           <a href="<%= Routes.preferences_path(@conn, :edit) %>">Preferences</a>
           <a href="<%= Routes.machine_path(@conn, :list) %>">Machines</a>
+          <a href="<%= Routes.support_path(@conn, :page) %>">Support</a>
           <a href="<%= Routes.auth_path(@conn, :logout) %>">Log out</a>
         <% else %>
           <a href="<%= Routes.auth_path(@conn, :render_login) %>">Log in</a>

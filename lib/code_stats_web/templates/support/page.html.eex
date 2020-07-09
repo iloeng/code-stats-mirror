@@ -1,0 +1,33 @@
+<section class="stripe">
+  <h1>Support <%= get_conf(:site_name) %></h1>
+</section>
+
+<section class="stripe stripe-accent stripe-content-padded">
+  <p>
+    <%= get_conf(:site_name) %> is a free service, but running it has a cost. The servers, backups, and domain names cost real money. In addition to helping cover these costs, income motivates and helps allocate more time for developing the service. Your support is very appreciated.
+  </p>
+
+  <p>
+    Don't forget that <%= get_conf(:site_name) %> is <a href="<%= Routes.page_path(@conn, :changes) %>">open source</a>! Supporting the project by helping out with the code is just as valuable!
+  </p>
+</section>
+
+<section class="stripe">
+  <img class="paragraph-img" src="https://blog.nytsoi.net/static/images/sticker/on-mac.jpg" alt="Laptop with Code::Stats sticker on it">
+
+  <h2>Buy stickers</h2>
+
+  <p>
+    That's right! You can now buy a snazzy sticker for your laptop (or any other contraption) to show your support for the service and raise your style to a whole new level. The stickers are 5 × 3.3 cm (1.97” × 1.3”) and cost 2.5 € a piece, plus shipping and possible VAT.
+  </p>
+
+  <p>
+    <a href="https://blog.nytsoi.net/2020/06/16/cs-stickers">Instructions for ordering and more details →</a>
+  </p>
+
+  <hr class="clear-both" />
+
+  <p>
+    <i><%= get_conf(:site_name) %> is run by Tmi AhlCode, Finnish business ID 3133797-6.</i>
+  </p>
+</section>

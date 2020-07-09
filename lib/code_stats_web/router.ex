@@ -48,6 +48,7 @@ defmodule CodeStatsWeb.Router do
     get("/tos", CodeStatsWeb.PageController, :terms)
     get("/plugins", CodeStatsWeb.PageController, :plugins)
     get("/changes", CodeStatsWeb.PageController, :changes)
+    get("/support", CodeStatsWeb.SupportController, :page)
 
     get("/aliases", CodeStatsWeb.AliasController, :list)
 

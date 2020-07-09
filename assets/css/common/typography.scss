@@ -150,3 +150,16 @@ pre {
     padding: 0;
   }
 }
+
+.paragraph-img {
+  max-width: 360px;
+  margin: 10px;
+  margin-right: 0;
+  float: right;
+
+  &.float-left {
+    float: left;
+    margin-right: 10px;
+    margin-left: 0;
+  }
+}
