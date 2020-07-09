@@ -9,10 +9,10 @@ defmodule CodeStatsWeb.Gravatar.Utils do
 
   ## Examples
 
-      iex> CodeStatsWeb.Gravatar.email_to_hash("foo")
+      iex> CodeStatsWeb.Gravatar.Utils.email_to_hash("foo")
       "acbd18db4cc2f85cedef654fccc4a4d8"
 
-      iex> CodeStatsWeb.Gravatar.email_to_hash("foo@bar.example")
+      iex> CodeStatsWeb.Gravatar.Utils.email_to_hash("foo@bar.example")
       "356321a16f5bfa0ac6fe84b259cfa3e3"
   """
   @spec email_to_hash(String.t()) :: hash()
