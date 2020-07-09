@@ -5,6 +5,7 @@ defmodule Mix.Tasks.Frontend.Build.Css.Compile do
 
   @shortdoc "Compile the SCSS sources"
 
+  def watch_path(), do: Path.join([base_src_path(), "css"])
   def in_path(), do: Path.join([base_src_path(), "css", "frontend"])
   def in_file(), do: Path.join([in_path(), "frontend.scss"])
 

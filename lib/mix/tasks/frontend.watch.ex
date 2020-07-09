@@ -25,7 +25,7 @@ defmodule Mix.Tasks.Frontend.Watch do
       ),
       watch(
         "CompileFrontendCSS",
-        FrontendCompileCSS.in_path(),
+        FrontendCompileCSS.watch_path(),
         FrontendCompileCSS
       ),
       watch(
