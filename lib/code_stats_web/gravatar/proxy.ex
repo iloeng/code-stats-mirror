@@ -13,6 +13,7 @@ defmodule CodeStatsWeb.Gravatar.Proxy do
   require Logger
 
   import Ex2ms, only: [fun: 1]
+  import CodeStats.Utils.TypedStruct
 
   alias CodeStatsWeb.Gravatar.Utils
 
@@ -29,28 +30,23 @@ defmodule CodeStatsWeb.Gravatar.Proxy do
   @type response :: {:ok, String.t(), binary()} | :error
 
   defmodule Options do
-    @type t :: %__MODULE__{
-            name: GenServer.name()
-          }
-    @enforce_keys [:name]
-    defstruct [:name]
+    deftypedstruct(%{
+      name: GenServer.name()
+    })
   end
 
   defmodule State do
     defmodule FetchData do
-      @type t :: %__MODULE__{
-              task: Task.t(),
-              listeners: [GenServer.from()]
-            }
-      @enforce_keys [:task]
-      defstruct [:task, listeners: []]
+      deftypedstruct(%{
+        task: Task.t(),
+        listeners: {[GenServer.from()], []}
+      })
     end
 
-    @type t :: %__MODULE__{
-            fetches: %{optional(Utils.hash()) => FetchData.t()},
-            refs: %{optional(reference()) => Utils.hash()}
-          }
-    defstruct fetches: %{}, refs: %{}
+    deftypedstruct(%{
+      fetches: {%{optional(Utils.hash()) => FetchData.t()}, %{}},
+      refs: {%{optional(reference()) => Utils.hash()}, %{}}
+    })
   end
 
   ### SERVER INTERFACE ###
