@@ -1,6 +1,7 @@
 import { el, setAttr, svg } from 'redom';
 import Chart from 'chart.js';
 import { XP_FORMATTER } from '../../../common/xp_utils';
+import { graphButton } from '../../../common/graph-buttons';
 
 
 const AM_COLOR = 'rgba(10, 0, 178, 0.5)';
@@ -14,18 +15,14 @@ class HourXpsComponent {
     this.chartStyle = localStorage.getItem('HourXpsChartStyle');
     if (!this.chartStyle) this.chartStyle = "clock";
 
-    const clockDrawing = svg('svg',
-      svg('symbol', { id: 'clock', viewBox: '-4 -4 16 16', height: 32, width: 32 },
-        svg('path', { d: "M4 0c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm0 1c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm-.5 1v2.22l.16.13.5.5.34.38.72-.72-.38-.34-.34-.34v-1.81h-1z" })
-      ),
-      svg('use', { xlink: { href: '#clock' } })
+    const clockDrawing = graphButton(
+      'clock',
+      'M4 0c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm0 1c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm-.5 1v2.22l.16.13.5.5.34.38.72-.72-.38-.34-.34-.34v-1.81h-1z'
     );
 
-    const barDrawing = svg('svg',
-      svg('symbol', { id: 'bar', viewBox: '-4 -4 16 16', height: 32, width: 32 },
-        svg('path', { d: "M0 0v7h8v-1h-7v-6h-1zm5 0v5h2v-5h-2zm-3 2v3h2v-3h-2z" })
-      ),
-      svg('use', { xlink: { href: '#bar' } })
+    const barDrawing = graphButton(
+      'bar',
+      'M0 0v7h8v-1h-7v-6h-1zm5 0v5h2v-5h-2zm-3 2v3h2v-3h-2z'
     );
 
     this.clockButton = el(
@@ -51,7 +48,7 @@ class HourXpsComponent {
 
     this.title = el('h4', 'Total XP per hour of days');
 
-    this.el = el('div.hour-xps', [
+    this.el = el('section.hour-xps', [
       this.title,
       el('div.graph-container', [this.canvas]),
       el('div.mode-switcher', [this.clockButton, this.barButton])
