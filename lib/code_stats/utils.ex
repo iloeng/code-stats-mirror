@@ -24,7 +24,6 @@ defmodule CodeStats.Utils do
     @type field_spec :: typespec() | enforced() | has_default()
     @type field_map :: %{optional(atom()) => field_spec()}
 
-    @spec deftypedstruct(field_map()) :: term()
     @doc """
     Create typed struct with a type, default values, and enforced keys.
 
@@ -53,6 +52,7 @@ defmodule CodeStats.Utils do
     })
     ```
     """
+    @spec deftypedstruct(field_map()) :: term()
     defmacro deftypedstruct(fields) do
       fields_list =
         case fields do
