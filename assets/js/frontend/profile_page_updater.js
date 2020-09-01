@@ -1,7 +1,7 @@
-import { mount, setChildren } from 'redom';
+import { setChildren } from 'redom';
 import MainInfoComponent from './profile/main_info.component';
 import TotalInfoComponent from './profile/total_info.component';
-import { request_profile, race_promises } from '../common/utils';
+import { request_profile } from '../common/utils';
 import { DateTime } from 'luxon';
 
 import { RECENT_HOURS } from './config';
