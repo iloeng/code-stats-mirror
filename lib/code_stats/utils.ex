@@ -52,7 +52,6 @@ defmodule CodeStats.Utils do
     })
     ```
     """
-    @spec deftypedstruct(field_map()) :: term()
     defmacro deftypedstruct(fields) do
       fields_list =
         case fields do
