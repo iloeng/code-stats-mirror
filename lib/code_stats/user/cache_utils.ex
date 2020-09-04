@@ -19,7 +19,7 @@ defmodule CodeStats.User.CacheUtils do
   def update_all!(user) do
     # Don't use any previous cache data
     empty_cache = %{}
-    all_since = DateTime.from_naive!(~N[1970-01-01T00:00:00], "Etc/UTC")
+    all_since = ~U[1970-01-01T00:00:00Z]
 
     # Load all of user's new XP plus required associations
     xps =
