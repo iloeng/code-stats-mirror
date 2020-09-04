@@ -114,11 +114,7 @@ defmodule CodeStats.User.CacheUtils do
       )
       when is_integer(language_id) and is_integer(machine_id) and is_integer(amount) do
     # Date could be a DateTime for old XPs
-    date =
-      case datetime do
-        %NaiveDateTime{} -> NaiveDateTime.to_date(datetime)
-        %DateTime{} -> DateTime.to_date(datetime)
-      end
+    date = datetime.__struct__.to_date(datetime)
 
     languages = Map.update(cache.languages, language_id, amount, &(&1 + amount))
     machines = Map.update(cache.machines, machine_id, amount, &(&1 + amount))
