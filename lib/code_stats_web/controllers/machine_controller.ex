@@ -13,7 +13,7 @@ defmodule CodeStatsWeb.MachineController do
   @spec list(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def list(conn, _params) do
     {conn, _} = common_assigns(conn)
-    changeset = Machine.changeset(%Machine{})
+    changeset = Machine.create_changeset()
 
     conn
     |> render("machines.html", changeset: changeset)
@@ -28,7 +28,7 @@ defmodule CodeStatsWeb.MachineController do
   def add(conn, %{"machine" => %{"name" => name}}) do
     {conn, user} = common_assigns(conn)
 
-    Machine.changeset(%Machine{}, %{name: name, user: user})
+    Machine.create_changeset(%{name: name, user: user})
     |> create_machine()
     |> case do
       %Machine{} ->

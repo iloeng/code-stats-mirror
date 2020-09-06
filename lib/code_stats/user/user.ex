@@ -1,29 +1,28 @@
 defmodule CodeStats.User do
-  use Ecto.Schema
-
   require Logger
 
+  import CodeStats.Utils.TypedSchema
   import Ecto.Changeset
   import Ecto.Query
 
   alias CodeStats.Repo
-  alias CodeStats.User.Pulse
+  alias CodeStats.User.{Pulse, Alias}
 
-  schema "users" do
-    field(:username, :string)
-    field(:email, :string)
-    field(:password, :string)
-    field(:last_cached, :utc_datetime)
-    field(:private_profile, :boolean)
-    field(:cache, :map)
+  deftypedschema "users" do
+    field(:username, :string, String.t())
+    field(:email, :string, String.t())
+    field(:password, :string, String.t())
+    field(:last_cached, :utc_datetime, DateTime.t())
+    field(:private_profile, :boolean, boolean())
+    field(:cache, :map, CodeStats.User.Cache.db_t())
 
     # The latest version of the legal terms that was accepted by the user
-    field(:terms_version, :date)
+    field(:terms_version, :date, Date.t())
 
     # Email address used for Gravatar, or nil
-    field(:gravatar_email, :string)
+    field(:gravatar_email, :string, String.t())
 
-    has_many(:pulses, Pulse)
+    has_many(:pulses, Pulse, [Pulse.t()])
 
     timestamps(type: :utc_datetime)
   end
@@ -97,7 +96,7 @@ defmodule CodeStats.User do
   @doc """
   Update user's accepted legal terms version to the latest available.
   """
-  @spec update_terms_version(%__MODULE__{}) :: :ok | {:error, [{atom, Ecto.Changeset.error()}]}
+  @spec update_terms_version(t()) :: :ok | {:error, [{atom, Ecto.Changeset.error()}]}
   def update_terms_version(%__MODULE__{} = user) do
     cset = terms_changeset(user, %{terms_version: CodeStats.LegalTerms.get_latest_version()})
 
@@ -114,7 +113,7 @@ defmodule CodeStats.User do
 
   Returns nil if user was not found.
   """
-  @spec get_by_username(String.t(), boolean) :: %__MODULE__{} | nil
+  @spec get_by_username(String.t(), boolean()) :: t() | nil
   def get_by_username(username, case_insensitive \\ false) do
     query =
       case case_insensitive do

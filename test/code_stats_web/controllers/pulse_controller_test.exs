@@ -358,8 +358,7 @@ defmodule CodeStatsWeb.PulseControllerTest do
 
   defp create_data_for(user, language) do
     {:ok, machine} =
-      %Machine{}
-      |> Machine.changeset(%{name: "test_machine", user: user})
+      Machine.create_changeset(%{name: "test_machine", user: user})
       |> Repo.insert()
 
     {:ok, sent_at} = Calendar.DateTime.from_erl({{2017, 11, 27}, {23, 00, 00}}, "Etc/UTC")

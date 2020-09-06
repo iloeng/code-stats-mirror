@@ -80,7 +80,7 @@ defmodule CodeStatsWeb.AuthController do
   end
 
   def render_forgot(conn, _params) do
-    {changeset, _} = PasswordReset.changeset(%PasswordReset{})
+    {changeset, _} = PasswordReset.create_changeset()
 
     conn
     |> assign(:title, "Forgot password")
@@ -88,7 +88,7 @@ defmodule CodeStatsWeb.AuthController do
   end
 
   def forgot(conn, %{"password_reset" => params}) do
-    {changeset, user} = PasswordReset.changeset(%PasswordReset{}, params)
+    {changeset, user} = PasswordReset.create_changeset(params)
 
     # If the changeset is valid, attempt to create password reset token
     # and send email

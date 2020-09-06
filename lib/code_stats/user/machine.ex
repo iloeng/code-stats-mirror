@@ -1,15 +1,14 @@
 defmodule CodeStats.User.Machine do
-  use Ecto.Schema
-
+  import CodeStats.Utils.TypedSchema
   import Ecto.Changeset
 
-  schema "machines" do
-    field(:name, :string)
-    field(:api_salt, :string)
-    field(:active, :boolean)
+  deftypedschema "machines" do
+    field(:name, :string, String.t())
+    field(:api_salt, :string, String.t())
+    field(:active, :boolean, boolean())
 
-    belongs_to(:user, CodeStats.User)
-    has_many(:pulses, CodeStats.User.Pulse)
+    belongs_to(:user, CodeStats.User, CodeStats.User.t())
+    has_many(:pulses, CodeStats.User.Pulse, [CodeStats.User.Pulse.t()])
 
     timestamps(type: :utc_datetime)
   end
@@ -20,14 +19,14 @@ defmodule CodeStats.User.Machine do
   def machine_name_max_length(), do: 64
 
   @doc """
-  Creates a changeset based on the `data` and `params`.
+  Creates a changeset based on the `params`.
 
   If no params are provided, an invalid changeset is returned
   with no validation performed.
   """
-  @spec changeset(Machine.t(), map()) :: Ecto.Changeset.t()
-  def changeset(data, params \\ %{}) do
-    data
+  @spec create_changeset(map()) :: Ecto.Changeset.t()
+  def create_changeset(params \\ %{}) do
+    %__MODULE__{}
     |> cast(params, [:name])
     |> validate_required([:name])
     |> name_validations()
@@ -38,7 +37,7 @@ defmodule CodeStats.User.Machine do
     |> put_change(:active, true)
   end
 
-  @spec update_changeset(Machine.t(), map()) :: Ecto.Changeset.t()
+  @spec update_changeset(t(), map()) :: Ecto.Changeset.t()
   def update_changeset(data, params \\ %{}) do
     data
     |> cast(params, [:name])
@@ -46,7 +45,7 @@ defmodule CodeStats.User.Machine do
     |> name_validations()
   end
 
-  @spec activation_changeset(Machine.t(), map()) :: Ecto.Changeset.t()
+  @spec activation_changeset(t(), map()) :: Ecto.Changeset.t()
   def activation_changeset(data, params \\ %{}) do
     data
     |> cast(params, [:active])
@@ -57,7 +56,7 @@ defmodule CodeStats.User.Machine do
 
   Takes no input.
   """
-  @spec activation_changeset(Machine.t()) :: Ecto.Changeset.t()
+  @spec activation_changeset(t()) :: Ecto.Changeset.t()
   def api_changeset(data) do
     data
     |> change(%{api_salt: generate_api_salt()})

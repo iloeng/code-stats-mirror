@@ -1,23 +1,22 @@
 defmodule CodeStats.Language do
-  use Ecto.Schema
-
+  import CodeStats.Utils.TypedSchema
   import Ecto.Changeset
   import Ecto.Query, only: [from: 2]
 
   # Default language name if given language name is invalid
   @default_name "Plain text"
 
-  schema "languages" do
-    field(:name, :string)
+  deftypedschema "languages" do
+    field(:name, :string, String.t())
 
-    has_many(:xps, CodeStats.XP)
+    has_many(:xps, CodeStats.XP, [CodeStats.XP.t()])
 
     # Either a language has many aliases or it is an alias of some other language,
     # it cannot be both.
     # NOTE: Only 1 level of aliases is supported! That is, you cannot form a chain of
     # aliases.
-    belongs_to(:alias_of, __MODULE__)
-    has_many(:aliases, __MODULE__, foreign_key: :alias_of_id)
+    belongs_to(:alias_of, __MODULE__, __MODULE__.t() | nil)
+    has_many(:aliases, __MODULE__, [__MODULE__.t()], foreign_key: :alias_of_id)
 
     timestamps(type: :utc_datetime)
   end
@@ -41,7 +40,7 @@ defmodule CodeStats.Language do
   Get or create language with the given name using the given repo.
   """
   @spec get_or_create(Ecto.Repo.t() | nil, String.t()) ::
-          {:ok, Language.t()} | {:error, :unknown}
+          {:ok, t()} | {:error, :unknown}
   def get_or_create(repo \\ CodeStats.Repo, language_name) do
     language_name = sanitize_language(language_name)
 

@@ -1,6 +1,5 @@
 defmodule CodeStats.User.PasswordReset do
-  use Ecto.Schema
-
+  import CodeStats.Utils.TypedSchema
   import Ecto.Changeset
   import Ecto.Query
 
@@ -12,13 +11,13 @@ defmodule CodeStats.User.PasswordReset do
   # How long a password reset token is active (hours)
   @token_max_life 4
 
-  schema "password_resets" do
-    field(:token, Ecto.UUID)
+  deftypedschema "password_resets" do
+    field(:token, Ecto.UUID, Ecto.UUID.t())
 
     # Virtual field that is only used to fetch the correct user
-    field(:username, :string, virtual: true)
+    field(:username, :string, String.t(), virtual: true)
 
-    belongs_to(:user, User)
+    belongs_to(:user, User, User.t())
 
     timestamps(type: :utc_datetime)
   end
@@ -26,11 +25,11 @@ defmodule CodeStats.User.PasswordReset do
   @doc """
   Get the maximum life of a password reset token, in hours.
   """
-  @spec token_max_life() :: Integer.t()
+  @spec token_max_life() :: pos_integer()
   def token_max_life(), do: @token_max_life
 
   @doc """
-  Creates a changeset based on the `data` and `params`.
+  Creates a changeset based on the `params`.
 
   `params` should contain a key :username with the username of the user
   to create reset for.
@@ -41,10 +40,10 @@ defmodule CodeStats.User.PasswordReset do
   Note that the function returns both the changeset and the user, if found,
   so it can be used when sending the password reset email.
   """
-  @spec changeset(%__MODULE__{}, %{}) :: {%Ecto.Changeset{}, %User{} | nil}
-  def changeset(data, params \\ %{}) do
+  @spec create_changeset(map()) :: {Ecto.Changeset.t(), User.t() | nil}
+  def create_changeset(params \\ %{}) do
     cset =
-      data
+      %__MODULE__{}
       |> cast(params, [:username])
       |> validate_required([:username])
       |> put_change(:token, Ecto.UUID.generate())

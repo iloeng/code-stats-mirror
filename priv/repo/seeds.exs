@@ -6,7 +6,7 @@
 #
 #     mix ecto.setup
 #
-# This script creates a given user from the "user" map. 
+# This script creates a given user from the "user" map.
 # You can change credentials as you wish below.
 # Or supply environment variables:
 #
@@ -42,7 +42,7 @@
 # This script can be run multiple times without overwriting existing date, just adding new.
 # This means seeded data for multiple machines and multiple languages is easily done.
 # Resetting the database can be done with
-# 
+#
 #     mix ecto.reset
 #
 # In the "languages" list you can append/remove names of languages to populate.
@@ -104,8 +104,7 @@ defmodule Seeds do
       |> CodeStats.Repo.insert()
 
     {:ok, machine} =
-      %CodeStats.User.Machine{name: machine_name}
-      |> CodeStats.User.Machine.changeset(%{user: fetched_user})
+      CodeStats.User.Machine.create_changeset(%{name: machine_name, user: fetched_user})
       |> CodeStats.Repo.insert()
 
     {:ok, fetched_user, machine}
@@ -115,8 +114,7 @@ defmodule Seeds do
     case CodeStats.Repo.get_by(CodeStats.User.Machine, user_id: user.id, name: machine_name) do
       nil ->
         {:ok, machine} =
-          %CodeStats.User.Machine{name: machine_name}
-          |> CodeStats.User.Machine.changeset(%{})
+          CodeStats.User.Machine.create_changeset(%{name: machine_name})
           |> Ecto.Changeset.put_change(:user_id, user.id)
           |> CodeStats.Repo.insert()
 

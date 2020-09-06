@@ -1,17 +1,16 @@
 defmodule CodeStats.XP do
-  use Ecto.Schema
-
+  import CodeStats.Utils.TypedSchema
   import Ecto.Changeset
   import Ecto.Query, only: [from: 2]
 
-  schema "xps" do
-    field(:amount, :integer)
-    belongs_to(:pulse, CodeStats.User.Pulse)
-    belongs_to(:language, CodeStats.Language)
+  deftypedschema "xps" do
+    field(:amount, :integer, integer())
+    belongs_to(:pulse, CodeStats.User.Pulse, CodeStats.User.Pulse.t())
+    belongs_to(:language, CodeStats.Language, CodeStats.Language.t())
 
     # Original language can be used to fix alias errors later, it should always use
     # the language that was sent. :language field on the other hand follows aliases
-    belongs_to(:original_language, CodeStats.Language)
+    belongs_to(:original_language, CodeStats.Language, CodeStats.Language.t())
 
     timestamps(type: :utc_datetime)
   end
@@ -31,7 +30,7 @@ defmodule CodeStats.XP do
   @doc """
   Get all of a user's XP's by user ID.
   """
-  @spec xps_by_user_id(integer) :: %Ecto.Query{}
+  @spec xps_by_user_id(integer) :: Ecto.Query.t()
   def xps_by_user_id(user_id) when is_integer(user_id) do
     from(
       x in __MODULE__,
