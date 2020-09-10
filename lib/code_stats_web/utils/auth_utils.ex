@@ -26,7 +26,7 @@ defmodule CodeStatsWeb.AuthUtils do
   @doc """
   Is the current user authenticated?
   """
-  @spec is_authed?(%Conn{}) :: boolean
+  @spec is_authed?(Conn.t()) :: boolean
   def is_authed?(%Conn{} = conn) do
     match?(number when is_integer(number), Conn.get_session(conn, @auth_key))
   end
@@ -36,7 +36,7 @@ defmodule CodeStatsWeb.AuthUtils do
 
   Returns nil if user is not authenticated.
   """
-  @spec get_current_user_id(%Conn{}) :: number | nil
+  @spec get_current_user_id(Conn.t()) :: number | nil
   def get_current_user_id(conn) do
     Conn.get_session(conn, @auth_key)
   end
@@ -46,7 +46,7 @@ defmodule CodeStatsWeb.AuthUtils do
 
   Returns nil if the user is not authenticated.
   """
-  @spec get_current_user(%Conn{}) :: %User{} | nil
+  @spec get_current_user(Conn.t()) :: %User{} | nil
   def get_current_user(conn) do
     conn.private[@private_info_key]
   end
@@ -64,7 +64,7 @@ defmodule CodeStatsWeb.AuthUtils do
 
   Authentication status is saved in the session. Returns conn on success, :error on failure.
   """
-  @spec auth_user(%Conn{}, %User{}, String.t()) :: %Conn{} | :error
+  @spec auth_user(Conn.t(), User.t(), String.t()) :: Conn.t() | :error
   def auth_user(%Conn{} = conn, %User{} = user, password) do
     if check_user_password(user, password) do
       force_auth_user_id(conn, user.id)
@@ -85,7 +85,7 @@ defmodule CodeStatsWeb.AuthUtils do
 
   The whole session is destroyed.
   """
-  @spec unauth_user(%Conn{}) :: %Conn{}
+  @spec unauth_user(Conn.t()) :: Conn.t()
   def unauth_user(%Conn{} = conn) do
     Conn.configure_session(conn, drop: true)
   end
@@ -107,7 +107,7 @@ defmodule CodeStatsWeb.AuthUtils do
 
   Returns an Ecto changeset if validation errors happened.
   """
-  @spec create_user(%Changeset{}) :: %User{} | %Changeset{}
+  @spec create_user(User.t()) :: User.t() | Changeset.t()
   def create_user(changeset) do
     changeset
     |> Repo.insert()
@@ -122,7 +122,7 @@ defmodule CodeStatsWeb.AuthUtils do
 
   Returns an Ecto changeset if validation errors happened.
   """
-  @spec update_user(%Changeset{}) :: %User{} | %Changeset{}
+  @spec update_user(Changeset.t()) :: User.t() | Changeset.t()
   def update_user(changeset) do
     changeset
     |> Repo.update()
@@ -170,7 +170,7 @@ defmodule CodeStatsWeb.AuthUtils do
 
   Returns true if succeeded, false if failed.
   """
-  @spec delete_user(%User{}) :: boolean
+  @spec delete_user(User.t()) :: boolean
   def delete_user(user) do
     case Repo.delete(user) do
       {:ok, _} -> true
@@ -181,7 +181,7 @@ defmodule CodeStatsWeb.AuthUtils do
   @doc """
   Is the current user authenticated to the API with a machine token?
   """
-  @spec is_machine_authed?(%Conn{}) :: boolean
+  @spec is_machine_authed?(Conn.t()) :: boolean
   def is_machine_authed?(%Conn{} = conn) do
     match?({%User{}, %Machine{}}, conn.private[@machine_auth_key])
   end
@@ -194,7 +194,7 @@ defmodule CodeStatsWeb.AuthUtils do
 
   If the given token is not valid, nothing is done to the connection.
   """
-  @spec auth_machine(%Conn{}, String.t()) :: %Conn{}
+  @spec auth_machine(Conn.t(), String.t()) :: Conn.t()
   def auth_machine(%Conn{} = conn, machine_token) do
     with {username, machine_id} <- split_token(machine_token),
          %User{} = user <- User.get_by_username(username),
@@ -212,7 +212,7 @@ defmodule CodeStatsWeb.AuthUtils do
 
   Returns nil if user is not API authenticated.
   """
-  @spec get_machine_auth_details(%Conn{}) :: {%User{}, %Machine{}} | nil
+  @spec get_machine_auth_details(Conn.t()) :: {User.t(), Machine.t()} | nil
   def get_machine_auth_details(%Conn{} = conn) do
     conn.private[@machine_auth_key]
   end
@@ -222,7 +222,7 @@ defmodule CodeStatsWeb.AuthUtils do
 
   Connection needs to be given to get the secret key base.
   """
-  @spec get_machine_key(%Conn{}, %User{}, %Machine{}) :: String.t()
+  @spec get_machine_key(Conn.t(), User.t(), Machine.t()) :: String.t()
   def get_machine_key(%Conn{} = conn, %User{} = user, %Machine{} = machine) do
     MessageVerifier.sign(
       form_payload(user.username, machine.id),
@@ -233,7 +233,7 @@ defmodule CodeStatsWeb.AuthUtils do
   @doc """
   Checks if the given password matches the given user's password.
   """
-  @spec check_user_password(%User{}, String.t()) :: boolean
+  @spec check_user_password(User.t(), String.t()) :: boolean
   def check_user_password(%User{} = user, password) do
     Bcrypt.verify_pass(password, user.password)
   end
